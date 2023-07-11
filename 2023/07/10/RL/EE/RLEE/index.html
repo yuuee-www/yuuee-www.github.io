@@ -74,8 +74,8 @@
 <p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled21.png" width="20%" height="20%"><br></p>
 <p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled22.png" width="20%" height="20%"><br></p>
 <p>sample this</p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled23.png" width="20%" height="20%"><br></p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled24.png" width="20%" height="20%"><br></p>
+<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled23.png" width="50%" height="50%"><br></p>
+<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled24.png" width="50%" height="50%"><br></p>
 <h2 id="Theory"><a href="#Theory" class="headerlink" title="Theory"></a><strong>Theory</strong></h2><p><strong>Theorem (Lai and Robbins)</strong></p>
 <p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled25.png" alt="Untitled"></p>
 <p><strong>Counting Regret</strong></p>
@@ -90,5 +90,37 @@
 <p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled29.png" alt="Untitled"></p>
 <p><strong>Calculating Upper Confidence Bounds</strong></p>
 <p>…</p>
+<h2 id="Bayesian-approaches"><a href="#Bayesian-approaches" class="headerlink" title="Bayesian approaches"></a>Bayesian approaches</h2><h3 id="Bayesian-Bandits"><a href="#Bayesian-Bandits" class="headerlink" title="Bayesian Bandits"></a><strong>Bayesian Bandits</strong></h3><p><strong>Bayesian approach:</strong></p>
+<p><strong>model distributions over values</strong> <strong>p(q(a) | θt )</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled30.png" width="50%" height="50%">
+
+<p><strong>Bayesian Learning</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled31.png" width="50%" height="50%">
+
+<p><strong>Example:</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled32.png" width="50%" height="50%">
+
+<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled33.png" width="50%" height="50%">
+
+<p><strong>Bayesian Bandits with Upper Confidence Bounds</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled34.png" width="50%" height="50%">
+
+<h2 id="Thompson-sampling"><a href="#Thompson-sampling" class="headerlink" title="Thompson sampling"></a>Thompson sampling</h2><p><strong>Probability Matching</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled35.png" width="50%" height="50%">
+
+<p>Probability matching is optimistic in the face of uncertainty:</p>
+<p>Actions have higher probability when either the estimated value is high, <strong>or the uncertainty is high</strong></p>
+<p>Can be difficult to compute π (a) analytically from posterior (but can be done numerically)</p>
+<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled36.png" width="50%" height="50%">
+
+<h2 id="Planning-to-explore"><a href="#Planning-to-explore" class="headerlink" title="Planning to explore"></a>Planning to explore</h2><h3 id="Information-State-Space"><a href="#Information-State-Space" class="headerlink" title="Information State Space"></a><strong>Information State Space</strong></h3><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled37.png" width="50%" height="50%">
+
+<p><strong>Example: Bernoulli Bandits</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled38.png" width="50%" height="50%">
+
+<p><strong>Solving Information State Space Bandits</strong></p>
+<p>E.g., learn a Bayesian reward distribution, plan into the future</p>
+<p><strong>Bayes-adaptive RL</strong>: optimally trades off exploration with respect to the prior distribution</p>
+<p>full RL: transition model</p>
 <p>All included screenshots credit to Lecture 2: <a target="_blank" rel="noopener" href="https://dpmd.ai/explorationcontrol">slides</a> and wiki.</p>
 </article></div></main><div class="nav-wrap"><div class="nav"><button class="site-nav"><div class="navicon"></div></button><ul class="nav_items"><li class="nav_item"><a class="nav-page" href="https://yuuee-www.github.io/2023/07/05/notes/"> Notes</a></li></ul></div><div class="cd-top"><i class="fa fa-arrow-up" aria-hidden="true"></i></div></div><footer id="page_footer"><div class="footer_wrap"><div class="copyright">&copy;2023 by Yue Wang</div><div class="theme-info">Powered by <a target="_blank" href="https://hexo.io" rel="nofollow noopener">Hexo</a> & <a target="_blank" href="https://github.com/PhosphorW/hexo-theme-academia" rel="nofollow noopener">Academia Theme</a></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery-pjax@latest/jquery.pjax.min.js"></script><script src="/js/main.js"></script></body></html>
