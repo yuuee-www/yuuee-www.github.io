@@ -736,6 +736,7 @@ blockquote p {
   }
   .author-discrip {
     display: block;
+    text-align: center;
     width: 100%;
     padding-left: 0;
     padding-right: 0;
