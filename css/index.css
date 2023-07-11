@@ -748,9 +748,11 @@ blockquote p {
   }
   .author-links {
     display: block;
+    text-align: center;
   }
   .social-icons {
     display: block;
+    text-align: center;
     visibility: visible;
     opacity: 1;
     position: relative;
