@@ -1,126 +1,133 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5"><title>yuuee-www</title><meta name="author" content="Yue Wang"><link rel="shortcut icon" href="/img/favicon.png"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><meta name="generator" content="Hexo 6.3.0"></head><body><header id="page_header"><div class="header_wrap"><div id="blog_name"><a class="blog_title" id="site-name" href="/">yuuee-www</a></div><button class="menus_icon"><div class="navicon"></div></button><ul class="menus_items"><li class="menus_item"><a class="site-page" href="https://yuuee-www.github.io/2023/07/05/notes/"> Notes</a></li></ul></div></header><main id="page_main"><div class="side-card sticky"><div class="card-wrap" itemscope itemtype="http://schema.org/Person"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/profile.png'" alt="avatar"></div><div class="author-discrip"><h3>Yue Wang</h3><p class="author-bio"></p></div><div class="author-links"><button class="btn m-social-links">Links</button><ul class="social-icons"><li><a class="social-icon" href="https://github.com/yuuee-www" target="_blank"><i class="fab fa-github" aria-hidden="true"></i></a></li><li><a class="social-icon" href="mailto:zcabwaa@ucl.ac.uk" target="_blank"><i class="fas fa-envelope" aria-hidden="true"></i></a></li><li><a class="social-icon" href="https://wa.me/8613377207084?text=" target="_blank"><i class="fab fa-whatsapp" aria-hidden="true"></i></a></li></ul></div></div></div><div class="page" itemscope itemtype="http://schema.org/CreativeWork"><h2 class="page-title"></h2><article><h1 id="Exploration-and-Exploitation"><a href="#Exploration-and-Exploitation" class="headerlink" title="Exploration and Exploitation"></a>Exploration and Exploitation</h1><p>Setting</p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled.png" alt="Untitled"></p>
-<p>Learning agents need to trade off two things</p>
-<p>Exploitation: Maximise performance based on current knowledge</p>
-<p>Exploration: Increase knowledge</p>
-<h2 id="The-Multi-Armed-Bandit"><a href="#The-Multi-Armed-Bandit" class="headerlink" title="The Multi-Armed Bandit"></a><strong>The Multi-Armed Bandit</strong></h2><p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled1.png" alt="Untitled"></p>
-<h3 id="Values-and-Regret"><a href="#Values-and-Regret" class="headerlink" title="Values and Regret"></a><strong>Values and Regret</strong></h3><p>The <strong>action value</strong> for action a is the expected <strong>reward</strong></p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled2.png" width="20%" height="20%">
-
-<p>The <strong>optimal value</strong> is</p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled3.png" width="40%" height="40%">
-
-<p><strong>Regret</strong> of an action a is</p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled4.png" width="20%" height="20%">
-
-<p>The regret for the optimal action is zero</p>
-<p>We want to <strong>minimise</strong> <strong>total regret</strong>:</p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled5.png" width="20%" height="20%">
-
-<p>Maximise cumulative reward ≡ minimise total regret</p>
-<p>The summation spans over the full ‘lifetime of learning’</p>
-<h2 id="Algorithms"><a href="#Algorithms" class="headerlink" title="Algorithms"></a><strong>Algorithms</strong></h2><ul>
-<li>Greedy</li>
-<li>ε-greedy</li>
-<li>UCB</li>
-</ul>
-<p>The first three all use <strong>action value estimates</strong> Qt (a) ≈ q(a)</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5"><title>yuuee-www</title><meta name="author" content="Yue Wang"><link rel="shortcut icon" href="/img/favicon.png"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><meta name="generator" content="Hexo 6.3.0"></head><body><header id="page_header"><div class="header_wrap"><div id="blog_name"><a class="blog_title" id="site-name" href="/">yuuee-www</a></div><button class="menus_icon"><div class="navicon"></div></button><ul class="menus_items"><li class="menus_item"><a class="site-page" href="https://yuuee-www.github.io/2023/07/05/notes/"> Notes</a></li></ul></div></header><main id="page_main"><div class="side-card sticky"><div class="card-wrap" itemscope itemtype="http://schema.org/Person"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/profile.png'" alt="avatar"></div><div class="author-discrip"><h3>Yue Wang</h3><p class="author-bio"></p></div><div class="author-links"><button class="btn m-social-links">Links</button><ul class="social-icons"><li><a class="social-icon" href="https://github.com/yuuee-www" target="_blank"><i class="fab fa-github" aria-hidden="true"></i></a></li><li><a class="social-icon" href="mailto:zcabwaa@ucl.ac.uk" target="_blank"><i class="fas fa-envelope" aria-hidden="true"></i></a></li><li><a class="social-icon" href="https://wa.me/8613377207084?text=" target="_blank"><i class="fab fa-whatsapp" aria-hidden="true"></i></a></li></ul></div></div></div><div class="page" itemscope itemtype="http://schema.org/CreativeWork"><h2 class="page-title"></h2><article><p>Markov Decision Processes and Dynamic Programming</p>
+<p><strong>Formalising the RL interface</strong></p>
+<p><strong>Markov Decision Process (MDP)</strong></p>
+<p>a mathematical formulation of the agent-environment interaction</p>
+<p>the <strong>objective</strong> and <strong>how to achieve it</strong></p>
+<p>a <strong>simplifying assumption</strong></p>
+<p><strong>assume the environment is fully observable</strong></p>
+<p>Almost all RL problems can be formalised as MDPs, e.g.,</p>
 <ul>
-<li>Thompson sampling</li>
-<li>Policy gradients</li>
+<li>Optimal control primarily deals with continuous MDPs</li>
+<li>Partially observable problems can be converted into MDPs</li>
+<li>Bandits are MDPs with one state</li>
 </ul>
-<h2 id="Action-values"><a href="#Action-values" class="headerlink" title="Action values"></a><strong>Action values</strong></h2><p>The <strong>action value</strong> for action a is the expected reward</p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled6.png" width="20%" height="20%">
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled.png" width="20%" height="20%">
 
-<p>A <strong>simple estimate</strong> is the <strong>average of the sampled rewards</strong>:</p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled7.png" width="20%" height="20%">
+<p>Joint Distributions</p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled1.png" width="20%" height="20%">
 
-<p>The <strong>count</strong> for action a is</p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled8.png" width="20%" height="20%">
+<p><strong>Alternative Definition</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled2.png" width="20%" height="20%">
 
-<p><strong>This can also be updated incrementally:</strong></p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled9.png" width="50%" height="50%">
+<p><strong>Markov Property <em>The future is independent of the past given the present</em></strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled3.png" width="20%" height="20%">
 
-<p><strong>Where</strong></p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled10.png" width="30%" height="30%"><br></p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled11.png" width="20%" height="20%"><br></p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled12.png" width="30%" height="30%"><br></p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled13.png" width="10%" height="10%"><br></p>
-<p>α: step sizes, constant α would lead to tracking, rather than averaging</p>
-<h2 id="The-greedy-policy"><a href="#The-greedy-policy" class="headerlink" title="The greedy policy"></a><strong>The greedy policy</strong></h2><p>One of the simplest policies</p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled14.png" width="20%" height="20%">
+<p>Markov Property in a MDP</p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled4.png" width="20%" height="20%">
 
-<h2 id="ε-Greedy-Algorithm"><a href="#ε-Greedy-Algorithm" class="headerlink" title="ε-Greedy Algorithm"></a>ε-Greedy Algorithm</h2><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled15.png" width="20%" height="20%">
+<hr>
+<p><strong>Formalising the objective</strong></p>
+<h3 id="Returns"><a href="#Returns" class="headerlink" title="Returns"></a><strong>Returns</strong></h3><img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled5.png" width="20%" height="20%">
 
-<h2 id="Policy-gradients"><a href="#Policy-gradients" class="headerlink" title="Policy gradients"></a>Policy gradients</h2><p><strong>Policy search, action preferences Ht(a)</strong></p>
-<p>learn policies π (a) <strong>directly</strong>, instead of learning values</p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled16.png" width="20%" height="20%">
+<p><strong>Discounted Return</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled6.png" width="20%" height="20%">
 
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled17.png" width="20%" height="20%">
+<p><strong>Most Markov decision processes are discounted</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled7.png" width="20%" height="20%">
 
-<p>(<strong>softmax</strong>)</p>
-<p>The preferences are not values: they are just learnable policy parameters</p>
-<p>Goal: learn by optimising the preferences</p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled18.png" width="50%" height="50%">
+<h3 id="Policies"><a href="#Policies" class="headerlink" title="Policies"></a><strong>Policies</strong></h3><p><strong>Goal of an RL agent</strong> </p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled8.png" width="20%" height="20%">
 
-<p><strong>Policy gradients</strong></p>
-<p>update policy parameters such that expected value increases</p>
-<p>use <strong>gradient ascent:</strong></p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled19.png" width="50%" height="50%">
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled9.png" width="20%" height="20%">
 
-<p><strong>Gradient bandits</strong></p>
-<p>Log-likelihood trick (also known as REINFORCE trick, Williams 1992):</p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled20.png" width="50%" height="50%"><br></p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled21.png" width="20%" height="20%"><br></p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled22.png" width="20%" height="20%"><br></p>
-<p>sample this</p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled23.png" width="50%" height="50%"><br></p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled24.png" width="50%" height="50%"><br></p>
-<h2 id="Theory"><a href="#Theory" class="headerlink" title="Theory"></a><strong>Theory</strong></h2><p><strong>Theorem (Lai and Robbins)</strong></p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled25.png" alt="Untitled"></p>
-<p><strong>Counting Regret</strong></p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled26.png" alt="Untitled"></p>
-<h2 id="Optimism-in-the-Face-of-Uncertainty"><a href="#Optimism-in-the-Face-of-Uncertainty" class="headerlink" title="Optimism in the Face of Uncertainty"></a><strong>Optimism in the Face of Uncertainty</strong></h2><p>More uncertainty about its value: more important to explore that action</p>
-<p>Which action should we pick?</p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled27.png" alt="Untitled"></p>
-<h2 id="Algorithms-UCB"><a href="#Algorithms-UCB" class="headerlink" title="Algorithms: UCB"></a>Algorithms: UCB</h2><p><strong>Upper Confidence Bounds</strong></p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled28.png" alt="Untitled"></p>
-<p><strong>Theory: the optimality of UCB</strong></p>
-<p><strong>Hoeffding’s Inequality</strong></p>
-<p><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled29.png" alt="Untitled"></p>
-<p><strong>Calculating Upper Confidence Bounds</strong></p>
-<p>…</p>
-<h2 id="Bayesian-approaches"><a href="#Bayesian-approaches" class="headerlink" title="Bayesian approaches"></a>Bayesian approaches</h2><h3 id="Bayesian-Bandits"><a href="#Bayesian-Bandits" class="headerlink" title="Bayesian Bandits"></a><strong>Bayesian Bandits</strong></h3><p><strong>Bayesian approach:</strong></p>
-<p><strong>model distributions over values</strong> <strong>p(q(a) | θt )</strong></p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled30.png" width="50%" height="50%">
+<h3 id="Value-Functions"><a href="#Value-Functions" class="headerlink" title="Value Functions"></a><strong>Value Functions</strong></h3><p>value function &amp; (state-)action values</p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled10.png" width="20%" height="20%">
 
-<p><strong>Bayesian Learning</strong></p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled31.png" width="50%" height="50%">
+<p><strong>Optimal Value Function</strong></p>
+<p>solution | state-value function | action-value function</p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled11.png" width="20%" height="20%">
 
-<p><strong>Example:</strong></p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled32.png" width="50%" height="50%">
+<p><strong>Optimal Policy</strong></p>
+<p><strong>Define a partial ordering over policies</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled12.png" width="20%" height="20%">
 
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled33.png" width="50%" height="50%">
+<p><strong>Theorem (Optimal Policies)</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled13.png" width="20%" height="20%">
 
-<p><strong>Bayesian Bandits with Upper Confidence Bounds</strong></p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled34.png" width="50%" height="50%">
+<p><strong>Finding an Optimal Policy</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled14.png" width="20%" height="20%">
 
-<h2 id="Thompson-sampling"><a href="#Thompson-sampling" class="headerlink" title="Thompson sampling"></a>Thompson sampling</h2><p><strong>Probability Matching</strong></p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled35.png" width="50%" height="50%">
+<h3 id="Bellman-Equations"><a href="#Bellman-Equations" class="headerlink" title="Bellman Equations"></a>Bellman Equations</h3><p><strong>Value Function</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled15.png" width="20%" height="20%">
 
-<p>Probability matching is optimistic in the face of uncertainty:</p>
-<p>Actions have higher probability when either the estimated value is high, <strong>or the uncertainty is high</strong></p>
-<p>Can be difficult to compute π (a) analytically from posterior (but can be done numerically)</p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled36.png" width="50%" height="50%">
+<p><strong>Action values</strong> ｜ state-action values</p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled16.png" width="20%" height="20%">
 
-<h2 id="Planning-to-explore"><a href="#Planning-to-explore" class="headerlink" title="Planning to explore"></a>Planning to explore</h2><h3 id="Information-State-Space"><a href="#Information-State-Space" class="headerlink" title="Information State Space"></a><strong>Information State Space</strong></h3><img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled37.png" width="50%" height="50%">
+<p><strong>Bellman Equations</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled17.png" width="20%" height="20%">
 
-<p><strong>Example: Bernoulli Bandits</strong></p>
-<img src="https://yuuee-www.github.io/2023/07/10/RL/EE/RLEE/Untitled38.png" width="50%" height="50%">
+<p><strong>The Bellman Optimality Equations</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled18.png" width="20%" height="20%">
 
-<p><strong>Solving Information State Space Bandits</strong></p>
-<p>E.g., learn a Bayesian reward distribution, plan into the future</p>
-<p><strong>Bayes-adaptive RL</strong>: optimally trades off exploration with respect to the prior distribution</p>
-<p>full RL: transition model</p>
-<p>All included screenshots credit to Lecture 2:<a target="_blank" rel="noopener" href="https://dpmd.ai/explorationcontrol">slides</a>, wiki and ucl comp0142 lectures.</p>
-</article></div></main><div class="nav-wrap"><div class="nav"><button class="site-nav"><div class="navicon"></div></button><ul class="nav_items"><li class="nav_item"><a class="nav-page" href="https://yuuee-www.github.io/2023/07/05/notes/"> Notes</a></li></ul></div><div class="cd-top"><i class="fa fa-arrow-up" aria-hidden="true"></i></div></div><footer id="page_footer"><div class="footer_wrap"><div class="copyright">&copy;2023 by Yue Wang</div><div class="theme-info">Powered by <a target="_blank" href="https://hexo.io" rel="nofollow noopener">Hexo</a> & <a target="_blank" href="https://github.com/PhosphorW/hexo-theme-academia" rel="nofollow noopener">Academia Theme</a></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery-pjax@latest/jquery.pjax.min.js"></script><script src="/js/main.js"></script></body></html>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled19.png" width="20%" height="20%">
+
+<hr>
+<p><strong>Problems in RL</strong>                 prediction vs control</p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled20.png" width="20%" height="20%">
+
+<p><strong>Bellman Equation in Matrix Form</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled21.png" width="20%" height="20%">
+
+<p>There are iterative methods for larger problems</p>
+<ul>
+<li>Dynamic programming</li>
+<li>Monte-Carlo evaluation</li>
+<li>Temporal-Difference learning</li>
+</ul>
+<h3 id="Solving-the-Bellman-Optimality-Equation"><a href="#Solving-the-Bellman-Optimality-Equation" class="headerlink" title="Solving the Bellman Optimality Equation"></a><strong>Solving the Bellman Optimality Equation</strong></h3><p>The Bellman optimality equation is <strong>non-linear</strong></p>
+<p><strong>Cannot</strong> use the same direct <strong>matrix solution</strong> as for policy optimisation (in general)</p>
+<p>Many <strong>iterative solution</strong> methods</p>
+<p>Using models &#x2F; dynamic programming</p>
+<p>Value iteration</p>
+<p>Policy iteration</p>
+<p>Using <strong>samples</strong></p>
+<p>Monte Carlo</p>
+<p>Q-learning</p>
+<p>Sarsa</p>
+<p><strong>Dynamic Programming</strong></p>
+<p><em>Dynamic programming refers to a collection of algorithms that can be used</em></p>
+<p><em>to compute optimal policies given a perfect model of the environment as a</em></p>
+<p><em>Markov decision process (MDP).   —</em> <strong>Sutton &amp; Barto 2018</strong></p>
+<p><strong>dynamic programming methods:</strong></p>
+<p>solve MDPs</p>
+<p>two important parts: <strong>policy evaluation</strong> and <strong>policy improvement</strong></p>
+<p><strong>Policy evaluation:</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled22.png" width="20%" height="20%">
+
+<ul>
+<li><strong>this algorithm always converges</strong></li>
+</ul>
+<p><strong>Policy Improvement:</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled23.png" width="20%" height="20%">
+
+<p><strong>Policy Iteration</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled.png24" width="20%" height="20%">
+
+<p><strong>Value Iteration</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled25.png" width="20%" height="20%">
+
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled26.png" width="20%" height="20%">
+
+<p><strong>…</strong></p>
+<h3 id="Preliminaries-→-Functional-Analysis"><a href="#Preliminaries-→-Functional-Analysis" class="headerlink" title="Preliminaries → Functional Analysis"></a><strong>Preliminaries → Functional Analysis</strong></h3><p><strong>Normed Vector Spaces</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled27.png" width="20%" height="20%">
+
+<p><strong>Contraction Mapping</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled28.png" width="20%" height="20%">
+
+<p><strong>Fixed point</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled29.png" width="20%" height="20%">
+
+<p><strong>Banach Fixed Point Theorem</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled30.png" width="20%" height="20%">
+…</article></div></main><div class="nav-wrap"><div class="nav"><button class="site-nav"><div class="navicon"></div></button><ul class="nav_items"><li class="nav_item"><a class="nav-page" href="https://yuuee-www.github.io/2023/07/05/notes/"> Notes</a></li></ul></div><div class="cd-top"><i class="fa fa-arrow-up" aria-hidden="true"></i></div></div><footer id="page_footer"><div class="footer_wrap"><div class="copyright">&copy;2023 by Yue Wang</div><div class="theme-info">Powered by <a target="_blank" href="https://hexo.io" rel="nofollow noopener">Hexo</a> & <a target="_blank" href="https://github.com/PhosphorW/hexo-theme-academia" rel="nofollow noopener">Academia Theme</a></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery-pjax@latest/jquery.pjax.min.js"></script><script src="/js/main.js"></script></body></html>
