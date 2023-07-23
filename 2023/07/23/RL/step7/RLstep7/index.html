@@ -1,0 +1,99 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5"><title>yuuee-www</title><meta name="author" content="Yue Wang"><link rel="shortcut icon" href="/img/favicon.png"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><meta name="generator" content="Hexo 6.3.0"></head><body><header id="page_header"><div class="header_wrap"><div id="blog_name"><a class="blog_title" id="site-name" href="/">yuuee-www</a></div><button class="menus_icon"><div class="navicon"></div></button><ul class="menus_items"><li class="menus_item"><a class="site-page" href="https://yuuee-www.github.io/2023/07/05/notes/"> Notes</a></li></ul></div></header><main id="page_main"><div class="side-card sticky"><div class="card-wrap" itemscope itemtype="http://schema.org/Person"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/profile.png'" alt="avatar"></div><div class="author-discrip"><h3>Yue Wang</h3><p class="author-bio"></p></div><div class="author-links"><button class="btn m-social-links">Links</button><ul class="social-icons"><li><a class="social-icon" href="https://github.com/yuuee-www" target="_blank"><i class="fab fa-github" aria-hidden="true"></i></a></li><li><a class="social-icon" href="mailto:zcabwaa@ucl.ac.uk" target="_blank"><i class="fas fa-envelope" aria-hidden="true"></i></a></li><li><a class="social-icon" href="https://wa.me/8613377207084?text=" target="_blank"><i class="fab fa-whatsapp" aria-hidden="true"></i></a></li></ul></div></div></div><div class="page" itemscope itemtype="http://schema.org/CreativeWork"><h2 class="page-title"></h2><article><p>Policy Gradients and Actor Critics</p>
+<p><strong>Model-based RL Value-based RL Policy-based RL</strong></p>
+<p><strong>Policy-Based Reinforcement Learning</strong></p>
+<p>model-free reinforcement learning</p>
+<p>previous</p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled.png" width="40%" height="40%">
+
+<p>Now,</p>
+<p>parametrise the <strong>policy</strong> directly</p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled1.png" width="40%" height="40%">
+
+<p><strong>Value-based and policy-based RL’:’ terminology</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled2.png" width="40%" height="40%">
+
+<p><strong>Stochastic policies</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled3.png" width="40%" height="40%">
+
+<p><strong>Policy Objective Functions</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled4.png" width="40%" height="40%">
+
+<p><strong>Episodic:</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled5.png" width="40%" height="40%">
+
+<p><strong>Average Reward:</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled6.png" width="40%" height="40%">
+
+<p>Policy Gradients</p>
+<p><strong>Policy Optimisation</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled7.png" width="40%" height="40%">
+
+<p><strong>Policy Gradient</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled8.png" width="40%" height="40%">
+
+<p><strong>Gradients on parameterized policies</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled9.png" width="40%" height="40%">
+
+<p><strong>Contextual Bandits Policy Gradient</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled10.png" width="40%" height="40%">
+
+<p>use the identity instead</p>
+<p>REINFORCE (Williams, 1992) </p>
+<p><strong>The right-hand side gives an expected gradient that can be sampled:</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled11.png" width="40%" height="40%">
+
+<p><strong>The score function trick</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled12.png" width="40%" height="40%">
+
+<p><strong>Contextual Bandit Policy Gradient</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled13.png" width="40%" height="40%">
+
+<p><strong>Policy gradients’:’ reduce variance</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled14.png" width="40%" height="40%">
+
+<p><strong>Example’:’ Softmax Policy:</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled15.png" width="40%" height="40%">
+
+<p><strong>Policy Gradient Theorem</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled16.png" width="40%" height="40%">
+
+<p><strong>Policy gradient theorem (episodic):</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled17.png" width="40%" height="40%">
+
+<p><strong>Episodic policy gradients algorithm:</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled18.png" width="40%" height="40%">
+
+<p><strong>Policy gradient theorem (average reward):</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled19.png" width="40%" height="40%">
+
+<p>Alternatively (but equivalently)</p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled20.png" width="40%" height="40%">
+
+<p><strong>Policy gradients’:’ reduce variance</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled21.png" width="40%" height="40%">
+
+<hr>
+<h2 id="Actor-Critics"><a href="#Actor-Critics" class="headerlink" title="Actor Critics"></a>Actor Critics</h2><p><strong>Critics</strong></p>
+<p>A critic is a <strong>value function</strong>, learnt via <strong>policy evaluation</strong>:</p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled22.png" width="40%" height="40%">
+
+<p><strong>Actor-Critic</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled23.png" width="40%" height="40%">
+
+<p><strong>Policy gradient variations</strong></p>
+<p>This is different from supervised learning (where learning and data are independent)</p>
+<p><strong>Increasing robustness with trust regions</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled24.png" width="40%" height="40%">
+
+<hr>
+<h3 id="Continuous-action-spaces"><a href="#Continuous-action-spaces" class="headerlink" title="Continuous action spaces"></a>Continuous action spaces</h3><p><strong>Gaussian policy</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled25.png" width="40%" height="40%">
+
+<p><strong>Policy gradient with Gaussian policy</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled26.png" width="40%" height="40%">
+
+<p><strong>Gradient ascent on value</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled27.png" width="40%" height="40%">
+
+<p><strong>Continuous actor-critic learning automaton (Cacla)</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/23/RL/step7/RLstep7/Untitled28.png" width="40%" height="40%"></article></div></main><div class="nav-wrap"><div class="nav"><button class="site-nav"><div class="navicon"></div></button><ul class="nav_items"><li class="nav_item"><a class="nav-page" href="https://yuuee-www.github.io/2023/07/05/notes/"> Notes</a></li></ul></div><div class="cd-top"><i class="fa fa-arrow-up" aria-hidden="true"></i></div></div><footer id="page_footer"><div class="footer_wrap"><div class="copyright">&copy;2023 by Yue Wang</div><div class="theme-info">Powered by <a target="_blank" href="https://hexo.io" rel="nofollow noopener">Hexo</a> & <a target="_blank" href="https://github.com/PhosphorW/hexo-theme-academia" rel="nofollow noopener">Academia Theme</a></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery-pjax@latest/jquery.pjax.min.js"></script><script src="/js/main.js"></script></body></html>
