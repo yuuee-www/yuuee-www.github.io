@@ -249,7 +249,7 @@ span,
   font-family: "Times New Roman", FangSong, STFangsong, sans-serif;
 }
 img {
-  max-width: 100%;
+  max-width: 50%;
 }
 blockquote {
   position: relative;
@@ -529,13 +529,13 @@ blockquote p {
 .author-avatar {
   display: table-cell;
   vertical-align: top;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
 }
 .author-avatar img {
   width: 100%;
-  max-width: 110px;
-  border-radius: 50%;
+  max-width: 120px;
+  border-radius: 80%;
 }
 .author-discrip {
   display: table-cell;
@@ -736,6 +736,7 @@ blockquote p {
   }
   .author-discrip {
     display: block;
+    text-align: center;
     width: 100%;
     padding-left: 0;
     padding-right: 0;
@@ -748,9 +749,11 @@ blockquote p {
   }
   .author-links {
     display: block;
+    text-align: center;
   }
   .social-icons {
     display: block;
+    text-align: center;
     visibility: visible;
     opacity: 1;
     position: relative;
