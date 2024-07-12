@@ -13,26 +13,22 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://yuuee-www.github.io/blog/2023/07/23/rl/step9/rlstep9/"/>
+    <link rel="canonical" href="https://yuuee-www.github.io/blog/2024/07/12/summer-notes/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="Off-policy and multi-step learningOne-step off-policy   Multi-step off-policy   Off-policy corrections for policy gradients">
+        <meta name="description" content="Learning Notes on Optimal Transport1. IntroductionOptimal Transport (OT) originates from the work of the French mathematician Gaspard Monge in the 18th century. The problem involves figuring out the m">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hola">
-<meta property="og:url" content="https://yuuee-www.github.io/blog/2023/07/23/RL/step9/RLstep9/index.html">
+<meta property="og:title" content="summer notes">
+<meta property="og:url" content="https://yuuee-www.github.io/blog/2024/07/12/summer-notes/index.html">
 <meta property="og:site_name" content="hola">
-<meta property="og:description" content="Off-policy and multi-step learningOne-step off-policy   Multi-step off-policy   Off-policy corrections for policy gradients">
+<meta property="og:description" content="Learning Notes on Optimal Transport1. IntroductionOptimal Transport (OT) originates from the work of the French mathematician Gaspard Monge in the 18th century. The problem involves figuring out the m">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://yuuee-www.github.io/2023/07/23/RL/step9/RLstep9/Untitled.png">
-<meta property="og:image" content="https://yuuee-www.github.io/2023/07/23/RL/step9/RLstep9/Untitled1.png">
-<meta property="og:image" content="https://yuuee-www.github.io/2023/07/23/RL/step9/RLstep9/Untitled2.png">
-<meta property="article:published_time" content="2023-07-23T10:50:21.849Z">
-<meta property="article:modified_time" content="2023-07-23T10:55:20.617Z">
+<meta property="article:published_time" content="2024-07-12T14:22:21.000Z">
+<meta property="article:modified_time" content="2024-07-12T14:22:45.926Z">
 <meta property="article:author" content="wy">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://yuuee-www.github.io/2023/07/23/RL/step9/RLstep9/Untitled.png">
     
     
     <!--- Icon Part-->
@@ -43,6 +39,8 @@
     <!--- Page Info-->
     
     <title>
+        
+            summer notes -
         
         hola
     </title>
@@ -388,7 +386,7 @@
         <div class="article-title relative w-full">
             
                 <div class="w-full flex items-center pt-6 justify-start">
-                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3"></h1>
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">summer notes</h1>
                 </div>
             
             </div>
@@ -409,15 +407,15 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2023-07-23 18:50:21</span>
-        <span class="mobile">2023-07-23 18:50:21</span>
+        <span class="desktop">2024-07-12 22:22:21</span>
+        <span class="mobile">2024-07-12 22:22:21</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2023-07-23 18:55:20</span>
-            <span class="mobile">2023-07-23 18:55:20</span>
+            <span class="desktop">2024-07-12 22:22:45</span>
+            <span class="mobile">2024-07-12 22:22:45</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -444,47 +442,29 @@
 
 
         <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-            <h1 id="Off-policy-and-multi-step-learning"><a href="#Off-policy-and-multi-step-learning" class="headerlink" title="Off-policy and multi-step learning"></a>Off-policy and multi-step learning</h1><p><strong>One-step off-policy</strong></p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://yuuee-www.github.io/2023/07/23/RL/step9/RLstep9/Untitled.png"
-                      width="40%" height="40%"
-                >
+            <h1 id="Learning-Notes-on-Optimal-Transport"><a href="#Learning-Notes-on-Optimal-Transport" class="headerlink" title="Learning Notes on Optimal Transport"></a>Learning Notes on Optimal Transport</h1><h2 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h2><p>Optimal Transport (OT) originates from the work of the French mathematician Gaspard Monge in the 18th century. The problem involves figuring out the most cost-effective way to transport a resource (like soil, goods, etc.) from various sources to multiple destinations. This concept has applications across various fields, including economics, engineering, and more recently, machine learning and data science.</p>
+<h2 id="2-Mathematical-Formulation"><a href="#2-Mathematical-Formulation" class="headerlink" title="2. Mathematical Formulation"></a>2. Mathematical Formulation</h2><h3 id="2-1-Monge’s-Problem"><a href="#2-1-Monge’s-Problem" class="headerlink" title="2.1 Monge’s Problem"></a>2.1 Monge’s Problem</h3><p>Monge’s formulation of the OT problem seeks a mapping ( T: \mathbb{R}^n \rightarrow \mathbb{R}^n ) that transports a mass distributed according to a density ( \mu ) to another mass distributed according to a density ( \nu ), minimizing the cost function:<br>[ \min_T \int | T(x) - x | , d\mu(x) ]</p>
+<h3 id="2-2-Kantorovich’s-Relaxation"><a href="#2-2-Kantorovich’s-Relaxation" class="headerlink" title="2.2 Kantorovich’s Relaxation"></a>2.2 Kantorovich’s Relaxation</h3><p>Leonid Kantorovich introduced a relaxed version of Monge’s problem, which is easier to solve with modern computational tools. It transforms the problem into finding a joint distribution ( \gamma ) over the product space of the sources and the destinations that minimizes:<br>[ \min_\gamma \int_{X \times Y} c(x, y) , d\gamma(x, y) ]<br>where ( c(x, y) ) is the cost of transporting mass from ( x ) to ( y ).</p>
+<h2 id="3-Computational-Methods"><a href="#3-Computational-Methods" class="headerlink" title="3. Computational Methods"></a>3. Computational Methods</h2><h3 id="3-1-Linear-Programming"><a href="#3-1-Linear-Programming" class="headerlink" title="3.1 Linear Programming"></a>3.1 Linear Programming</h3><p>For discrete distributions, the OT problem can be formulated as a linear program where the objective is to minimize the total transportation cost subject to constraints ensuring that the mass is properly moved from sources to destinations.</p>
 
-<p><strong>Multi-step off-policy</strong></p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://yuuee-www.github.io/2023/07/23/RL/step9/RLstep9/Untitled1.png"
-                      width="40%" height="40%"
-                >
-
-<p><strong>Off-policy corrections for policy gradients</strong></p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://yuuee-www.github.io/2023/07/23/RL/step9/RLstep9/Untitled2.png"
-                      width="40%" height="40%"
-                >
         </div>
 
         
             <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
                 <div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> </li>
+        <li><strong>Title:</strong> summer notes</li>
         <li><strong>Author:</strong> wy</li>
         <li><strong>Created at
-                :</strong> 2023-07-23 18:50:21</li>
+                :</strong> 2024-07-12 22:22:21</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2023-07-23 18:55:20
+                    :</strong> 2024-07-12 22:22:45
             </li>
         
         <li>
-            <strong>Link:</strong> https://redefine.ohevan.com/2023/07/23/RL/step9/RLstep9/
+            <strong>Link:</strong> https://redefine.ohevan.com/2024/07/12/summer-notes/
         </li>
         <li>
             <strong>
@@ -509,29 +489,14 @@
         
             <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
                 
-                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-                        <a class="prev"
-                        rel="prev"
-                        href="/2023/07/23/RL/step10/RLstep10/"
-                        >
-                            <span class="left arrow-icon flex justify-center items-center">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item"></span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
                         <a class="next"
                         rel="next"
-                        href="/2023/07/23/RL/step8/RLstep8/"
+                        href="/2024/07/12/musings/"
                         >
                             <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item"></span>
+                                <span class="post-nav-title-item">musings</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex justify-center items-center">
@@ -595,8 +560,8 @@
             <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">On this page</div>
-        <div class="page-title"></div>
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Off-policy-and-multi-step-learning"><span class="nav-text">Off-policy and multi-step learning</span></a></li></ol>
+        <div class="page-title">summer notes</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Notes-on-Optimal-Transport"><span class="nav-text">Learning Notes on Optimal Transport</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Introduction"><span class="nav-text">1. Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Mathematical-Formulation"><span class="nav-text">2. Mathematical Formulation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Monge%E2%80%99s-Problem"><span class="nav-text">2.1 Monge’s Problem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Kantorovich%E2%80%99s-Relaxation"><span class="nav-text">2.2 Kantorovich’s Relaxation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Computational-Methods"><span class="nav-text">3. Computational Methods</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Linear-Programming"><span class="nav-text">3.1 Linear Programming</span></a></li></ol></li></ol></li></ol>
 
     </div>
 </div>
