@@ -1,6 +1,133 @@
-extends includes/layout
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5"><title>Hexo</title><meta name="author" content="John Doe"><link rel="shortcut icon" href="/blog/img/favicon.png"><link rel="stylesheet" href="/blog/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><meta name="generator" content="Hexo 6.3.0"></head><body><header id="page_header"><div class="header_wrap"><div id="blog_name"><a class="blog_title" id="site-name" href="/blog/">Hexo</a></div><button class="menus_icon"><div class="navicon"></div></button><ul class="menus_items"><li class="menus_item"><a class="site-page" href="/blog/#Publications"> Publications</a></li><li class="menus_item"><a class="site-page" href="/blog/"> About</a></li><li class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://phower.me"> Blog</a></li></ul></div></header><main id="page_main"><div class="side-card sticky"><div class="card-wrap" itemscope itemtype="http://schema.org/Person"><div class="author-avatar"><img class="avatar-img" src="/blog/img/avatar.jpg" onerror="this.onerror=null;this.src='/blog/img/profile.png'" alt="avatar"></div><div class="author-discrip"><h3>John Doe</h3><p class="author-bio">Your biography can be writed down here.</p></div><div class="author-links"><button class="btn m-social-links">Links</button><ul class="social-icons"><li><a class="social-icon" href="/" target="_blank"><i class="fab fa-twitter" aria-hidden="true"></i></a></li><li><a class="social-icon" href="/" target="_blank"><i class="fab fa-facebook-square" aria-hidden="true"></i></a></li><li><a class="social-icon" href="/" target="_blank"><i class="fab fa-github" aria-hidden="true"></i></a></li><li><a class="social-icon" href="/" target="_blank"><i class="fab fa-stack-overflow" aria-hidden="true"></i></a></li><li><a class="social-icon" href="/" target="_blank"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li><li><a class="social-icon" href="/" target="_blank"><i class="fab fa-weibo" aria-hidden="true"></i></a></li><li><a class="social-icon" href="/" target="_blank"><i class="fab fa-weixin" aria-hidden="true"></i></a></li><li><a class="social-icon" href="/" target="_blank"><i class="fab fa-qq" aria-hidden="true"></i></a></li><li><a class="social-icon" href="/" target="_blank"><i class="fas fa-envelope" aria-hidden="true"></i></a></li><li><a class="social-icon" href="/" target="_blank"><i class="fas fa-rss" aria-hidden="true"></i></a></li></ul><ul class="social-links"><li><a class="e-social-link" href="/blog/" target="_blank"><i class="fas fa-graduation-cap" aria-hidden="true"></i><span>Google Scholar</span></a></li><li><a class="e-social-link" href="/blog/" target="_blank"><i class="fab fa-orcid" aria-hidden="true"></i><span>ORCID</span></a></li></ul></div><a class="cv-links" href="/blog/attaches/CV.pdf" target="_blank"><i class="fas fa-file-pdf" aria-hidden="true"><span>My Detail CV.</span></i></a></div></div><div class="page" itemscope itemtype="http://schema.org/CreativeWork"><h2 class="page-title"></h2><article><p>Markov Decision Processes and Dynamic Programming</p>
+<p><strong>Formalising the RL interface</strong></p>
+<p><strong>Markov Decision Process (MDP)</strong></p>
+<p>a mathematical formulation of the agent-environment interaction</p>
+<p>the <strong>objective</strong> and <strong>how to achieve it</strong></p>
+<p>a <strong>simplifying assumption</strong></p>
+<p><strong>assume the environment is fully observable</strong></p>
+<p>Almost all RL problems can be formalised as MDPs, e.g.,</p>
+<ul>
+<li>Optimal control primarily deals with continuous MDPs</li>
+<li>Partially observable problems can be converted into MDPs</li>
+<li>Bandits are MDPs with one state</li>
+</ul>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled.png" width="20%" height="20%">
 
-block content
-    .page(itemscope itemtype='http://schema.org/CreativeWork')
-        h2.page-title!= page.title
-        article!= page.content
+<p>Joint Distributions</p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled1.png" width="20%" height="20%">
+
+<p><strong>Alternative Definition</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled2.png" width="20%" height="20%">
+
+<p><strong>Markov Property <em>The future is independent of the past given the present</em></strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled3.png" width="20%" height="20%">
+
+<p>Markov Property in a MDP</p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled4.png" width="20%" height="20%">
+
+<hr>
+<p><strong>Formalising the objective</strong></p>
+<h3 id="Returns"><a href="#Returns" class="headerlink" title="Returns"></a><strong>Returns</strong></h3><img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled5.png" width="20%" height="20%">
+
+<p><strong>Discounted Return</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled6.png" width="20%" height="20%">
+
+<p><strong>Most Markov decision processes are discounted</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled7.png" width="20%" height="20%">
+
+<h3 id="Policies"><a href="#Policies" class="headerlink" title="Policies"></a><strong>Policies</strong></h3><p><strong>Goal of an RL agent</strong> </p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled8.png" width="20%" height="20%">
+
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled9.png" width="20%" height="20%">
+
+<h3 id="Value-Functions"><a href="#Value-Functions" class="headerlink" title="Value Functions"></a><strong>Value Functions</strong></h3><p>value function &amp; (state-)action values</p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled10.png" width="20%" height="20%">
+
+<p><strong>Optimal Value Function</strong></p>
+<p>solution | state-value function | action-value function</p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled11.png" width="20%" height="20%">
+
+<p><strong>Optimal Policy</strong></p>
+<p><strong>Define a partial ordering over policies</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled12.png" width="20%" height="20%">
+
+<p><strong>Theorem (Optimal Policies)</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled13.png" width="20%" height="20%">
+
+<p><strong>Finding an Optimal Policy</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled14.png" width="20%" height="20%">
+
+<h3 id="Bellman-Equations"><a href="#Bellman-Equations" class="headerlink" title="Bellman Equations"></a>Bellman Equations</h3><p><strong>Value Function</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled15.png" width="20%" height="20%">
+
+<p><strong>Action values</strong> ｜ state-action values</p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled16.png" width="20%" height="20%">
+
+<p><strong>Bellman Equations</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled17.png" width="20%" height="20%">
+
+<p><strong>The Bellman Optimality Equations</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled18.png" width="20%" height="20%">
+
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled19.png" width="20%" height="20%">
+
+<hr>
+<p><strong>Problems in RL</strong>                 prediction vs control</p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled20.png" width="20%" height="20%">
+
+<p><strong>Bellman Equation in Matrix Form</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled21.png" width="20%" height="20%">
+
+<p>There are iterative methods for larger problems</p>
+<ul>
+<li>Dynamic programming</li>
+<li>Monte-Carlo evaluation</li>
+<li>Temporal-Difference learning</li>
+</ul>
+<h3 id="Solving-the-Bellman-Optimality-Equation"><a href="#Solving-the-Bellman-Optimality-Equation" class="headerlink" title="Solving the Bellman Optimality Equation"></a><strong>Solving the Bellman Optimality Equation</strong></h3><p>The Bellman optimality equation is <strong>non-linear</strong></p>
+<p><strong>Cannot</strong> use the same direct <strong>matrix solution</strong> as for policy optimisation (in general)</p>
+<p>Many <strong>iterative solution</strong> methods</p>
+<p>Using models &#x2F; dynamic programming</p>
+<p>Value iteration</p>
+<p>Policy iteration</p>
+<p>Using <strong>samples</strong></p>
+<p>Monte Carlo</p>
+<p>Q-learning</p>
+<p>Sarsa</p>
+<p><strong>Dynamic Programming</strong></p>
+<p><em>Dynamic programming refers to a collection of algorithms that can be used</em></p>
+<p><em>to compute optimal policies given a perfect model of the environment as a</em></p>
+<p><em>Markov decision process (MDP).   —</em> <strong>Sutton &amp; Barto 2018</strong></p>
+<p><strong>dynamic programming methods:</strong></p>
+<p>solve MDPs</p>
+<p>two important parts: <strong>policy evaluation</strong> and <strong>policy improvement</strong></p>
+<p><strong>Policy evaluation:</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled22.png" width="20%" height="20%">
+
+<ul>
+<li><strong>this algorithm always converges</strong></li>
+</ul>
+<p><strong>Policy Improvement:</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled23.png" width="20%" height="20%">
+
+<p><strong>Policy Iteration</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled.png24" width="20%" height="20%">
+
+<p><strong>Value Iteration</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled25.png" width="20%" height="20%">
+
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled26.png" width="20%" height="20%">
+
+<p><strong>…</strong></p>
+<h3 id="Preliminaries-→-Functional-Analysis"><a href="#Preliminaries-→-Functional-Analysis" class="headerlink" title="Preliminaries → Functional Analysis"></a><strong>Preliminaries → Functional Analysis</strong></h3><p><strong>Normed Vector Spaces</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled27.png" width="20%" height="20%">
+
+<p><strong>Contraction Mapping</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled28.png" width="20%" height="20%">
+
+<p><strong>Fixed point</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled29.png" width="20%" height="20%">
+
+<p><strong>Banach Fixed Point Theorem</strong></p>
+<img src="https://yuuee-www.github.io/2023/07/20/RL/step3/RLstep3/Untitled30.png" width="20%" height="20%">
+…</article></div></main><div class="nav-wrap"><div class="nav"><button class="site-nav"><div class="navicon"></div></button><ul class="nav_items"><li class="nav_item"><a class="nav-page" href="/blog/#Publications"> Publications</a></li><li class="nav_item"><a class="nav-page" href="/blog/"> About</a></li><li class="nav_item"><a class="nav-page" target="_blank" rel="noopener" href="https://phower.me"> Blog</a></li></ul></div><div class="cd-top"><i class="fa fa-arrow-up" aria-hidden="true"></i></div></div><footer id="page_footer"><div class="footer_wrap"><div class="copyright">&copy;2020 - 2024 by John Doe</div><div class="theme-info">Powered by <a target="_blank" href="https://hexo.io" rel="nofollow noopener">Hexo</a> & <a target="_blank" href="https://github.com/PhosphorW/hexo-theme-academia" rel="nofollow noopener">Academia Theme</a></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery-pjax@latest/jquery.pjax.min.js"></script><script src="/blog/js/main.js"></script></body></html>
