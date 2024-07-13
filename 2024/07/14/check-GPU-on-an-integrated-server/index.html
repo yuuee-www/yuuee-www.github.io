@@ -13,20 +13,20 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://yuuee-www.github.io/blog/2024/07/12/hexo-blog-issues/"/>
+    <link rel="canonical" href="https://yuuee-www.github.io/blog/2024/07/14/check-gpu-on-an-integrated-server/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="Hexo Blog Setup Issues SummaryIssue 1: Web Page Fails to Render After DeploymentDescriptionAfter deploying the Hexo blog to a hosting platform such as GitHub Pages, the web page may not render properl">
+        <meta name="description" content="Using nvidia-smi on Integrated ServersWhen logged into an integrated server and attempting to use the nvidia-smi command directly in the command line, you might encounter the following error: “bash: n">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo_blog_issues">
-<meta property="og:url" content="https://yuuee-www.github.io/blog/2024/07/12/hexo-blog-issues/index.html">
+<meta property="og:title" content="check GPU on an integrated server">
+<meta property="og:url" content="https://yuuee-www.github.io/blog/2024/07/14/check-GPU-on-an-integrated-server/index.html">
 <meta property="og:site_name" content="hola">
-<meta property="og:description" content="Hexo Blog Setup Issues SummaryIssue 1: Web Page Fails to Render After DeploymentDescriptionAfter deploying the Hexo blog to a hosting platform such as GitHub Pages, the web page may not render properl">
+<meta property="og:description" content="Using nvidia-smi on Integrated ServersWhen logged into an integrated server and attempting to use the nvidia-smi command directly in the command line, you might encounter the following error: “bash: n">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-07-12T09:48:10.000Z">
-<meta property="article:modified_time" content="2024-07-12T10:13:38.380Z">
+<meta property="article:published_time" content="2024-07-13T16:51:17.000Z">
+<meta property="article:modified_time" content="2024-07-13T17:01:01.619Z">
 <meta property="article:author" content="wy">
 <meta name="twitter:card" content="summary">
     
@@ -40,7 +40,7 @@
     
     <title>
         
-            hexo_blog_issues -
+            check GPU on an integrated server -
         
         hola
     </title>
@@ -390,7 +390,7 @@
         <div class="article-title relative w-full">
             
                 <div class="w-full flex items-center pt-6 justify-start">
-                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">hexo_blog_issues</h1>
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">check GPU on an integrated server</h1>
                 </div>
             
             </div>
@@ -411,15 +411,15 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-07-12 17:48:10</span>
-        <span class="mobile">2024-07-12 17:48:10</span>
+        <span class="desktop">2024-07-14 00:51:17</span>
+        <span class="mobile">2024-07-14 00:51:17</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-07-12 18:13:38</span>
-            <span class="mobile">2024-07-12 18:13:38</span>
+            <span class="desktop">2024-07-14 01:01:01</span>
+            <span class="mobile">2024-07-14 01:01:01</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -446,48 +446,20 @@
 
 
         <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-            <h1 id="Hexo-Blog-Setup-Issues-Summary"><a href="#Hexo-Blog-Setup-Issues-Summary" class="headerlink" title="Hexo Blog Setup Issues Summary"></a>Hexo Blog Setup Issues Summary</h1><h3 id="Issue-1-Web-Page-Fails-to-Render-After-Deployment"><a href="#Issue-1-Web-Page-Fails-to-Render-After-Deployment" class="headerlink" title="Issue 1: Web Page Fails to Render After Deployment"></a>Issue 1: Web Page Fails to Render After Deployment</h3><h4 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h4><p>After deploying the Hexo blog to a hosting platform such as GitHub Pages, the web page may not render properly. This is often due to misconfigurations in the Hexo <code>_config.yml</code> file.</p>
-<h4 id="Symptoms"><a href="#Symptoms" class="headerlink" title="Symptoms"></a>Symptoms</h4><ul>
-<li>The blog deploys without errors, but when visiting the site, it shows a blank page or a layout without any styles.</li>
-<li>Console logs in the browser may show missing files or 404 errors.</li>
-</ul>
-<h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h4><p><strong>Verify and Adjust the <code>_config.yml</code> Settings:</strong></p>
+            <h2 id="Using-nvidia-smi-on-Integrated-Servers"><a href="#Using-nvidia-smi-on-Integrated-Servers" class="headerlink" title="Using nvidia-smi on Integrated Servers"></a>Using <code>nvidia-smi</code> on Integrated Servers</h2><p>When logged into an integrated server and attempting to use the <code>nvidia-smi</code> command directly in the command line, you might encounter the following error:</p>
+<p>“bash: nvidia-smi: command not found”</p>
+<p>This error occurs because, although you are logged into the server, you have not been allocated a GPU. On an integrated server, simply logging in does not grant access to GPU resources. To properly access and utilize GPUs, you must submit a specific job that requests a GPU, and execute the <code>nvidia-smi</code> command within the context of that job. The necessary GPU information can then be obtained from the job’s output file.</p>
+<h2 id="Specific-Steps-to-Fetch-GPU-Information"><a href="#Specific-Steps-to-Fetch-GPU-Information" class="headerlink" title="Specific Steps to Fetch GPU Information"></a>Specific Steps to Fetch GPU Information</h2><p>To fetch GPU information via <code>nvidia-smi</code> on an integrated server, follow these steps:</p>
 <ol>
-<li><p><strong>Correct <code>root</code> Setting:</strong></p>
-<ul>
-<li>Ensure that the <code>root</code> setting in your <code>_config.yml</code> matches the directory structure of your deployment environment. For example, if your blog is accessible at <code>https://username.github.io/blog</code>, set <code>root: /blog/</code>.</li>
-<li>If your blog is hosted at the root of a domain, e.g., <code>https://username.github.io</code>, make sure <code>root</code> is set to <code>/</code>.</li>
-</ul>
-</li>
-<li><p><strong>Check URL Configuration:</strong></p>
-<ul>
-<li>The <code>url</code> setting should match your domain</li>
-</ul>
-</li>
+<li><strong>Create a Shell Script</strong>: On the server, create a shell script file named <code>check_gpu_status.sh</code>. This script will request a GPU and execute the <code>nvidia-smi</code> command. Here’s a sample script:</li>
 </ol>
-<h2 id="Successful-Configuration-Example"><a href="#Successful-Configuration-Example" class="headerlink" title="Successful Configuration Example"></a>Successful Configuration Example</h2><p>Here’s an example of a correctly configured <code>_config.yml</code> that resolves the issue:</p>
-<div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">url:</span> <span class="string">https://yuuee-www.github.io/blog/</span></span><br><span class="line"><span class="attr">root:</span> <span class="string">/</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
-
-<h3 id="Issue-2-Images-Not-Displayed-in-Posts-After-Changing-Themes-and-Redeploying"><a href="#Issue-2-Images-Not-Displayed-in-Posts-After-Changing-Themes-and-Redeploying" class="headerlink" title="Issue 2: Images Not Displayed in Posts After Changing Themes and Redeploying"></a>Issue 2: Images Not Displayed in Posts After Changing Themes and Redeploying</h3><h4 id="Description-1"><a href="#Description-1" class="headerlink" title="Description"></a>Description</h4><p>After switching themes in a Hexo blog and redeploying, images located in the <code>source</code> directory may not appear in the generated <code>public</code> directory. This results in images not being displayed in blog posts when viewed on the web.</p>
-<h4 id="Symptoms-1"><a href="#Symptoms-1" class="headerlink" title="Symptoms"></a>Symptoms</h4><ul>
-<li>Blog posts are missing images that are supposed to be embedded.</li>
-<li>No errors during deployment, but the images from the <code>source</code> directory do not appear in the <code>public</code> directory, resulting in broken image links on the live site.</li>
-</ul>
-<h4 id="Resolution"><a href="#Resolution" class="headerlink" title="Resolution"></a>Resolution</h4><h6 id="Configure-the-config-yml-File"><a href="#Configure-the-config-yml-File" class="headerlink" title="Configure the _config.yml File"></a>Configure the <code>_config.yml</code> File</h6><p>The issue often stems from the <code>post_asset_folder</code> setting in Hexo’s <code>_config.yml</code> file not being enabled. By default, this setting is false, which means images stored in post asset folders aren’t copied to the <code>public</code> directory during the generation process.</p>
-<h6 id="Steps-to-Resolve"><a href="#Steps-to-Resolve" class="headerlink" title="Steps to Resolve:"></a>Steps to Resolve:</h6><ol>
-<li>Open your Hexo blog’s <code>_config.yml</code> file.</li>
-<li>Locate the <code>post_asset_folder</code> setting.</li>
-<li>Change the value of <code>post_asset_folder</code> from <code>false</code> to <code>true</code>:<pre><code class="yaml">post_asset_folder: true
-</code></pre>
-</li>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">#BSUB -J check_gpu_status        # Job name is check_gpu_status</span></span><br><span class="line"><span class="comment">#BSUB -o gpu_status_output.txt   # Standard output redirected to gpu_status_output.txt</span></span><br><span class="line"><span class="comment">#BSUB -e gpu_status_error.txt    # Standard error redirected to gpu_status_error.txt</span></span><br><span class="line"><span class="comment">#BSUB -q gpu                     # Submit to GPU queue</span></span><br><span class="line"><span class="comment">#BSUB -gpu &quot;num=1:mode=exclusive_process&quot; # Request 1 GPU in exclusive mode</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Execute the nvidia-smi command</span></span><br><span class="line">nvidia-smi</span><br></pre></td></tr></table></figure></div>
+<p>This script configures the job to run on a GPU queue with one GPU allocated in exclusive mode. It captures the output and errors in respective files, facilitating easy review and troubleshooting.</p>
+<ol start="2">
+<li><strong>Submit the Script</strong>: To submit this job to the server’s job scheduler, use the <code>bsub</code> command in the terminal:</li>
 </ol>
-<h2 id="Additional-Notes"><a href="#Additional-Notes" class="headerlink" title="Additional Notes"></a>Additional Notes</h2><p>Use these commands for routine Hexo blog maintenance:</p>
-<ul>
-<li><code>hexo clean</code></li>
-<li><code>hexo g</code></li>
-<li><code>hexo d</code></li>
-</ul>
-<h3 id="Recommended-Reading"><a href="#Recommended-Reading" class="headerlink" title="Recommended Reading"></a>Recommended Reading</h3><p>For advanced tips, check out this guide: <a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/caoayu/p/13855081.html" >Optimizing and Troubleshooting Hexo <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>.</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bsub &lt; check_gpu_status.sh</span><br></pre></td></tr></table></figure></div>
+<p>This command submits the script to the job queue specified in the script (gpu queue), and the job scheduler handles the allocation of GPU resources and execution of the script.</p>
 
         </div>
 
@@ -495,18 +467,18 @@
             <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
                 <div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> hexo_blog_issues</li>
+        <li><strong>Title:</strong> check GPU on an integrated server</li>
         <li><strong>Author:</strong> wy</li>
         <li><strong>Created at
-                :</strong> 2024-07-12 17:48:10</li>
+                :</strong> 2024-07-14 00:51:17</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2024-07-12 18:13:38
+                    :</strong> 2024-07-14 01:01:01
             </li>
         
         <li>
-            <strong>Link:</strong> https://redefine.ohevan.com/2024/07/12/hexo-blog-issues/
+            <strong>Link:</strong> https://redefine.ohevan.com/2024/07/14/check-GPU-on-an-integrated-server/
         </li>
         <li>
             <strong>
@@ -531,29 +503,14 @@
         
             <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
                 
-                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-                        <a class="prev"
-                        rel="prev"
-                        href="/2024/07/12/musings/"
-                        >
-                            <span class="left arrow-icon flex justify-center items-center">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">musings</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
                         <a class="next"
                         rel="next"
-                        href="/2023/07/24/RL/step12/RLstep12/"
+                        href="/2024/07/14/Access-to-Internal-Server-From-Jump-Server/"
                         >
                             <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item"></span>
+                                <span class="post-nav-title-item">Access to Internal Server From Jump Server</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex justify-center items-center">
@@ -617,8 +574,8 @@
             <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">On this page</div>
-        <div class="page-title">hexo_blog_issues</div>
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hexo-Blog-Setup-Issues-Summary"><span class="nav-text">Hexo Blog Setup Issues Summary</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Issue-1-Web-Page-Fails-to-Render-After-Deployment"><span class="nav-text">Issue 1: Web Page Fails to Render After Deployment</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Successful-Configuration-Example"><span class="nav-text">Successful Configuration Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Issue-2-Images-Not-Displayed-in-Posts-After-Changing-Themes-and-Redeploying"><span class="nav-text">Issue 2: Images Not Displayed in Posts After Changing Themes and Redeploying</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Additional-Notes"><span class="nav-text">Additional Notes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Recommended-Reading"><span class="nav-text">Recommended Reading</span></a></li></ol></li></ol></li></ol>
+        <div class="page-title">check GPU on an integrated server</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Using-nvidia-smi-on-Integrated-Servers"><span class="nav-text">Using nvidia-smi on Integrated Servers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Specific-Steps-to-Fetch-GPU-Information"><span class="nav-text">Specific Steps to Fetch GPU Information</span></a></li></ol>
 
     </div>
 </div>
