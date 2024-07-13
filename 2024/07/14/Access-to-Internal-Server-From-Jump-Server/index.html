@@ -13,16 +13,20 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://yuuee-www.github.io/blog/"/>
+    <link rel="canonical" href="https://yuuee-www.github.io/blog/2024/07/14/access-to-internal-server-from-jump-server/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta property="og:type" content="website">
-<meta property="og:title" content="hola">
-<meta property="og:url" content="https://yuuee-www.github.io/blog/index.html">
+        <meta name="description" content="Using a Jump Server for Internal Network AccessIn scenarios where direct access to internal network resources is restricted due to security policies, a jump server (also known as a bastion host) acts">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Access to Internal Server From Jump Server">
+<meta property="og:url" content="https://yuuee-www.github.io/blog/2024/07/14/Access-to-Internal-Server-From-Jump-Server/index.html">
 <meta property="og:site_name" content="hola">
+<meta property="og:description" content="Using a Jump Server for Internal Network AccessIn scenarios where direct access to internal network resources is restricted due to security policies, a jump server (also known as a bastion host) acts">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-07-13T16:05:19.000Z">
+<meta property="article:modified_time" content="2024-07-13T16:21:07.241Z">
 <meta property="article:author" content="wy">
 <meta name="twitter:card" content="summary">
     
@@ -35,6 +39,8 @@
     <!--- Page Info-->
     
     <title>
+        
+            Access to Internal Server From Jump Server -
         
         hola
     </title>
@@ -102,119 +108,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
-  direction: ltr;
-}
-
-mjx-container[jax="SVG"] > svg {
-  overflow: visible;
-}
-
-mjx-container[jax="SVG"][display="true"] {
-  display: block;
-  text-align: center;
-  margin: 1em 0;
-}
-
-mjx-container[jax="SVG"][justify="left"] {
-  text-align: left;
-}
-
-mjx-container[jax="SVG"][justify="right"] {
-  text-align: right;
-}
-
-g[data-mml-node="merror"] > g {
-  fill: red;
-  stroke: red;
-}
-
-g[data-mml-node="merror"] > rect[data-background] {
-  fill: yellow;
-  stroke: none;
-}
-
-g[data-mml-node="mtable"] > line[data-line] {
-  stroke-width: 70px;
-  fill: none;
-}
-
-g[data-mml-node="mtable"] > rect[data-frame] {
-  stroke-width: 70px;
-  fill: none;
-}
-
-g[data-mml-node="mtable"] > .mjx-dashed {
-  stroke-dasharray: 140;
-}
-
-g[data-mml-node="mtable"] > .mjx-dotted {
-  stroke-linecap: round;
-  stroke-dasharray: 0,140;
-}
-
-g[data-mml-node="mtable"] > svg {
-  overflow: visible;
-}
-
-[jax="SVG"] mjx-tool {
-  display: inline-block;
-  position: relative;
-  width: 0;
-  height: 0;
-}
-
-[jax="SVG"] mjx-tool > mjx-tip {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-mjx-tool > mjx-tip {
-  display: inline-block;
-  padding: .2em;
-  border: 1px solid #888;
-  font-size: 70%;
-  background-color: #F8F8F8;
-  color: black;
-  box-shadow: 2px 2px 5px #AAAAAA;
-}
-
-g[data-mml-node="maction"][data-toggle] {
-  cursor: pointer;
-}
-
-mjx-status {
-  display: block;
-  position: fixed;
-  left: 1em;
-  bottom: 1em;
-  min-width: 25%;
-  padding: .2em .4em;
-  border: 1px solid #888;
-  font-size: 90%;
-  background-color: #F8F8F8;
-  color: black;
-}
-
-foreignObject[data-mjx-xml] {
-  font-family: initial;
-  line-height: normal;
-  overflow: visible;
-}
-
-.MathJax path {
-  stroke-width: 3;
-}
-
-mjx-container[display="true"] {
-  overflow: auto hidden;
-}
-
-mjx-container[display="true"] + br {
-  display: none;
-}
-</style></head>
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -379,100 +273,6 @@ mjx-container[display="true"] + br {
 <main class="page-container" id="swup">
 
     
-        
-    <style>
-        .home-banner-container {
-            background: none !important;
-        }
-        .home-article-item,
-        .sidebar-links,
-        .sidebar-content,
-        a.page-number,
-        a.extend,
-        .sidebar-links .links:hover,
-        .right-bottom-tools,
-        footer.footer {
-            background-color: var(--background-color-transparent-80) !important;
-        }
-        .right-bottom-tools:hover,
-        a.page-number:hover,
-        a.extend:hover {
-            background-color: var(--primary-color) !important;
-        }
-        .site-info,
-        .home-article-sticky-label {
-            background-color: var(--background-color-transparent-15) !important;
-        }
-        .home-article-sticky-label {
-            backdrop-filter: none !important;
-        }
-    </style>
-    <div class="home-banner-background transition-fade fixed top-0 left-0 w-screen h-screen scale-125 sm:scale-110 box-border will-change-transform bg-cover">
-        <img src="/images/wallhaven-8oxg61.jpg" alt="home-banner-background" class="w-full h-full object-cover dark:hidden">
-        <img src="/images/wallhaven-8oxg61.jpg" alt="home-banner-background" class="w-full h-full object-cover hidden dark:block">
-    </div>
-
-
-<div class="home-banner-container flex justify-center items-center transition-fade relative">
-    
-    <div class="content mt-8 flex flex-col justify-center items-center">
-        <div class="description flex flex-col justify-center items-center w-screen font-medium text-center"
-        
-        >
-            Ruby's Blog
-            
-            
-                <p><i id="subtitle"></i></p>
-            
-        </div>
-        
-            
-            <div class="absolute bottom-0.5 flex flex-row justify-between max-w-[1340px] items-center w-full px-8 sm:px-12">
-                <div class="flex p-3 bg-gray-300/50 dark:bg-gray-500/40 backdrop-blur-lg border border-white/20 dark:border-gray-500/30 group rounded-full cursor-pointer flex justify-center items-center aspect-square h-full shadow-redefine-flat hover:shadow-redefine-flat-hover transition-shadow" onclick="scrollToMain()" >
-                    <i class="fa-solid fa-arrow-down fa-fw fa-lg group-hover:translate-y-1 transition-transform"></i>
-                </div>
-                <div class="social-contacts px-6 py-3 bg-gray-300/50 dark:bg-gray-500/40 backdrop-blur-lg border border-white/20 dark:border-gray-500/30 shadow-redefine-flat rounded-full flex flex-row gap-3 items-center">
-                    
-                        
-                            
-                                <span class="social-contact-item github">
-                                    <a target="_blank" href="https://github.com/yuuee-www">
-                                        <i class="fa-brands fa-fw fa-lg fa-github"></i>
-                                    </a>
-                                </span>
-                            
-                        
-                    
-                        
-                    
-                        
-                    
-                        
-                    
-                        
-                            
-                                <span class="social-contact-item email ">
-                                    <a href="mailto:969761826@qq.com">
-                                        <i class="fa-solid fa-fw fa-at fa-lg"></i>
-                                    </a>
-                                </span>
-                            
-                        
-                    
-                    
-                </div>
-            </div>
-        
-    </div>
-    <script>
-        const scrollToMain = ()=> {
-            console.log('scroll');
-            const target = document.querySelector('.main-content-container');
-            target.scrollIntoView({ behavior: 'smooth'});
-        }
-    </script>
-</div>
-    
 
     <div class="main-content-container">
 
@@ -480,13 +280,13 @@ mjx-container[display="true"] + br {
         <div class="main-content-header">
             <header class="navbar-container px-6 md:px-12">
 
-    <div class="navbar-content has-home-banner">
+    <div class="navbar-content ">
         <div class="left">
             
             <a class="logo-title" href="/">
-                <h1>
+                
                 hola
-                </h1>
+                
             </a>
         </div>
 
@@ -500,7 +300,7 @@ mjx-container[display="true"] + br {
 
                             <li class="navbar-item">
                                 <!-- Menu -->
-                                <a class="active"
+                                <a class=""
                                    href="/"
                                         >
                                     <i class="fa-regular fa-house fa-fw"></i>
@@ -534,7 +334,7 @@ mjx-container[display="true"] + br {
 
                     <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
                         
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
                            href="/"
                         >
                             <span>
@@ -580,479 +380,216 @@ mjx-container[display="true"] + br {
         <div class="main-content-body">
 
             
-                <div class="home-sidebar-container">
-    <div class="sticky-container sticky">
-        
-        
-            
-            <div class="sidebar-content" >
-                <div class="avatar flex justify-center">
-    <img src="/images/favicon.png">
-</div>
-                <div class="author flex flex-col justify-center my-2.5 mx-0">
-    <div class="name">wy</div>
-    
-        <div class="label">Lv3</div>
-    
-</div>
-                <div class="statistics flex justify-around my-2.5">
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
-        <div class="label text-third-text-color text-sm">Tags</div>
-    </a>
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
-        <div class="label text-third-text-color text-sm">Categories</div>
-    </a>
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">22</div>
-        <div class="label text-third-text-color text-sm">Posts</div>
-    </a>
-</div>
-            </div>
-        
-
-    </div>
-</div>
-
-            
 
             <div class="main-content">
 
                 
-                    <div class="home-content-container">
-    <ul class="home-article-list">
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Access to Internal Server From Jump Server</h1>
+                </div>
+            
+            </div>
+
         
-            <li class="home-article-item">
-
-                
-
-                
-
-                
-                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
-                    <h3 class="home-article-title">
-                        <a href="/2024/07/14/Access-to-Internal-Server-From-Jump-Server/">
-                            Access to Internal Server From Jump Server
-                        </a>
-                    </h3>
-
-                    <div class="home-article-content markdown-body">
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/images/favicon.png">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">wy</span>
                         
-                            Using a Jump Server for Internal Network AccessIn scenarios where direct access to internal network resources is restricted d...
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
                         
                     </div>
-
-                    <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sun Jul 14 2024 00:05:19 GMT+0800">
-                
-                    2024-07-14
-                
-            </span>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-07-14 00:05:19</span>
+        <span class="mobile">2024-07-14 00:05:19</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-07-14 00:21:07</span>
+            <span class="mobile">2024-07-14 00:21:07</span>
+            <span class="hover-info">Updated</span>
         </span>
-        
-        
-    </div>
+    
 
-    <a href="/2024/07/14/Access-to-Internal-Server-From-Jump-Server/">Read more<span class="seo-reader-text">Access to Internal Server From Jump Server</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
 </div>
 
-                </div>
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                
-                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
-                    <h3 class="home-article-title">
-                        <a href="/2024/07/13/summer-notes2/">
-                            summer notes2
-                        </a>
-                    </h3>
-
-                    <div class="home-article-content markdown-body">
-                        
-                            Learning Notebook on Hugging Face and TOFUThis notebook is used to explore the functionalities of Hugging Face, a leading pla...
-                        
                     </div>
-
-                    <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sat Jul 13 2024 09:01:05 GMT+0800">
-                
-                    2024-07-13
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2024/07/13/summer-notes2/">Read more<span class="seo-reader-text">summer notes2</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
                 </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h1 id="Using-a-Jump-Server-for-Internal-Network-Access"><a href="#Using-a-Jump-Server-for-Internal-Network-Access" class="headerlink" title="Using a Jump Server for Internal Network Access"></a>Using a Jump Server for Internal Network Access</h1><p>In scenarios where direct access to internal network resources is restricted due to security policies, a jump server (also known as a bastion host) acts as an intermediary that provides a secure path to these resources from an external network. This method is commonly used to manage servers, databases, and other critical infrastructure securely.</p>
+<h2 id="Purpose"><a href="#Purpose" class="headerlink" title="Purpose"></a>Purpose</h2><p>Use a jump server for SSH tunneling, allowing secure connection to a remote server within a protected network.</p>
+<h2 id="Operating-Environment"><a href="#Operating-Environment" class="headerlink" title="Operating Environment"></a>Operating Environment</h2><p>macOS</p>
+<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
+<li>Jump Server Password: The password required to access the jump server.</li>
+<li>Remote Server Password: The password needed to log into the remote server.</li>
+</ul>
+<h2 id="Some-Terminal-Commands"><a href="#Some-Terminal-Commands" class="headerlink" title="Some Terminal Commands"></a>Some Terminal Commands</h2><ul>
+<li><p><strong>ssh-keygen -t rsa</strong>: Generates a new RSA key pair, which is used for secure SSH connections. This command creates a private key and a public key, stored by default in <code>~/.ssh/id_rsa</code> and <code>~/.ssh/id_rsa.pub</code>, respectively.</p>
+</li>
+<li><p><strong>ssh Jumpmachine</strong>: Connects to the jump server using SSH. Replace <code>Jumpmachine</code> with the hostname or IP address of your jump server.</p>
+</li>
+<li><p><strong>ssh -v Jumpmachine</strong>: Connects to the jump server using SSH with verbose output. The <code>-v</code> option increases verbosity, which can help diagnose connection, authentication, and configuration problems. Replace <code>Jumpmachine</code> with the hostname or IP address of your jump server.</p>
+</li>
+</ul>
+<p>These commands are fundamental for establishing a secure channel between your local machine and the jump server.</p>
+<h2 id="Configuring-SSH-in-VSCode"><a href="#Configuring-SSH-in-VSCode" class="headerlink" title="Configuring SSH in VSCode"></a>Configuring SSH in VSCode</h2><p>To connect to your remote server via a jump server using VSCode’s SSH capabilities, you need to configure the SSH settings properly. Below is a sample configuration for the <code>~/.ssh/config</code> file:</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># Configuration for the remote server</span><br><span class="line">Host RemoteServerAlias</span><br><span class="line">  HostName [Remote-Server-IP]</span><br><span class="line">  User [Remote-Server-User-ID]</span><br><span class="line">  ProxyCommand ssh -W %h:%p JumpServerAlias</span><br><span class="line"></span><br><span class="line"># Configuration for the jump server</span><br><span class="line">Host JumpServerAlias</span><br><span class="line">  HostName [Jump-Server-Domain]</span><br><span class="line">  Port 22</span><br><span class="line">  User [Jump-Server-User-ID]</span><br><span class="line">  HostkeyAlgorithms ssh-dss,ssh-rsa</span><br><span class="line">  KexAlgorithms +diffie-hellman-group1-sha1</span><br></pre></td></tr></table></figure></div>
+<h2 id="Final-Connection-Steps"><a href="#Final-Connection-Steps" class="headerlink" title="Final Connection Steps"></a>Final Connection Steps</h2><p>To connect to the server in VSCode, simply open the Remote Explorer, select <code>RemoteServerAlias</code>, and enter your server password when prompted.</p>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> Access to Internal Server From Jump Server</li>
+        <li><strong>Author:</strong> wy</li>
+        <li><strong>Created at
+                :</strong> 2024-07-14 00:05:19</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2024-07-14 00:21:07
             </li>
         
-            <li class="home-article-item">
-
-                
-
-                
-
-                
-                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
-                    <h3 class="home-article-title">
-                        <a href="/2024/07/12/summer-notes/">
-                            summer notes
-                        </a>
-                    </h3>
-
-                    <div class="home-article-content markdown-body">
-                        
-                            Learning Notes on Optimal Transport1. IntroductionOT allows to definemeaningful distancesbetween point clouds (ordatasets), h...
-                        
-                    </div>
-
-                    <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Fri Jul 12 2024 22:22:21 GMT+0800">
-                
-                    2024-07-12
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2024/07/12/summer-notes/">Read more<span class="seo-reader-text">summer notes</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-                </div>
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                
-                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
-                    <h3 class="home-article-title">
-                        <a href="/2024/07/12/musings/">
-                            musings
-                        </a>
-                    </h3>
-
-                    <div class="home-article-content markdown-body">
-                        
-                            Four years have flown by in the blink of an eye, and my time at UCL has felt both brutal and embracing. College days were oft...
-                        
-                    </div>
-
-                    <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Fri Jul 12 2024 20:10:09 GMT+0800">
-                
-                    2024-07-12
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2024/07/12/musings/">Read more<span class="seo-reader-text">musings</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-                </div>
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                
-                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
-                    <h3 class="home-article-title">
-                        <a href="/2024/07/12/hexo-blog-issues/">
-                            hexo_blog_issues
-                        </a>
-                    </h3>
-
-                    <div class="home-article-content markdown-body">
-                        
-                            Hexo Blog Setup Issues SummaryIssue 1: Web Page Fails to Render After DeploymentDescriptionAfter deploying the Hexo blog to a...
-                        
-                    </div>
-
-                    <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Fri Jul 12 2024 17:48:10 GMT+0800">
-                
-                    2024-07-12
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2024/07/12/hexo-blog-issues/">Read more<span class="seo-reader-text">hexo_blog_issues</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-                </div>
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                
-                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
-                    <h3 class="home-article-title">
-                        <a href="/2023/07/24/RL/step12/RLstep12/">
-                            
-                        </a>
-                    </h3>
-
-                    <div class="home-article-content markdown-body">
-                        
-                            envTensorFlow - GPU - dockerdocker
-https://docs.docker.com/engine/install/ubuntu/#set-up-the-repository 
-tensorflow gpu
-https...
-                        
-                    </div>
-
-                    <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Mon Jul 24 2023 17:15:42 GMT+0800">
-                
-                    2023-07-24
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/07/24/RL/step12/RLstep12/">Read more<span class="seo-reader-text"></span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-                </div>
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                
-                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
-                    <h3 class="home-article-title">
-                        <a href="/2023/07/23/RL/step11/RLstep11/">
-                            
-                        </a>
-                    </h3>
-
-                    <div class="home-article-content markdown-body">
-                        
-                            Soft Actor-Critic (SAC)Maximum Entropy Reinforcement learning
-off policy
-stochastic policy and not deterministic policy (Only...
-                        
-                    </div>
-
-                    <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sun Jul 23 2023 20:16:31 GMT+0800">
-                
-                    2023-07-23
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/07/23/RL/step11/RLstep11/">Read more<span class="seo-reader-text"></span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-                </div>
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                
-                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
-                    <h3 class="home-article-title">
-                        <a href="/2023/07/23/RL/step10/RLstep10/">
-                            
-                        </a>
-                    </h3>
-
-                    <div class="home-article-content markdown-body">
-                        
-                            Deep RLRecap: Value function approximation
-
-
-
-
-
-
-Deep value function approximation
-
-
-
-JAX
-
-
-Deep Q-learning
-
-
-Deep Q-learning...
-                        
-                    </div>
-
-                    <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sun Jul 23 2023 18:59:37 GMT+0800">
-                
-                    2023-07-23
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/07/23/RL/step10/RLstep10/">Read more<span class="seo-reader-text"></span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-                </div>
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                
-                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
-                    <h3 class="home-article-title">
-                        <a href="/2023/07/23/RL/step9/RLstep9/">
-                            
-                        </a>
-                    </h3>
-
-                    <div class="home-article-content markdown-body">
-                        
-                            Off-policy and multi-step learningOne-step off-policy
-
-
-Multi-step off-policy
-
-
-Off-policy corrections for policy gradients
-
-                        
-                    </div>
-
-                    <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sun Jul 23 2023 18:50:21 GMT+0800">
-                
-                    2023-07-23
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/07/23/RL/step9/RLstep9/">Read more<span class="seo-reader-text"></span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-                </div>
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                
-                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
-                    <h3 class="home-article-title">
-                        <a href="/2023/07/23/RL/step8/RLstep8/">
-                            
-                        </a>
-                    </h3>
-
-                    <div class="home-article-content markdown-body">
-                        
-                            Approximate Dynamic ProgrammingUnder the 2 sources of error (estimation + function approximation), what can we say about resu...
-                        
-                    </div>
-
-                    <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sun Jul 23 2023 17:24:25 GMT+0800">
-                
-                    2023-07-23
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/07/23/RL/step8/RLstep8/">Read more<span class="seo-reader-text"></span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-                </div>
-            </li>
-        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/2024/07/14/Access-to-Internal-Server-From-Jump-Server/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
     </ul>
-
-    <div class="home-paginator px-7 py-5">
-        <div class="paginator">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa-regular fa-angle-right"></i></a>
 </div>
+
+            </div>
+        
+
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2024/07/13/summer-notes2/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">summer notes2</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">Access to Internal Server From Jump Server</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Using-a-Jump-Server-for-Internal-Network-Access"><span class="nav-text">Using a Jump Server for Internal Network Access</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Purpose"><span class="nav-text">Purpose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Operating-Environment"><span class="nav-text">Operating Environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prerequisites"><span class="nav-text">Prerequisites</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Some-Terminal-Commands"><span class="nav-text">Some Terminal Commands</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configuring-SSH-in-VSCode"><span class="nav-text">Configuring SSH in VSCode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Final-Connection-Steps"><span class="nav-text">Final Connection Steps</span></a></li></ol></li></ol>
 
     </div>
 </div>
+        </div>
+    
+</div>
 
-                    <div class="comment-container pjax"></div>
+
+
                 
 
             </div>
@@ -1133,6 +670,27 @@ Off-policy corrections for policy gradients
         </div>
     </div>
 
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
     
 
     <div class="right-side-tools-container">
@@ -1217,7 +775,6 @@ Off-policy corrections for policy gradients
         containers: ["#swup"],
     });
 </script>
-
 
 
 
