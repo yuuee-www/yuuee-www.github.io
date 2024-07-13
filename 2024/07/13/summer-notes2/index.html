@@ -26,7 +26,7 @@
 <meta property="og:description" content="Learning Notebook on Hugging Face and TOFUThis notebook is used to explore the functionalities of Hugging Face, a leading platform for natural language processing (NLP), and TOFU, a framework focused">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-07-13T01:01:05.000Z">
-<meta property="article:modified_time" content="2024-07-13T04:33:27.555Z">
+<meta property="article:modified_time" content="2024-07-13T04:36:57.542Z">
 <meta property="article:author" content="wy">
 <meta name="twitter:card" content="summary">
     
@@ -418,8 +418,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-07-13 12:33:27</span>
-            <span class="mobile">2024-07-13 12:33:27</span>
+            <span class="desktop">2024-07-13 12:36:57</span>
+            <span class="mobile">2024-07-13 12:36:57</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -466,7 +466,31 @@
 <li><a class="link"   target="_blank" rel="noopener" href="https://stackoverflow.com/questions/68086929/how-to-get-the-size-of-a-hugging-face-pretrained-model" >Stack Overflow discussion <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
 <li><a class="link"   target="_blank" rel="noopener" href="https://huggingface.co/docs/accelerate/usage_guides/model_size_estimator" >Hugging Face Model Size Estimator <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
 </ul>
-<h3 id="TOFU-Environment-Setup"><a href="#TOFU-Environment-Setup" class="headerlink" title="TOFU Environment Setup"></a>TOFU Environment Setup</h3><h4 id="Flash-Attention"><a href="#Flash-Attention" class="headerlink" title="Flash-Attention"></a>Flash-Attention</h4><p><code>Flash-attention</code> is a specialized technology designed to enhance the performance and efficiency of attention mechanisms in transformer models. It primarily focuses on reducing the computational complexity and memory usage, making it highly suitable for handling large-scale datasets or models.</p>
+<h3 id="TOFU-Environment-Setup"><a href="#TOFU-Environment-Setup" class="headerlink" title="TOFU Environment Setup"></a>TOFU Environment Setup</h3><h4 id="Libraries-Overview"><a href="#Libraries-Overview" class="headerlink" title="Libraries Overview"></a>Libraries Overview</h4><ul>
+<li><p><strong>accelerate</strong>: A library by Hugging Face to simplify running deep learning models on any hardware configuration, including multi-GPU setups.</p>
+</li>
+<li><p><strong>deepspeed</strong>: Microsoft’s library that provides a suite of advanced optimizations to improve scalability and efficiency in training large models, especially on distributed systems.</p>
+</li>
+<li><p><strong>evaluate</strong>: Developed by Hugging Face, it allows users to measure and compare the performance of models across a wide range of metrics and datasets easily.</p>
+</li>
+<li><p><strong>hydra-core</strong>: A framework for elegantly configuring complex applications, allowing dynamic creation of configurations and simplifying the management of multiple experiments.</p>
+</li>
+<li><p><strong>omegaconf</strong>: Complements Hydra by providing a hierarchical configuration system, which supports merging configurations from multiple sources and is type-safe.</p>
+</li>
+<li><p><strong>peft</strong>: Possibly stands for Parallel Execution Framework for Transformers, which helps in optimizing the parallel execution of transformer models.</p>
+</li>
+<li><p><strong>rouge_score</strong>: A package for evaluating text generation tasks by calculating ROUGE scores, which measure the quality of summaries or translated texts against reference texts.</p>
+</li>
+<li><p><strong>einops</strong>: Provides more flexible and powerful operations for tensor manipulation and reshaping, making model code more readable and concise.</p>
+</li>
+<li><p><strong>packaging</strong>: A utility library that assists in version comparisons and dependency management for Python packages.</p>
+</li>
+<li><p><strong>bitsandbytes</strong>: An optimization library focused on improving training speed and reducing memory footprint through efficient CUDA operations.</p>
+</li>
+<li><p><strong>ninja</strong>: A small build system with a focus on speed, enhancing the performance of backend processing during the compilation phase of software development.</p>
+</li>
+</ul>
+<h4 id="Flash-Attention"><a href="#Flash-Attention" class="headerlink" title="Flash-Attention"></a>Flash-Attention</h4><p><code>Flash-attention</code> is a specialized technology designed to enhance the performance and efficiency of attention mechanisms in transformer models. It primarily focuses on reducing the computational complexity and memory usage, making it highly suitable for handling large-scale datasets or models.</p>
 <p>For more detailed insights into <code>flash-attention</code> and its applications, consider the following resources:</p>
 <ul>
 <li><a class="link"   target="_blank" rel="noopener" href="https://huggingface.co/docs/text-generation-inference/conceptual/flash_attention" >Hugging Face Documentation on Flash-Attention <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
@@ -486,7 +510,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2024-07-13 12:33:27
+                    :</strong> 2024-07-13 12:36:57
             </li>
         
         <li>
