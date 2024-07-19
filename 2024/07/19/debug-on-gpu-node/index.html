@@ -26,7 +26,7 @@
 <meta property="og:description" content="Debugging on a Specialized GPU Node with VS CodeIn this post, we’ll explore how to connect to a GPU node on a cluster server via SSH in Visual Studio Code (VS Code) and debug a Python file in that env">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-07-19T09:07:07.000Z">
-<meta property="article:modified_time" content="2024-07-19T10:29:00.063Z">
+<meta property="article:modified_time" content="2024-07-19T10:32:55.871Z">
 <meta property="article:author" content="wy">
 <meta name="twitter:card" content="summary">
     
@@ -418,8 +418,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-07-19 18:29</span>
-            <span class="mobile">2024-07-19 18:29</span>
+            <span class="desktop">2024-07-19 18:32:55</span>
+            <span class="mobile">2024-07-19 18:32:55</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -466,7 +466,7 @@
 <h3 id="Difficulty-2-Debugging-Errors"><a href="#Difficulty-2-Debugging-Errors" class="headerlink" title="Difficulty 2: Debugging Errors"></a>Difficulty 2: Debugging Errors</h3><p>When you attempt to debug using F5, errors might pop up indicating missing plugins or interpreters, suggesting a version mismatch.</p>
 <p>For similar experiences, see this <a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/m0_74403409/article/details/134442358" >CSDN blog post <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>.</p>
 <p><strong>Solution:</strong><br>If you connect successfully but encounter issues when hitting F5 to debug, it could be another version issue. The solution is similar: switch to another version of VS Code after cleaning up old server files. Also, be mindful of any network or proxy issues that could be interfering.</p>
-<h5 id="Viewing-Mac-Public-Key"><a href="#Viewing-Mac-Public-Key" class="headerlink" title="Viewing Mac Public Key"></a>Viewing Mac Public Key</h5><p>If you need to verify your public key on a Mac, you can use the following commands:</p>
+<h3 id="Other-remainders"><a href="#Other-remainders" class="headerlink" title="Other remainders"></a>Other remainders</h3><h5 id="Viewing-Mac-Public-Key"><a href="#Viewing-Mac-Public-Key" class="headerlink" title="Viewing Mac Public Key"></a>Viewing Mac Public Key</h5><p>If you need to verify your public key on a Mac, you can use the following commands:</p>
 <div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/.ssh</span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line"><span class="built_in">cat</span> id_rsa.pub</span><br></pre></td></tr></table></figure></div>
 
 <p>Copy and paste your public key into the server’s <code>.ssh/authorized_keys</code> file to enable password-less SSH access.</p>
@@ -494,7 +494,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2024-07-19 18:29:00
+                    :</strong> 2024-07-19 18:32:55
             </li>
         
         <li>
@@ -595,7 +595,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">debug on gpu node</div>
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Debugging-on-a-Specialized-GPU-Node-with-VS-Code"><span class="nav-text">Debugging on a Specialized GPU Node with VS Code</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Prerequisites"><span class="nav-text">Prerequisites</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Strategy"><span class="nav-text">Strategy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Preliminary-Work"><span class="nav-text">Preliminary Work</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Local-SSH-Config-File-Setup"><span class="nav-text">Local SSH Config File Setup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Potential-Difficulties"><span class="nav-text">Potential Difficulties</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Difficulty-1-Connection-Failures"><span class="nav-text">Difficulty 1: Connection Failures</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Difficulty-2-Debugging-Errors"><span class="nav-text">Difficulty 2: Debugging Errors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Additional-Resources-and-Troubleshooting"><span class="nav-text">Additional Resources and Troubleshooting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#conclusion"><span class="nav-text">conclusion</span></a></li></ol></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Debugging-on-a-Specialized-GPU-Node-with-VS-Code"><span class="nav-text">Debugging on a Specialized GPU Node with VS Code</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Prerequisites"><span class="nav-text">Prerequisites</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Strategy"><span class="nav-text">Strategy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Preliminary-Work"><span class="nav-text">Preliminary Work</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Local-SSH-Config-File-Setup"><span class="nav-text">Local SSH Config File Setup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Potential-Difficulties"><span class="nav-text">Potential Difficulties</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Difficulty-1-Connection-Failures"><span class="nav-text">Difficulty 1: Connection Failures</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Difficulty-2-Debugging-Errors"><span class="nav-text">Difficulty 2: Debugging Errors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Other-remainders"><span class="nav-text">Other remainders</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Additional-Resources-and-Troubleshooting"><span class="nav-text">Additional Resources and Troubleshooting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#conclusion"><span class="nav-text">conclusion</span></a></li></ol></li></ol></li></ol>
 
     </div>
 </div>
