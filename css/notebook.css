@@ -1,0 +1,225 @@
+/* Notebook wrapper */
+.notebook .article-content.markdown-body {
+  background: #fffef5;
+  background-image:
+    linear-gradient(90deg, transparent 60px, #e8c4c4 60px, #e8c4c4 62px, transparent 62px),
+    linear-gradient(#e8e4d9 1px, transparent 1px);
+  background-size: 100% 32px;
+  background-position: 0 12px;
+  padding: 20px 40px 40px 80px !important;
+  border: 1px solid #d4c9a8;
+  border-radius: 4px;
+  box-shadow:
+    3px 3px 15px rgba(0,0,0,0.15),
+    inset 0 0 60px rgba(255,252,235,0.4);
+  position: relative;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  line-height: 32px !important;
+  color: #2c2c2c;
+}
+
+/* Spiral binding holes */
+.notebook .article-content.markdown-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 30px;
+  width: 12px;
+  height: 100%;
+  background-image: radial-gradient(circle, #888 4px, transparent 4px);
+  background-size: 12px 48px;
+  background-position: center 20px;
+  background-repeat: repeat-y;
+}
+
+/* Title styling */
+.notebook .article-content.markdown-body h1 {
+  font-family: 'Georgia', serif;
+  color: #A31F34;
+  border-bottom: 2px solid #A31F34;
+  padding-bottom: 8px;
+  margin-bottom: 24px;
+  background: none !important;
+  font-size: 1.8rem;
+  line-height: 2;
+}
+
+/* Subheadings */
+.notebook .article-content.markdown-body h2 {
+  font-family: 'Georgia', serif;
+  color: #4a3728;
+  border-bottom: 1px dashed #c9b99a;
+  padding-bottom: 4px;
+  background: none !important;
+  line-height: 2;
+}
+
+.notebook .article-content.markdown-body h3 {
+  font-family: 'Georgia', serif;
+  color: #5a4738;
+  background: none !important;
+  line-height: 2;
+}
+
+/* Paragraphs on lines */
+.notebook .article-content.markdown-body p {
+  line-height: 32px;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+/* Lists */
+.notebook .article-content.markdown-body ul,
+.notebook .article-content.markdown-body ol {
+  line-height: 32px;
+}
+
+.notebook .article-content.markdown-body li {
+  line-height: 32px;
+  margin: 0;
+}
+
+/* Code blocks - index card style */
+.notebook .article-content.markdown-body pre {
+  background: #f5f0e6 !important;
+  border: 1px solid #d4c9a8;
+  border-left: 3px solid #A31F34;
+  border-radius: 2px;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.08);
+  margin: 16px 0;
+}
+
+/* Inline code */
+.notebook .article-content.markdown-body code:not(pre code) {
+  background: #f0ead6;
+  border: 1px solid #d4c9a8;
+  border-radius: 2px;
+  padding: 1px 5px;
+  color: #A31F34;
+  font-size: 0.9em;
+}
+
+/* Blockquotes - sticky note style */
+.notebook .article-content.markdown-body blockquote {
+  background: #fff9c4;
+  border: none;
+  border-left: 4px solid #f9a825;
+  padding: 12px 16px;
+  margin: 16px 0;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+  transform: rotate(-0.5deg);
+  font-style: italic;
+  line-height: 28px;
+}
+
+/* Links - red ink */
+.notebook .article-content.markdown-body a {
+  color: #A31F34;
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-underline-offset: 3px;
+}
+
+/* Images */
+.notebook .article-content.markdown-body img {
+  border: 3px solid #d4c9a8;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.12);
+  margin: 16px auto;
+}
+
+/* Tables */
+.notebook .article-content.markdown-body table {
+  border-collapse: collapse;
+  background: #fffef5;
+}
+
+.notebook .article-content.markdown-body th {
+  background: #f0ead6;
+  border: 1px solid #d4c9a8;
+  color: #A31F34;
+}
+
+.notebook .article-content.markdown-body td {
+  border: 1px solid #d4c9a8;
+}
+
+/* Horizontal rule - torn edge */
+.notebook .article-content.markdown-body hr {
+  border: none;
+  border-top: 2px dashed #c9b99a;
+  margin: 24px 0;
+}
+
+/* Page curl effect bottom-right */
+.notebook .article-content.markdown-body::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 30px 30px;
+  border-color: transparent transparent var(--background-color, #f0f0f0) transparent;
+  filter: drop-shadow(-2px -2px 3px rgba(0,0,0,0.1));
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .notebook .article-content.markdown-body {
+  background: #2a2520;
+  background-image:
+    linear-gradient(90deg, transparent 60px, #5a3030 60px, #5a3030 62px, transparent 62px),
+    linear-gradient(rgba(80,72,60,0.5) 1px, transparent 1px);
+  background-size: 100% 32px;
+  background-position: 0 12px;
+  border-color: #4a4035;
+  color: #d4c9b8;
+  box-shadow:
+    3px 3px 15px rgba(0,0,0,0.4),
+    inset 0 0 60px rgba(40,35,28,0.4);
+}
+
+[data-theme="dark"] .notebook .article-content.markdown-body h1 {
+  color: #e8a0a0;
+  border-bottom-color: #e8a0a0;
+}
+
+[data-theme="dark"] .notebook .article-content.markdown-body h2 {
+  color: #c9b99a;
+  border-bottom-color: #5a5040;
+}
+
+[data-theme="dark"] .notebook .article-content.markdown-body pre {
+  background: #332e28 !important;
+  border-color: #4a4035;
+}
+
+[data-theme="dark"] .notebook .article-content.markdown-body blockquote {
+  background: #3a3520;
+  border-left-color: #b8860b;
+  color: #c9b99a;
+}
+
+[data-theme="dark"] .notebook .article-content.markdown-body code:not(pre code) {
+  background: #332e28;
+  border-color: #4a4035;
+  color: #e8a0a0;
+}
+
+[data-theme="dark"] .notebook .article-content.markdown-body a {
+  color: #e8a0a0;
+}
+
+[data-theme="dark"] .notebook .article-content.markdown-body img {
+  border-color: #4a4035;
+}
+
+[data-theme="dark"] .notebook .article-content.markdown-body th {
+  background: #332e28;
+  border-color: #4a4035;
+  color: #e8a0a0;
+}
+
+[data-theme="dark"] .notebook .article-content.markdown-body td {
+  border-color: #4a4035;
+}

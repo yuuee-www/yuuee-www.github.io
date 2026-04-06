@@ -78,7 +78,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://yue-ruby-w.site/2024/07/13/2024-07-13-access-to-internal-server-from-jump-server/"/>
+    <link rel="canonical" href="https://yue-ruby-w.site/2026/04/03/test-time-llms/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -87,13 +87,13 @@
         
         <meta name="description" content="Ruby&#39;s Blog">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Access to Internal Server From Jump Server">
-<meta property="og:url" content="https://yue-ruby-w.site/2024/07/13/2024-07-13-Access-to-Internal-Server-From-Jump-Server/index.html">
+<meta property="og:title" content="Test Time LLMs">
+<meta property="og:url" content="https://yue-ruby-w.site/2026/04/03/Test-Time-LLMs/index.html">
 <meta property="og:site_name" content="hola">
 <meta property="og:description" content="Ruby&#39;s Blog">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-07-13T08:05:19.000Z">
-<meta property="article:modified_time" content="2024-07-19T01:18:21.000Z">
+<meta property="article:published_time" content="2026-04-03T08:31:02.000Z">
+<meta property="article:modified_time" content="2026-04-06T09:29:48.660Z">
 <meta property="article:author" content="wy">
 <meta name="twitter:card" content="summary">
     
@@ -107,7 +107,7 @@
     
     <title>
         
-            Access to Internal Server From Jump Server | hola
+            Test Time LLMs | hola
         
     </title>
 
@@ -526,7 +526,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Access to Internal Server From Jump Server</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Test Time LLMs</h1>
 			</div>
 			
 		</div>
@@ -547,15 +547,15 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-07-13 16:05:19</span>
-        <span class="mobile">2024-07-13 16:05:19</span>
+        <span class="desktop">2026-04-03 16:31:02</span>
+        <span class="mobile">2026-04-03 16:31:02</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-07-19 09:18:21</span>
-            <span class="mobile">2024-07-19 09:18:21</span>
+            <span class="desktop">2026-04-06 17:29:48</span>
+            <span class="mobile">2026-04-06 17:29:48</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -566,12 +566,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>491 Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>17 Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>3 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>1 Mins</span>
         </span>
     
     
@@ -590,182 +590,23 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h1 id="Using-a-Jump-Server-for-Internal-Network-Access"><a href="#Using-a-Jump-Server-for-Internal-Network-Access" class="headerlink" title="Using a Jump Server for Internal Network Access"></a>Using a Jump Server for Internal Network Access</h1><p>In scenarios where direct access to internal network resources is restricted due to security policies, a jump server (also known as a bastion host) acts as an intermediary that provides a secure path to these resources from an external network. This method is commonly used to manage servers, databases, and other critical infrastructure securely.</p>
-<h2 id="Purpose"><a href="#Purpose" class="headerlink" title="Purpose"></a>Purpose</h2><p>Use a jump server for SSH tunneling, allowing secure connection to a remote server within a protected network.</p>
-<h2 id="Operating-Environment"><a href="#Operating-Environment" class="headerlink" title="Operating Environment"></a>Operating Environment</h2><p>macOS</p>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li><p>Jump Server Password: The password required to access the jump server.</p>
-</li>
-<li><p>Remote Server Password: The password needed to log into the remote server.</p>
-</li>
-</ul>
-<h2 id="Some-Terminal-Commands"><a href="#Some-Terminal-Commands" class="headerlink" title="Some Terminal Commands"></a>Some Terminal Commands</h2><p>- </p>
-<p><strong>ssh-keygen -t rsa</strong>: Generates a new RSA key pair, which is used for secure SSH connections. This command creates a private key and a public key, stored by default in <code>~/.ssh/id_rsa</code> and <code>~/.ssh/id_rsa.pub</code>, respectively.</p>
-<p>- </p>
-<p><strong>ssh Jumpmachine</strong>: Connects to the jump server using SSH. Replace <code>Jumpmachine</code> with the hostname or IP address of your jump server.</p>
-<p>- </p>
-<p><strong>ssh -v Jumpmachine</strong>: Connects to the jump server using SSH with verbose output. The <code>-v</code> option increases verbosity, which can help diagnose connection, authentication, and configuration problems. Replace <code>Jumpmachine</code> with the hostname or IP address of your jump server.</p>
-<p>These commands are fundamental for establishing a secure channel between your local machine and the jump server.</p>
-<h2 id="Configuring-SSH-in-VSCode"><a href="#Configuring-SSH-in-VSCode" class="headerlink" title="Configuring SSH in VSCode"></a>Configuring SSH in VSCode</h2><p>To connect to your remote server via a jump server using VSCode’s SSH capabilities, you need to configure the SSH settings properly. Below is a sample configuration for the <code>~/.ssh/config</code> file:</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># Configuration for the remote server</span><br><span class="line">Host RemoteServerAlias</span><br><span class="line">  HostName [Remote-Server-IP]</span><br><span class="line">  User [Remote-Server-User-ID]</span><br><span class="line">  ProxyCommand ssh -W %h:%p JumpServerAlias</span><br><span class="line"></span><br><span class="line"># Configuration for the jump server</span><br><span class="line">Host JumpServerAlias</span><br><span class="line">  HostName [Jump-Server-Domain]</span><br><span class="line">  Port 22</span><br><span class="line">  User [Jump-Server-User-ID]</span><br><span class="line">  HostkeyAlgorithms ssh-dss,ssh-rsa</span><br><span class="line">  KexAlgorithms +diffie-hellman-group1-sha1</span><br></pre></td></tr></table></figure></div>
-
-<h2 id="Final-Connection-Steps"><a href="#Final-Connection-Steps" class="headerlink" title="Final Connection Steps"></a>Final Connection Steps</h2><p>To connect to the server in VSCode, simply open the Remote Explorer, select <code>RemoteServerAlias</code>, and enter your server password when prompted.</p>
-<ul>
-<li><p><strong>Title:</strong> Access to Internal Server From Jump Server</p>
-</li>
-<li><p><strong>Author:</strong> wy</p>
-</li>
-<li><p><strong>Created at<br>          :</strong> 2024-07-14 00:05:19
-  
-      </p>
-</li>
-<li><pre><code>          **Updated at
-              :** 2024-07-19 17:18:21
-      
-  
-  
-</code></pre>
-</li>
-<li><pre><code>      **Link:** https://yuuee-www.github.io/blog/2024/07/14/Access-to-Internal-Server-From-Jump-Server/
-  
-  
-</code></pre>
-</li>
-<li><pre><code>      **
-          License:
-      **
-      
-
-      
-          This work is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0).
-      
-  
-
-
-      
-  
-
-  
-
-  
-
-  
-      
-          
-              
-                  [check GPU on an integrated server
-                          Prev posts](/2024/07/14/check-GPU-on-an-integrated-server/)
-              
-          
-          
-              
-                  [summer notes2
-                          Next posts](/2024/07/13/summer-notes2/)
-              
-          
-      
-  
-
-  
-      
-          
-
-
-  Comments
-
-
-
-  
-      
-
-
-
-  
-
-
-      
-  
-
-
-
-  
-      
-
-  On this page
-  Access to Internal Server From Jump Server
-</code></pre>
-</li>
-</ul>
-<ol>
-<li><p><a href="#Using-a-Jump-Server-for-Internal-Network-Access">Using a Jump Server for Internal Network Access</a></p>
-</li>
-<li><p><a href="#Purpose">Purpose</a></p>
-</li>
-<li><p><a href="#Operating-Environment">Operating Environment</a></p>
-</li>
-<li><p><a href="#Prerequisites">Prerequisites</a></p>
-</li>
-<li><p><a href="#Some-Terminal-Commands">Some Terminal Commands</a></p>
-</li>
-<li><p><a href="#Configuring-SSH-in-VSCode">Configuring SSH in VSCode</a></p>
-</li>
-<li><p><a href="#Final-Connection-Steps">Final Connection Steps</a></p>
-<pre><code>   ©
-   
-     2022
-     -
-   
-   2024    [wy](/)
-   
-       
-       
-
-           
-               24 posts in total
-           
-           
-       
-
-   
-
-
-   
-   
-       
-           
-               VISITOR COUNT
-               
-           
-       
-       
-           
-               TOTAL PAGE VIEWS
-               
-           
-       
-   
-
-
-   POWERED BY [Hexo](https://hexo.io)
-   THEME [Redefine v2.6.4](https://github.com/EvanNotFound/hexo-theme-redefine)
-
-
-
-   
-       Blog up for  days  hrs  Min  Sec
-</code></pre>
-</li>
-</ol>
-<p>- </p>
-<p>- </p>
-<p>- </p>
-<p>- </p>
-<p>- </p>
-<p>- </p>
-<p>- </p>
-<ul>
-<li></li>
-</ul>
+			
+<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Wrong password, please try again." data-whm="Oops, the password check failed. But you can still try to see the decrypted content.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="70ff177d8a30c53741073bcabdab09b98138696a90dada535629aa43882e5ab6">0c16c35e7adbea7c1d5d106717c8cfa8c950791fbab2573ee52c013532b2dbb51a79d8f0bf449b631f1afaeabe7cf179981292df3e4eba4cac4d54849641d8332dfd3e0798ee5965e64221291473bba37c8813f76ce373404f0ae578dc56a7d53421e7d4be2210b9bdf68a8bc7148366dc1690eda1ef0e6528d20882913c6448cd64f252040b9794b1cbb152b0c233669e17260c409a4b6ac2b175484760d2a35236627677f0628cad7343afbb9da9d512f170c68ab1762cb14d81fdf34949950727a48fc17ec574f1216160c4c67ca370d67203d94ef900db11e025867562f845092d434303b5e6c5adaac98964ff5c03a9ff11b4956c84e206b22d80b4374f89f1d8237979b8dfd06ea91d35b19d4acfe0fce1e2a230ca9995ea57a8c9769ce141f384b5f71206829b795cca0277e535d6994dc1891f96e54d5d2041ba9d7e5350069f367c72891e21c82b708c46377228574c2a66b453b5b8e4db0a15561eaa12671f6c66988385cb4156d43f8fec6594cd82a9f4e4fffc3adf2905b8b26f6bf4ea2b263586f893a17223b935e1350ad90db2993cd52078249b6fcfb6bd9d7e633bf5d9bd92e06b447ece7baac3f84556e38bcb8755dd07847971a07e0cc64f12ca30791d40105932cce5d387dd5e0af3cf67ff14561596418446b2df67a3a918f04a44b29870fe427b70422ac98ce064d648795eab0dfbcd80c096aa48d6f06d35488cf29e193fdbbbc12471d72fa90d0390c6f570025bdf4e9e92f43de11675b20396de721403d20cb13a801e3961e84bd1cd39ee5ffdc216ffe3d082b61b6f89f5e9abc238282804f5c768c6534d48eca7f82bd8ddec3c0cc18c84aa9cbd02e5a9e8d0f2505201ce52b1788c1ee0710a43439d97b707103d1de262b740f1ac4d3663c078c52fd82ca4f786175c584042c576a7786b80f8bc9f1275bdd1827bab811e67b20694857610b409e1ad760ea13d8fc8ad543c9a744ba43d0e6770e9567a107210246b736a3363bc19c785fcb01d6a31d7e4048e0eede3aa10620fa1ba80640fc8960701417002288ffdf108becefc37ff49b15e764bfaeeda490a8c6b2dae331c820bce09d4b1d05cca0380d071e3eca255864116e5802c00a9cc7ea7fe3339ff0a73640a95d7c16d3839428d824c042585a408b234475709b83be2f1bb76efc30771ee37d621370ef2517777adfdc9fda959ae4c779614e37ef40b1a3727d9236b2e9c7b8fbae7323e077391b1f13672cd26fae7da0fd040c1a9e86f5550c263dc9a9f6ee59dc5528a2c970b6eab58ba5f1b7c58485fba8df0f7fe57cb44aaec3a37dc6c41e0213ab682d3096af3e34448c43ff782fad6b900fb1113f2ee57e6e52f51dd32b28caf4ad4dd72470b751b41265b92113a67273c2e54b1bb50c30624e5089de8b74a7fec5504869e7e1992d269b7173e26ace1e1ceccdcb1cfe13ab3181402d19e9530632bf1a3b9e6cb129f864a82f55ac91e032945a9a463d56daf5d56a568777089047b8776fca6338bd5cb59aed4f1aeb355c1dc81397c83d8ec4c8be1499b6e35a14c499d288c3133262e57024348b085f741a14f7340ef0dd1917bc48b591b43e49d14114d492e8464f6fab5bd0479d58ccb10b63fbc930904c1c55a36cf7662dd1ddc5d29abb917867104f2e81291494ef1a1d494b3c1a42568499dc4243fd2afcdcc256a91580a6dc4be1a082e8497ad78f1da271f15151354b3cab041414294b213193fca6f257407e89bf4cbb16933f6068e5632d1ccadc1f3d0b806a4f12602ff91326a5848479f4ce1ab2c81368d557bcf5ff1ff86a68a300d93abeb7551d6fd8094fb06efab05116b31b98dad11de7fbd5f64d6b46a8686f08ce2c9bf911ba7e4d56c00ab686f7665ca83df96815457311f3a7e7c0284370fdab782c93878989a4fe973d62ba1769050c93819e0a288a58c5a29f6ab490627bbbfd8f26e73becefe711663e8a72d77766b9b893e39cae698bd8f4907e3d06c5fb6ae6c12bc28fcf9b6b545650b32b45303aa591bc062fbbf94178013166af89cbc0a4fdfa494d9df5b23697fa7f51c612c5fb567539c4548ecc3dc46e2d77cc02ca64511f1c552e3216b24fdfbbe5e850500808087f818acd6330b6184ae2610b4f5fb867cbf272eb6c41fc5bfae275259944458952d86ad27f3500c76d00710de97def1bc54b822c424373cd544a25062969e1da1c807e1cd0a629512a750028aa3a6171caaedef36d53e494f9e9f11b0e7f070405c040fbe2cc5861aa32d11c6670fa8c2f4c5a908012c56b595dd526fd89cdea069ee17f6ae63f3ff724e64870df27816e46c11f57c3ced9706873cd16f05457694e62146bdfba514ac03d201d507ab66d30e3faef6d1a3447c4560f62165affa225c0e12390b1788c59e9b41b866e1e3be4b58bbfa2f31b43cb09479455521e6db0011101d8a69ecc76006d63e7d73e7779eda86236c183b9d64353442397e9c2c6c8afe1761bb55c4a526a1b169272ee3cd24a0561ac41b61904d75e921ec758056f622fe0f7f241cd3fc9850d805d14177279e688247dff4d34849a60cecb0d8eed31a1f0c8013d6d0ead99aa3e4de14e29649b0c8d6f8994b311f52c017fa8e24cc26f199c7e93f56b827d3b994348203069991911cd913427dc078372100347d2119d64a4fcbb3455def1bf980f0d1323959ec3621a0389043c795e8dd2cd9cfc48df27ecdfe1ba4aec4a67e552a9323da56445041fd14c0c6135850754f702297b96f994b1c32e58ce8102b783aa611fb31b2c1a3136ac073f2f6393751341757eb140ef6a858415643bf0a11a50914d09a1f8d6baa267ad6e88ffd0aec13fc1cbc7a87a06007c3d9826302e05610ad20523fdbac253938fd5dd389b3138e2b109533c9ae0c4d808a3b0efcd6e9a64d1cd95ffde2a23f2571827e1b22aa4d369d23a4485f27a6b1c39e129ce5f3613a6545b35c63581df91cd4f0712e1e168dc348183a0fed0a4408c0b6370c0f70d76ecd956e354f4427c2ed9128436c208fafb04af2f89964c4565fc9b514424941dd0de00f8206eef55a958eabf22e972bccdbe297010f8d388bb961283e656fce979189325cc73cb9c290e255dad4bf46bb3dec005f8f34bae99188eca809debcbb29a407c5558d720c3acc9647781cf06364e5a9d2dca8e270e0f5975341981878328bccd58c80e565f41025296a1b2b052d5b10cf65401003066d227dc6b09bfd452f2806f108210fd2c589bc81c9c8fd3181046d6607c7e6d0c471a6af54a20d6ac44e91f5cd1d32e871077870feef30104196b25411da08a989a399fb20b025430986433294cfb296651105f34b24815a96f1e898e100a4731b24bd64d5f980ad686682a916e854c12384c3187484db450357bc16085220d48b045419f1995d88f9d2831709c1013f414b1367145fb519b6df83725a566fa800d8d0146fc717e6b254e1334dbecce6d861c2ed4125c7d30f5a5f5e8f547d4ba83eb9254bf5fcc707db39eb6d311121be9dab71bf83df8d5800f0630441e45efb51288641080b4b535598a476d210513f43a15be9a078dd3300534d8723c4c158f3280b8db4bad2d2ed44f475338fed2015c5869e28807228a2b4c86d8ac3b8f0310472f22b3c0792df05d5823ca4b453fbb8920cc7cb9dbc720ee15f94b5aac16fe95f07095f6ebb91bf71f6e6954018df7179a1c56673e540f03f0c45892925af49edf6f6514652d6be841f5a4e4cae0a2ca1dd164617e4008eb4b4d4d97571d06f14d1af3e5aa07dcfaa467c89d47c34d1b2d3063b8e0bf968d61e5979353484940218c7af265961a2c4dfc0dfe63347047e229ca4c7957d54f725d7bef606693c7ceb6acfc0b6a93f29635dc54f515dabc4e003aa8d2a0453e3ec44ed73d90246613f19342c4769bab7f990e62bc5a61c11f80fa713415dcda156cbf73a780db0260f291ac7d0d092dba4fc8680d14cee8385531b3b037e3e21736a28dd27f03b1063f853868dc5c62cd9443ba0f5271b47e8845c29cecf7bda88623a72a1fc82a4794f0e7713bac387062e7537440fd0161e76a44072cbbc3a6f8654b43468f85a8f4b4fac8537b5abc5c53575812822664eb33bf92679b64a79b8ff10f9d56f714841c82e29a4faa63dff84f1a42b5dcd4c99606a35863c42298d382fdb5bbee183e184970af0c2b64f3d65aa6d0f3619956e276d4839ef3f50cd9b62300993fe6fe596a721e4a33e9c0a03a2bf2cd3489c9ffead2ec5fe9c0aeb02b52dfaf0b878ea314e88be739fb9108568aae3e1874e7043ec0cdf8fb100045835f1f66beab0da34ae5cc7061f151f3b7f1a97de2fbdecd916b1ebb54817c6b3e2634584361251ee3f9fc786171dc7483571e1a0f17c1d6a2b396d92a14bb73a520deb9d8220c8382f2e90e326dad0070630d1532fa71ad381a474797526e6114c650c6beddd7fd556d492ea45cfcb66abedf759abef523d16e585bfd2147779e739330973968b9c423e978ae954ed7dc4de076beef2b21fe8ecb257526c0d8100ca0a30dd871c5760c423f9a8f9adcbd6a89ea8aad2300e5b047acccfd7a32585984f53c9c91580144bc39604c1202fb123b041560e287a02f56f838bc7d240a019e55d2b9b63161e62b96642448869f80d4d9d5d911cd21930ef30d21c08d4bb2ae9c9384ff96a7355ddbbc33aca30133ece2dd1dee8dbe4ed132df7807fcda7d8c0dc623f2e5886ed99424962760f71b3bb620164df72766bd56d0ea84a1a076f9797df6eacbb1c36ff0137450fed58236861f044c36bc60b63b19139376e50d10f1c86a9d43e70098589e0434c4564379958425647332aac40e1f9d9a775af7292db08bd1a97e198f9cae15088bd4820a397796e31e5d05f27f5bdfb72c6499bfe7df9ca5ee991e4a88b7f23812221a618db152b73e331164493a59f674d92668e70aaa3835310c7d3930cb7d6d5aa07205184a417462db05213d1f86a6fcab0ce390ca2711c33c2a9fd9341b20e4f5cdf7953f93016a731c3eb91e94cf6e4eca8bba19d8c68e1909669101b703ea4a48e8be85715acac5a1ee45f4db70d8d18d2a58ac6c8a76dd16737fd5440e6ab745b927b85843dd911c5c44bf3a9438687bae8ce657f66533df2d1d8e649d593dfca8192b570351fe2449be110025e3e84b26745312fd4001e44ebf3106da733643bf24cff821e687826590d73f3357158ba1d251cb2352648a154fa078706bf87a24bd28e47fd5acadc0868c7108987792efb93bf5d76d5973489c53649209b5176bc8d4afeef599c48bd1469b2c9bce21ca8654641100a4241782f1dfcf96236a57aa5bf6e5fec25334cf6813d8f20976f04b525737ff0757d62fe9e396ed1a6dfa8a9e80a6d02480f75565bf34f2ed7f69e5db0af20e2748f9579f9dcfa5ab8e424e796fe4a75933326f303a2eb76ef64e4ce26dd2cb795c4091cef88094d9e1f9952a3f9933bee99e3813327e2a5c286dd60b217dc90d4e596cd3b5a2e837ac121f16833dee6040b69a3993ab7303bd66ea27f4874722538b703178f8d27d05dfd19bf82f09257dc99ea9d95f82ea29d90cdc5d7a4705be81a7bd6f17718eaa25a0617825e17f72020f6127140c2637462a5e1426381cde986a35f1667b9e1ee046d36170735ed8648e86513c2e6951f5871d7d956dde4ae512a2386fae63242c112a71b91e4cc9d46814588f9857818ec063cfe3de8e460b10c34b63a51a3c628247c38e281fbb90fd24d1c2959900e6da62cd6ccd7110e092632855662637df0f944592454a95b1202efc73f92fa2abfb91ad40f1b26c0b325f3e4aa49a00a76edae4c4373403d98b6afc7c8e5b55719d5390c7ed247eaa4d9c7abf06718c618e5c1997a9d737953e038aa7f972b87acfd9ead444235a8ff6c39aa3899d13272029e6b39e41056a3c046b2e1544317c1e54c6784e8bba30005b8ad6e39bb38dc626ab7887860164816a8c5100168c35863520a47346924772ddd8676d536956d519ecba640745afefb253ea924871644eb6069831a065474b82f8c46e0069f919a9b3f582628799fc9a236317f0215016780a06b5993afb53c8aacf6a61897a9845151e46c170c0893162869b2339233704af33cfcc7f50d4bbcf69819185364dd7fdb63a9d9bf7c7c1aa2bb7c6c00aafb27b61e97b4b4bdc2dc3d47a800db2312816f53a46b7393f95a551b93d15d2dd7d15ed452dd875daf6c6f3c55dc9ea6527e919b9ad5b2ea4e1d09e822025c97d0cc5a6bbe649cdcba6a548cc7a1fe5994e1a4178906b679b3b3b81c62da15fa6dcbab8dd13e80000c37a64599cbc21f4f3f5c435499a4d9fb3023f798daeb99f6d1d188d82c5ec2ff5d2f2aa2b12ec987a319e1192f21ea462c3e235d16caac04909d49f9f910223ee9fad4d432ef0d97773e5eded543b22a76164ecd36d4b825b44ade10358f078f2d449aa8c99b198f2b39f16d1a07b08d2284379c204e31988675249943d2fdd3c8d8295fc494d094d2e1c113c25871282166e34a3fa70496daec188813d2982e23a5c070b74ee424b46e83866dd755d09310cde989e72a944b633ebdce23a5bde34d3475328d9a1a5a1e003eb3ed2b178b52c75070f927704d5e9fe0c6e492a9dad6ab376f9ab9e886de6c8a38eb41ffde2a227577b6b91967e6d0defef27c47e4aa934a10d238740fbc9aaa8bf4849c55517c52d06d8a2e73929cbc0f1bdd69e1b7d2aa13cecb254c6a769f2c9bb98e7ee40b45e5e78f4dcd44d118e5f74270ad4a1e2c1d0d3a6c426f4fcce694efab6cb3cb134fe819cc7c5ad5db2d608292d5c2acf88e3903c8ebac78355b33ce1e7c72dd896df669aa2bda2a984bc20f675c3ff9d7f988ae7f6db2243705d1b1809d2b2ac1a32c97cdb8e5dc9869dcc1f9347d826ade7d30e5e7907392abc88590399b8dc38016cbc31e8cff968bf0535d96bfc9384ad7fc2d4055804f4f05eed71b5e2c4d07f63b2811fa3bb7854957077e128c5c5c7ba608b2fd730013bac04ae3692bdd26473bb437e0aa75fd9fea740b463527da0472c3ad65aafd26a433b090ce0516b42afda6a8846970015511796210fbad313b998c12c23e997c58e23dba93b2035c26bb629ab576de2a11b6f21bc02657a89c30efb79f894a750e97b83a2855d0bc24b9cf7551c1f6d94de8eb1762dfc58b5994312df6b999b30ba29cc25ba6279972e04eabe28c4a4ab943b6ca53d9e81c463ac5ee631c99034383fb6ca0f266063044ebb6dcffde7433959a7adeaebef4cec9985d1c466b998fb4160b5be48afc93ebcbb987c46dffe47b9901fd2d1f2c516f301cc146b10f8ed0c4d4c2b19afce542b6c68fbb532d57874785acaedf03a0e5a1a985cbe1e1718821364d28b5972e90b4e7ee4acea3a3bc146381f5e10731fc8f6eb3a1075067edbd41b3e0f2c7c53c4f4b75d4c748a7d9be672dc9b326164a3ee77e4fb863caef5d0cf9a175d0238942fcd1f4f3b636a437f39683b7e11df7b1e7f3179333354e9d6c32aa395b853f7ec7258337e3a1060fa10826cd3c0614f5fbae2215d8a6b55737c7b2dbdc9775b078ec43ae3bb16d0831b5cf57eb931cf54bd79c2c46f8ae7d559b43ecd8af384e55e120965f164382c583d5fe3fe0823207ec1c7794f883e14464c22beb8069e458a324faf22b6051d3cd1a96ea44fc5dec15c77ae27865d0f7f2e682710a571bf971c220bd697166b1cf26031be8107f392cc3c1ab6dd692b3b6f4a7721173949c49ebbf7024586412cae8ba0fe6e6845261382aa0c1b6fef4a3b13a3d3ad63621da1d0c12f39daaf35c63288f3856cc70aead6e493677740a50e71d73fbd718e99758e037fd7968eb536ac5d0bb9b34347d4efe6f3df8fc3609617f84ee006b2186f8296a821f89f5606a525bed53e259ebe8cd698613d1a23034370aa6135708d3ae2c440e36233e2953763cde1cf05963730115b0f64928a8c490007371001eef55dcd5ac71e2bfd04ebf32e1377a036f7fe0abe25be8e1bb9caa6578d542e93548fac8d57b51a23b0718b2895f992bbb7e253d9d9545aac7c2bf8ac41c04db2d37ff259dfc99ac802fe9a6b80e4c826e50f69cf57c26995fa22b21cb44438908310810327232df026ffa96e1c111b5eff64fe9f4faf8cacd973b4a5d8fe6888321db2b3931254b564546a648dd34b8b70d7b108398efce6202ebd1c8ed167a07ebd77e7cea7a7c072022816df4e10b77244a917048debc052f5916d44d6f225b8d04e78c62916ae5ff36e219e147738c010c6a3746fc92e140a86794756a3d61f5bdd9c431b7b033b08e7916b495169ca40fda1eeb459dadf088792d864c9e40fb33bac2983a111700d781e6f6ad568e22d2ab4c1249c9e67e59a212c9e4b3f7d18853508fc44d52e1003a0c3ef20c151a60fdf786e96dafa66e116cbce0a0a7e3229a726771ab810b439eee875b2d59ae0b6e1394840db8cec60d5d141e98bab43292a18682b24e1f9eb42c63a6dbefc9d8efa47053f3d003dbe589da18119a8ecf9f321ed58ebbc5c5295376df625f3dae7a6f78f2f6e8329781e830358d507592514eda579b235b22c8c46e69d7b5b6d52007af36bef9801a5f71b63477e49a1faa4c36066fd48861dc0b16bd0ffa992e98921c3a461353c848f9910c7a12189aa47a3ba97fd16ef1d27381c32a29cb91a138392b5ccd8d269be04a345f15cddf7409e84b23b8a90512ae25bc0821a8f69a85bbac39f6b55a5c0280d885ebe8646095f96df1dd32dc7513af3e906eab57fac58bfd0df35af1b31e93708a7ec2c94dcd20f7f5ab6eb10be17cb5f017fb570a33afdf6092c93268fc7656aee5f7f6b33a47d7125a65bd25d49dbe7f3d76aeeb1835cc4f1715b8d4831b707cb40e37ed7dafb3d4ca4db6eadd99944f15cc16cd989d27cf66865c0fbbf3daa322749ee6b85558916733ffe027db96dfe5a4ada34a8e47b2aaa83a5c9eda11bf1fbd5cd04d6299a58066cdb2784098f8e0018c93e80b073fa870f73511e96471687184fd910108674c0e7f0e3ce4dff72f0ac024f884788e297b030b149162e381187a2ff69dc713f787470a5bd9b1f317bade953615e733e6ace1dda087ca64fb0cffc0b129d8dcd64ca675f4738d2b1b8cdf1267568264877580340b9b28f1580b7719b4e9ade07c9dd3843726967c9915e1e38933f82cf0a941475fbd6397205aee0ab6ecd17b62c28a71087173905dd1b0281159f58d3adbfdee5dc32b26a30876e262b084085e0373cc36c2021aa567a89ff9f762463096ce9afdc76df3553796fa163f6356884d7da482d9ba1eb86c5566cb3cc8711c373600429d9b924855655b720c126fdb6899b8da6ed753efb6ae6e3e5822c7ac052143acbd329d6aacf59d8618ce9581cd736b1143a770c5504d31a114cfbe8e22d1c46bf59112bb1af5a6f68389cbeab0aa519627cf59df1b3482761d05487704e8f87eb52e200ac3f66b868d1c641a8378109a8b551ae8e1e17c0eb87caddb99bdf6b00517bce5e10bd107c0fa327ad08129ae33c6f7de631792e8edb553f298025a679a0a50c6e3ffb8d9a043a23b8c933476293daf6840a70c59286b3c03ea054b90ab00f0d3a40bb0dd890068c0969641fc7b72a471fa1afb0a9a86358e8c67c8edeacd58b98a0564f96cb329a190a432389c55c96850ee7928c472529d4c2e9702292e489ed3e1c7e149b2eba8e1168ec532db567ce7ff0e6465a1bee9cfc86c932effd41b18f15d8af414591c4b9acc84cf0d427b6c3b2afd209863a366e79a21dfe3a3c9e1151b91fa086756329b394ded4fd5cc5c0525308f444a3910e93c355b5d855c45a9102a97b4ac836fba87243e5a346c074a37a9d7f1fc9a7c45dbacdc8671bcde9b97c8f964ca0e2c88a90bc1722fdb721b15a8861e0dc514d349f1656dd02e10362658e1b965829d82a85fc35f5698ee02188a879e4269fb3c0d2b9d2dc08a73c074ec7f20b50ccd80b9a5ddda7b31cc0aaccdc797c0c086808e57d3c34a260ceebee233978abc0f7c3d446f62f5b443da67af3b18a2a98a8e52207d233615a322d4fba80d28f3a4b420410dd72cc897d4ee54e98c10c948f09f667ec5caef9217afedc3c6d1c73190c79237e74b9ca999012e0be6e181e8323dc4454c24ef45a785cc080883d61353c82276cefe4a9e27d84f3d8422c054341e9c9c57ddbf8c73367d76a5ec816532d97791ee1391254ad830a6b9cbcf89dc7750f52f8ec273e0b8510e87be3fb03721401dcac3a2e84bd03419a9d003c65aabb829c19e66d0f2b4f5350235bbd4ee109912</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Please enter the password to read this post.</span>
+      </label>
+    </div>
+  </div>
+</div>
+<link href="/css/hbe.style.css" rel="stylesheet" type="text/css"><script data-swup-reload-script type="module" src="/js/plugins/hbe.js"></script>
+<script data-swup-reload-script type="module">
+import {initHBE} from "/js/plugins/hbe.js";
+    initHBE();
+</script>
 
 		</div>
 
@@ -773,18 +614,18 @@
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> Access to Internal Server From Jump Server</li>
+        <li><strong>Title:</strong> Test Time LLMs</li>
         <li><strong>Author:</strong> wy</li>
         <li><strong>Created at
-                :</strong> 2024-07-13 16:05:19</li>
+                :</strong> 2026-04-03 16:31:02</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2024-07-19 09:18:21
+                    :</strong> 2026-04-06 17:29:48
             </li>
         
         <li>
-            <strong>Link:</strong> https://yue-ruby-w.site/2024/07/13/2024-07-13-Access-to-Internal-Server-From-Jump-Server/
+            <strong>Link:</strong> https://yue-ruby-w.site/2026/04/03/Test-Time-LLMs/
         </li>
         <li>
             <strong>
@@ -809,23 +650,11 @@
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2024/07/13/2024-07-13-check-GPU-on-an-integrated-server/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">check GPU on an integrated server</span>
-						<span class="post-nav-item">Prev posts</span>
-					</span>
-				</a>
-			</div>
-			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2024/07/13/2024-07-13-summer-notes2/">
+				<a class="next" rel="next" href="/2024/07/19/2024-07-19-debug-on-gpu-node/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">summer notes2</span>
+						<span class="post-nav-title-item truncate max-w-48">debug on gpu node</span>
 						<span class="post-nav-item">Next posts</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -846,8 +675,8 @@
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">Access to Internal Server From Jump Server</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Using-a-Jump-Server-for-Internal-Network-Access"><span class="nav-text">Using a Jump Server for Internal Network Access</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Purpose"><span class="nav-text">Purpose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Operating-Environment"><span class="nav-text">Operating Environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prerequisites"><span class="nav-text">Prerequisites</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Some-Terminal-Commands"><span class="nav-text">Some Terminal Commands</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configuring-SSH-in-VSCode"><span class="nav-text">Configuring SSH in VSCode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Final-Connection-Steps"><span class="nav-text">Final Connection Steps</span></a></li></ol></li></ol>
+		<div class="page-title">Test Time LLMs</div>
+		
 
 	</div>
 </div>
