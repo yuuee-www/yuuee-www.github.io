@@ -223,3 +223,106 @@
 [data-theme="dark"] .notebook .article-content.markdown-body td {
   border-color: #4a4035;
 }
+
+/* ===== Page Navigation ===== */
+.nb-page-nav {
+  display: flex;
+  gap: 0;
+  margin: 0 0 24px 0;
+  padding: 0;
+  border-bottom: 2px solid #d4c9a8;
+  list-style: none;
+  background: none !important;
+  line-height: 1.4 !important;
+}
+
+.nb-page-nav a {
+  display: block;
+  padding: 8px 20px;
+  color: #6b5b4d !important;
+  text-decoration: none !important;
+  font-family: 'Georgia', serif;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.nb-page-nav a:hover {
+  background: #f5f0e6;
+  color: #A31F34 !important;
+}
+
+.nb-page-nav a.active {
+  background: #fffef5;
+  color: #A31F34 !important;
+  border-color: #d4c9a8;
+  font-weight: bold;
+}
+
+.nb-page {
+  display: none;
+}
+
+.nb-page.active {
+  display: block;
+}
+
+/* Page footer navigation */
+.nb-page-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 2px dashed #c9b99a;
+}
+
+.nb-page-footer a {
+  color: #A31F34 !important;
+  text-decoration: none !important;
+  font-family: 'Georgia', serif;
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border: 1px solid #d4c9a8;
+  border-radius: 4px;
+  background: #f5f0e6;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.nb-page-footer a:hover {
+  background: #e8e0d0;
+}
+
+/* Dark mode page nav */
+[data-theme="dark"] .nb-page-nav {
+  border-bottom-color: #4a4035;
+}
+
+[data-theme="dark"] .nb-page-nav a {
+  color: #a09080 !important;
+}
+
+[data-theme="dark"] .nb-page-nav a:hover {
+  background: #332e28;
+  color: #e8a0a0 !important;
+}
+
+[data-theme="dark"] .nb-page-nav a.active {
+  background: #2a2520;
+  color: #e8a0a0 !important;
+  border-color: #4a4035;
+}
+
+[data-theme="dark"] .nb-page-footer a {
+  color: #e8a0a0 !important;
+  border-color: #4a4035;
+  background: #332e28;
+}
+
+[data-theme="dark"] .nb-page-footer a:hover {
+  background: #3a3530;
+}
