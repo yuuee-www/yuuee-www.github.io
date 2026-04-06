@@ -326,3 +326,199 @@
 [data-theme="dark"] .nb-page-footer a:hover {
   background: #3a3530;
 }
+
+/* ===== Notebook Diagrams ===== */
+.nb-diagram {
+  margin: 24px 0;
+  padding: 20px;
+  background: #faf6eb;
+  border: 1px solid #d4c9a8;
+  border-radius: 6px;
+  font-family: 'Georgia', serif;
+  line-height: 1.6 !important;
+}
+
+.nb-diagram-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #A31F34;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* Flow box (Encoder / Decoder) */
+.nb-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #2c2c2c;
+  border-radius: 50px;
+  padding: 6px 24px;
+  font-weight: bold;
+  font-size: 1rem;
+  background: #fffef5;
+  color: #2c2c2c;
+  min-width: 100px;
+}
+
+.nb-flow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+
+.nb-flow-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nb-arrow {
+  font-size: 1.4rem;
+  color: #A31F34;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.nb-label {
+  font-size: 0.92rem;
+  color: #4a3728;
+  padding: 4px 10px;
+  background: #f5f0e6;
+  border: 1px dashed #c9b99a;
+  border-radius: 4px;
+  line-height: 1.5 !important;
+}
+
+.nb-label strong {
+  color: #A31F34;
+}
+
+.nb-highlight {
+  background: #fff3cd;
+  border: 1px solid #f9a825;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-weight: bold;
+  color: #6b5b00;
+}
+
+.nb-green {
+  background: #e8f5e9;
+  border-color: #4caf50;
+  color: #2e7d32;
+}
+
+.nb-branch {
+  border-left: 3px solid #A31F34;
+  padding-left: 16px;
+  margin: 8px 0 8px 20px;
+}
+
+.nb-branch-item {
+  padding: 4px 0;
+  font-size: 0.92rem;
+  color: #4a3728;
+  line-height: 1.6 !important;
+}
+
+.nb-connector {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.nb-connector-line {
+  width: 2px;
+  background: #A31F34;
+  min-height: 40px;
+  flex-shrink: 0;
+  margin-left: 50px;
+}
+
+.nb-note {
+  font-size: 0.85rem;
+  color: #888;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* Properties list */
+.nb-props {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.nb-prop {
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #2e7d32;
+}
+
+/* Dark mode diagrams */
+[data-theme="dark"] .nb-diagram {
+  background: #2e2a24;
+  border-color: #4a4035;
+}
+
+[data-theme="dark"] .nb-box {
+  border-color: #d4c9b8;
+  background: #3a3530;
+  color: #d4c9b8;
+}
+
+[data-theme="dark"] .nb-arrow {
+  color: #e8a0a0;
+}
+
+[data-theme="dark"] .nb-label {
+  color: #c9b99a;
+  background: #332e28;
+  border-color: #4a4035;
+}
+
+[data-theme="dark"] .nb-label strong {
+  color: #e8a0a0;
+}
+
+[data-theme="dark"] .nb-highlight {
+  background: #3a3520;
+  border-color: #b8860b;
+  color: #e8c840;
+}
+
+[data-theme="dark"] .nb-green {
+  background: #1b3a1b;
+  border-color: #4a7a4a;
+  color: #8bc48b;
+}
+
+[data-theme="dark"] .nb-branch {
+  border-left-color: #e8a0a0;
+}
+
+[data-theme="dark"] .nb-branch-item {
+  color: #c9b99a;
+}
+
+[data-theme="dark"] .nb-connector-line {
+  background: #e8a0a0;
+}
+
+[data-theme="dark"] .nb-prop {
+  background: #1b3a1b;
+  border-color: #4a7a4a;
+  color: #8bc48b;
+}
+
+[data-theme="dark"] .nb-diagram-title {
+  color: #e8a0a0;
+}
