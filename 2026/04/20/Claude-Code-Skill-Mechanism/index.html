@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    
+    <meta name="author" content="wy">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://yue-ruby-w.site/2026/04/20/claude-code-skill-mechanism/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+        
+        <meta name="description" content="Ruby&#39;s Blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How Claude Code Skills Work Under the Hood">
+<meta property="og:url" content="https://yue-ruby-w.site/2026/04/20/Claude-Code-Skill-Mechanism/index.html">
+<meta property="og:site_name" content="hola">
+<meta property="og:description" content="Ruby&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/01_title.jpg">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/03_proxy_setup.jpg">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/02_charles_open.jpg">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/04_charles_connect.jpg">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/05_claude_launch.jpg">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/06_request_captured.jpg">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/07_request_json.jpg">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/08_tools_array.jpg">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/13_task_tool.jpg">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/14_todowrite.jpg">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/15_exitplan.jpg">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/09_skill_prompt.jpg">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/11_translation.jpg">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/10_skill_md.jpg">
+<meta property="og:image" content="https://yue-ruby-w.site/images/claude-code-skill/12_function_calling.jpg">
+<meta property="article:published_time" content="2026-04-20T14:45:00.000Z">
+<meta property="article:modified_time" content="2026-04-20T14:56:59.128Z">
+<meta property="article:author" content="wy">
+<meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="Reverse Engineering">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yue-ruby-w.site/images/claude-code-skill/01_title.jpg">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/favicon.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            How Claude Code Skills Work Under the Hood | hola
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+        
+            
+    
+            
+    
+            
+                
+                    <link rel="stylesheet" href="/css/notebook.css">
+                
+    
+            
+                
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+                
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+        <link href="/fonts/Geist/geist.css" rel="stylesheet">
+    
+    
+        <link href="/fonts/Chillax/chillax.css" rel="stylesheet">
+    
+    
+        
+<script src="/js/build/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"yue-ruby-w.site","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"Recommended","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":true,"family":"Geist","url":"/fonts/Geist/geist.css"},"title":{"enable":true,"family":"Chillax","url":"/fonts/Chillax/chillax.css"}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":true,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":null,"description":"Ruby's Blog"},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-8oxg61.jpg","dark":"/images/wallhaven-8oxg61.jpg"},"title":"Ruby's Blog","subtitle":{"text":["Hi!","你好～"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":[{"icon":"fa-brands fa-github","url":"https://github.com/yuuee-www"},{"icon":"fa-solid fa-at","url":"mailto:wy@yue-ruby-w.site"},{"icon":"fa-solid fa-at","url":"you@example.com"},{"icon":"fa-brands fa-telegram","url":null},{"icon":"/images/custom-icon.svg","url":null}],"qrs":[{"icon":"fa-brands fa-weixin","qr":null},{"icon":"/images/custom-icon.svg","qr":null}]}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1","theme":{"light":"default","dark":"dark"}}},"version":"2.9.0","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur","masonry":{"batch_size":12,"initial_batch_size":24}},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footer":{"runtime":true,"icon":"<i class=\"fa-solid fa-heart fa-beat\" style=\"--fa-animation-duration: 0.5s; color: #f54545\"></i>","start":"2023/06/13 00:00:00","statistics":true,"customize":null,"icp":{"enable":false,"number":null,"url":null}},"footerStart":"2023/06/13 00:00:00","mermaid":{"style":{"light":"default","dark":"dark"}}};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.i18n = {"search":"Search...","toc":"On this page","prev":"Prev","next":"Next","prev_posts":"Prev posts","next_posts":"Next posts","page":"Page %d","recent_posts":"Recent Posts","share":"Share","powered_by":"POWERED BY %s","theme":"THEME","rss_feed":"RSS Feed","category":"Category","categories":"Categories","tag":"Tag","tags":"Tags","post":"Post","posts":"Posts","tagcloud":"Tag Cloud","comment":"Comment","comments":"Comments","home":"Home","archive":"Archive","archives":"Archives","top":"TOP","sticky":"Sticky","go-back-home":"Go Back Home","masonry_loading":"Loading photos...","image_viewer":"Image viewer","close":"Close","exif":{"title":"EXIF","cards":{"camera":"Camera","lens":"Lens","exposure":"Exposure","other":"Other"},"fields":{"make":"Brand","model":"Model","date_taken":"Date taken","lens_model":"Lens","focal_length":"Focal length","focus_mode":"Focus mode","shutter":"Shutter","aperture":"Aperture","iso":"ISO","exposure_program":"Exposure program","exposure_compensation":"Exposure compensation","metering_mode":"Metering mode","flash":"Flash","white_balance":"White balance","latitude":"Latitude","longitude":"Longitude","altitude":"Altitude"},"status":{"loading":"Loading...","no_exif":"No EXIF available","library_missing":"EXIF library not loaded","image_source_missing":"Image source unavailable","unavailable":"EXIF unavailable (blocked by CORS or missing metadata)","flag_unavailable":"EXIF unavailable"}},"about":"About","changelog":"Changelog","links":"Links","link":"Link","friends":"Friends","friend":"Friend","timeline":"Timeline","shuoshuo":"Shuoshuo","bookmarks":"Bookmarks","site_uv":"VISITOR COUNT","site_pv":"TOTAL PAGE VIEWS","read_more":"Read more","wordcount":"Words","min2read":"Mins","status":"Status","runtime":"Blog up for","days":"days","hours":"hrs","minutes":"Min","seconds":"Sec","optimized_by":"and Optimized by Evan","rights":"All Rights Reserved","site_posts":"%s posts in total","site_wordcount":"%s words in total","copyright":{"author":"Author","title":"Title","link":"Link","create_time":"Created at","update_time":"Updated at","license_title":"License","license_content":"This work is licensed under %s.","all_rights_reserved":"All Rights Reserved &#169; %s","public_domain":"This work is in the public domain."},"ago":{"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"},"create_time":"Created","update_time":"Updated","expired":"This post is written %s days ago, and the content may not be up to date."};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        hola
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({ loop: true })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [20, 0],
+                translateZ: 0,
+                opacity: [0, 1],
+                filter: ['blur(5px)', 'blur(0px)'],
+                easing: "easeOutExpo",
+                duration: 1200,
+                delay: (el, i) => 300 + 20 * i,
+            })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [0, -20],
+                opacity: [1, 0],
+                filter: ['blur(0px)', 'blur(5px)'],
+                easing: "easeInExpo",
+                duration: 1000,
+                delay: (el, i) => 15 * i,
+                complete: function() {
+                    hidePreloader();
+                }
+            }, '-=700');
+
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                hola
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/categories"
+                        >
+                            <span>Categories</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">1</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">25</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">How Claude Code Skills Work Under the Hood</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/images/redefine-avatar.svg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">wy</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-04-20 22:45</span>
+        <span class="mobile">2026-04-20 22:45</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-04-20 22:56:59</span>
+            <span class="mobile">2026-04-20 22:56:59</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/Tools/">Tools</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Claude-Code/">Claude Code</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/LLM/">LLM</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Reverse-Engineering/">Reverse Engineering</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3.3k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>20 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h1 id="抓包-Claude-Code-——-Skill-的实现原理"><a href="#抓包-Claude-Code-——-Skill-的实现原理" class="headerlink" title="抓包 Claude Code —— Skill 的实现原理"></a>抓包 Claude Code —— Skill 的实现原理</h1><p><strong>Source:</strong> Xiaohongshu post by 程序员小山与Bug</p>
+<p><strong>Core question:</strong> How are Claude Code Skills actually implemented under the hood?</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/01_title.jpg"
+                      alt="Opening question"
+                ></p>
+<blockquote>
+<p><strong>&quot;Skill 怎么实现的?&quot;</strong> — The author&#39;s verdict, spoilered up front: <strong>Skills are just Function Calling + a big system-prompt injection.</strong> No magic protocol — just tool-use and text.</p>
+</blockquote>
+<hr>
+<h2 id="1-Setup-—-MITM-the-Claude-Code-CLI-with-Charles"><a href="#1-Setup-—-MITM-the-Claude-Code-CLI-with-Charles" class="headerlink" title="1. Setup — MITM the Claude Code CLI with Charles"></a>1. Setup — MITM the Claude Code CLI with Charles</h2><p>The experiment is a classic packet-capture study:</p>
+<ol>
+<li>Open Charles 5.0.3 on localhost port <strong>8888</strong></li>
+<li>Edit <code>~/.claude/settings.json</code> (the CC user settings file)</li>
+<li>Export proxy env vars so Claude Code&#39;s outgoing HTTPS is forced through Charles:</li>
+</ol>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> HTTP_PROXY=http://127.0.0.1:8888</span><br><span class="line"><span class="built_in">export</span> HTTPS_PROXY=http://127.0.0.1:8888</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/03_proxy_setup.jpg"
+                      alt="Proxy env vars"
+                ></p>
+<p>Charles is launched and ready to record.</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/02_charles_open.jpg"
+                      alt="Charles idle"
+                ></p>
+<p>When the author runs <code>claude</code> and the CLI connects out, Charles immediately shows a <strong>CONNECT</strong> to <code>api.anthropic.com</code> (TLS 1.3, HTTP&#x2F;1.1, ~570 ms, &quot;SSL Proxying not enabled for this host&quot;). So at minimum the destination is confirmed.</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/04_charles_connect.jpg"
+                      alt="First CONNECT hit"
+                ></p>
+<blockquote>
+<p>In this particular demo the author is not actually talking to <code>api.anthropic.com</code> for chat — the CLI has been configured via the Doubao provider so the real traffic goes to <strong><code>ark.cn-beijing.volces.com</code></strong> (ByteDance Volcano Engine&#39;s Anthropic-compatible endpoint, model <code>doubao-seed-code-preview-251028</code>). This is what lets him read the request body in the clear.</p>
+</blockquote>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/05_claude_launch.jpg"
+                      alt="Claude Code launched"
+                ></p>
+<p>Claude Code v2.1.7 boots up showing model <code>doubao-seed-code-preview-251028</code> · API Usage Billing — same UX as normal CC, just a different backend.</p>
+<hr>
+<h2 id="2-Trigger-a-Request-Capture-It"><a href="#2-Trigger-a-Request-Capture-It" class="headerlink" title="2. Trigger a Request &amp; Capture It"></a>2. Trigger a Request &amp; Capture It</h2><p>Inside Claude Code the author types the simplest possible prompt — <code>你好</code> (&quot;hi&quot;). Charles captures <strong>two</strong> POSTs to:</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST http://ark.cn-beijing.volces.com:80/api/compatible/v1/messages?beta=true</span><br></pre></td></tr></table></figure></div>
+
+<p>Sizes: <strong>~77.89 KB request</strong> for a one-word prompt. That size is the whole point of the video.</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/06_request_captured.jpg"
+                      alt="Charles captures the POST"
+                ></p>
+<hr>
+<h2 id="3-Open-the-Request-Body-in-a-JSON-Viewer"><a href="#3-Open-the-Request-Body-in-a-JSON-Viewer" class="headerlink" title="3. Open the Request Body in a JSON Viewer"></a>3. Open the Request Body in a JSON Viewer</h2><p>He copies the raw body and pastes it into his own tiny web tool <code>https://sunzsh.github.io/json/?clipboard</code> (reads JSON from clipboard and pretty-prints it). Top level keys:</p>
+<div class="code-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;doubao-seed-code-preview-251028&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;messages&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> ... <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;system&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> ... <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tools&quot;</span><span class="punctuation">:</span>  <span class="punctuation">[</span> ... <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/07_request_json.jpg"
+                      alt="Request top-level"
+                ></p>
+<p>Three blocks matter: <strong><code>messages</code></strong>, <strong><code>system</code></strong>, <strong><code>tools</code></strong>. The user&#39;s &quot;你好&quot; is a tiny sliver at the bottom of <code>messages</code>. Everything else is framework scaffolding.</p>
+<hr>
+<h2 id="4-The-tools-Array-—-Every-Claude-Code-Tool-Schematized"><a href="#4-The-tools-Array-—-Every-Claude-Code-Tool-Schematized" class="headerlink" title="4. The tools Array — Every Claude Code Tool, Schematized"></a>4. The <code>tools</code> Array — Every Claude Code Tool, Schematized</h2><p>Expanding <code>&quot;tools&quot;: [ ... ]</code> reveals the full CC toolbelt as OpenAI-style JSON-Schema function definitions. The first one is <code>Task</code>:</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/08_tools_array.jpg"
+                      alt="tools[0] &#x3D; Task"
+                ></p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">name: &quot;Task&quot;</span><br><span class="line">description: &quot;Launch a new agent to handle complex, multi-step tasks autonomously.</span><br><span class="line">Each agent type has specific capabilities and tools available to it:</span><br><span class="line">  - Bash: Command execution specialist for running bash commands...</span><br><span class="line">  - general-purpose: General-purpose agent for researching complex questions...</span><br><span class="line">  - statusline-setup: configure the user&#x27;s Claude Code status line...</span><br><span class="line">  - claude-code-guide: quickly find files by patterns...</span><br><span class="line">  - Plan: Software architect agent for designing implementation plans...</span><br><span class="line">  ...&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>Scrolling the list yields the familiar CC tools, each with a multi-hundred-token description:</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/13_task_tool.jpg"
+                      alt="More tools"
+                ></p>
+<ul>
+<li><strong>Task</strong> (sub-agent launcher)</li>
+<li><strong>Bash</strong>, <strong>Read</strong>, <strong>Edit</strong>, <strong>Write</strong>, <strong>Grep</strong>, <strong>Glob</strong></li>
+<li><strong>WebFetch</strong>, <strong>WebSearch</strong></li>
+<li><strong>TodoWrite</strong>, <strong>NotebookEdit</strong></li>
+<li><strong>ExitPlanMode</strong></li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/14_todowrite.jpg"
+                      alt="TodoWrite description"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/15_exitplan.jpg"
+                      alt="ExitPlanMode description"
+                ></p>
+<p>Each schema is pure JSON-Schema (<code>required</code>, <code>additionalProperties: false</code>, nested objects, enums) — exactly what the Anthropic Messages API expects under <code>tools</code>. <strong>Nothing here is Skill-specific.</strong> These are the base-layer tools.</p>
+<hr>
+<h2 id="5-The-system-Block-—-Where-Skills-Actually-Live"><a href="#5-The-system-Block-—-Where-Skills-Actually-Live" class="headerlink" title="5. The system Block — Where Skills Actually Live"></a>5. The <code>system</code> Block — Where Skills Actually Live</h2><p>This is the punchline of the video. The author scrolls into the system-prompt text and highlights a section (he pastes it into Google Translate to read the English more carefully).</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/09_skill_prompt.jpg"
+                      alt="System prompt: skill rules"
+                ></p>
+<p>Reconstructed, the system prompt contains a block roughly like:</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">How to invoke:</span><br><span class="line">- Use this tool with the skill name and optional arguments.</span><br><span class="line">Examples:</span><br><span class="line">  - skill: &quot;pdf&quot;                        - invoke the pdf skill</span><br><span class="line">  - skill: &quot;commit&quot;, args: &quot;-m &#x27;Fix bug&#x27;&quot; - invoke with arguments</span><br><span class="line">  - skill: &quot;review-pr&quot;, args: &quot;123&quot;        - invoke with arguments</span><br><span class="line">  - skill: &quot;ms-office-suite:pdf&quot;           - invoke using fully qualified name</span><br><span class="line"></span><br><span class="line">Important:</span><br><span class="line">- When a skill is relevant, you must invoke this tool IMMEDIATELY as your first action</span><br><span class="line">- NEVER just announce or mention a skill in your text response without actually calling this tool</span><br><span class="line">- This is a BLOCKING REQUIREMENT: invoke the relevant Skill tool BEFORE generating any other response about the task</span><br><span class="line">- Only use skills listed in &quot;Available skills&quot; below</span><br><span class="line">- Do not invoke a skill that is already running</span><br><span class="line">- Do not use this tool for built-in CLI commands (like /help, /clear, etc.)</span><br><span class="line">- If you see a &lt;command-name&gt; tag in the current conversation turn,</span><br><span class="line">  the skill has ALREADY been loaded and its instructions follow in the next message.</span><br><span class="line">  Do NOT call this tool — just follow the skill instructions directly.</span><br><span class="line"></span><br><span class="line">Available skills:</span><br><span class="line">- xlsx: Comprehensive spreadsheet creation, editing, and analysis...</span><br><span class="line">- pdf: Comprehensive PDF manipulation toolkit...</span><br><span class="line">- skill-creator: Guide for creating effective skills...</span><br><span class="line">- pptx: Presentation creation, editing, and analysis...</span><br><span class="line">- mcp-builder: Guide for creating high-quality MCP servers...</span><br><span class="line">- explaining-code: Explains code with visual diagrams and analogies...</span><br><span class="line">- docx: Comprehensive document creation, editing, and analysis...</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/11_translation.jpg"
+                      alt="Bilingual view"
+                ></p>
+<h3 id="What-This-Tells-Us"><a href="#What-This-Tells-Us" class="headerlink" title="What This Tells Us"></a>What This Tells Us</h3><table>
+<thead>
+<tr>
+<th>Observation</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Skills are entries in the system prompt</strong></td>
+<td>No separate &quot;skill channel&quot; — only <code>name: description</code> pairs</td>
+</tr>
+<tr>
+<td><strong>Invocation is a Function Call</strong></td>
+<td>A <code>Skill</code> tool is registered in <code>tools</code> with one <code>skill</code> string param</td>
+</tr>
+<tr>
+<td><strong>Gating is done by English prose</strong></td>
+<td>&quot;You MUST invoke IMMEDIATELY&quot;, &quot;BLOCKING REQUIREMENT&quot;, &quot;NEVER just announce&quot; — prose enforcement</td>
+</tr>
+<tr>
+<td><strong>Slash command precedence</strong></td>
+<td><code>&lt;command-name&gt;</code> tag tells model &quot;already loaded, follow the body&quot;</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="6-What-a-Skill-File-Itself-Looks-Like"><a href="#6-What-a-Skill-File-Itself-Looks-Like" class="headerlink" title="6. What a Skill File Itself Looks Like"></a>6. What a Skill File Itself Looks Like</h2><p>When the Skill tool fires, the runtime loads that skill&#39;s <code>SKILL.md</code>. The author opens one locally (<code>vim SKILL.md</code>) — classic YAML frontmatter + markdown body:</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/10_skill_md.jpg"
+                      alt="SKILL.md for xlsx"
+                ></p>
+<div class="code-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">xlsx</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&quot;Comprehensive spreadsheet creation, editing, and analysis with</span></span><br><span class="line"><span class="string">  support for formulas, formatting, data analysis, and visualization. When</span></span><br><span class="line"><span class="string">  Claude needs to work with spreadsheets (.xlsx, .xlsm, .csv, .tsv, etc) for:</span></span><br><span class="line"><span class="string">  (1) Creating new spreadsheets with formulas and formatting, (2) Reading or</span></span><br><span class="line"><span class="string">  analyzing data, (3) Modify existing spreadsheets while preserving formulas,</span></span><br><span class="line"><span class="string">  (4) Data analysis and visualization in spreadsheets, or (5) Recalculating</span></span><br><span class="line"><span class="string">  formulas&quot;</span></span><br><span class="line"><span class="attr">license:</span> <span class="string">Proprietary.</span> <span class="string">LICENSE.txt</span> <span class="string">has</span> <span class="string">complete</span> <span class="string">terms</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="comment"># Requirements for Outputs</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## All Excel files</span></span><br><span class="line"></span><br><span class="line"><span class="comment">### Zero Formula Errors</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Every</span> <span class="string">Excel</span> <span class="string">model</span> <span class="string">MUST</span> <span class="string">be</span> <span class="string">delivered</span> <span class="string">with</span> <span class="string">ZERO</span> <span class="string">formula</span> <span class="string">errors</span> <span class="string">(#REF!,</span> <span class="comment">#DIV/0!,</span></span><br><span class="line">  <span class="comment">#VALUE!, #N/A, #NAME?)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">### Preserve Existing Templates (when updating templates)</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Study</span> <span class="string">and</span> <span class="string">EXACTLY</span> <span class="string">preserve</span> <span class="string">...</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Never</span> <span class="string">impose</span> <span class="string">standard</span> <span class="string">formatting</span> <span class="string">...</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="Key-Observations-About-SKILL-md"><a href="#Key-Observations-About-SKILL-md" class="headerlink" title="Key Observations About SKILL.md"></a>Key Observations About <code>SKILL.md</code></h3><ul>
+<li>The <strong><code>description</code></strong> in the frontmatter is <em>exactly</em> the string that appears next to <code>xlsx:</code> in the system prompt&#39;s &quot;Available skills&quot; list. That is how CC builds the list — it scans each installed skill&#39;s frontmatter and concatenates.</li>
+<li>The <strong>body</strong> is not shipped in the first request. It&#39;s lazy-loaded: when the model calls <code>Skill(skill=&quot;xlsx&quot;)</code>, the runtime returns the body as the tool result, and <em>then</em> the model plans the work.</li>
+<li>The <code>name</code> is the invocation key. Plugin-namespaced skills use <code>plugin:skill</code> form (<code>ms-office-suite:pdf</code>).</li>
+</ul>
+<hr>
+<h2 id="7-The-Reveal"><a href="#7-The-Reveal" class="headerlink" title="7. The Reveal"></a>7. The Reveal</h2><p>The author overlays a giant text across the JSON view:</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/claude-code-skill/12_function_calling.jpg"
+                      alt="Function Calling"
+                ></p>
+<blockquote>
+<p><strong>&quot;Function Calling.&quot;</strong></p>
+</blockquote>
+<p>That&#39;s the entire mechanism. Skills are:</p>
+<ol>
+<li>A <strong><code>Skill</code> tool</strong> declared in the <code>tools</code> array (single <code>skill</code> string argument)</li>
+<li>A <strong>registry block</strong> in the <code>system</code> prompt listing <code>name + description</code> for every installed skill</li>
+<li>A set of <strong><code>SKILL.md</code> files</strong> on disk whose body becomes the tool-call response when invoked</li>
+<li><strong>Prose enforcement</strong> (&quot;BLOCKING REQUIREMENT&quot;, &quot;call IMMEDIATELY&quot;) to make the model reach for it when relevant</li>
+</ol>
+<p>No special API. No out-of-band protocol. It&#39;s the same tool-use contract you already use.</p>
+<hr>
+<h2 id="8-The-Author-s-Closing-Lament"><a href="#8-The-Author-s-Closing-Lament" class="headerlink" title="8. The Author&#39;s Closing Lament"></a>8. The Author&#39;s Closing Lament</h2><p>Last cards:</p>
+<ul>
+<li><em>&quot;但是它底层发了这么多东西&quot;</em> — but under the hood it&#39;s sending so much stuff</li>
+<li><em>&quot;最后哈我想再感叹一下&quot;</em> — finally, one more remark</li>
+<li><em>&quot;TOKEN 对我们来说是真的越来越重要了&quot;</em> — <strong>tokens really are getting more and more important for us</strong></li>
+</ul>
+<p>The gripe: a bare <code>你好</code> produced a <strong>~78 KB</strong> request body. All of that overhead — the tool schemas, the skill registry, the reminder prose, the todo&#x2F;plan-mode scaffolding — is paid on <em>every</em> turn. If you care about cost or context-window budget, Skills are not free, even when unused.</p>
+<hr>
+<h2 id="TL-DR-—-What-I-Learned"><a href="#TL-DR-—-What-I-Learned" class="headerlink" title="TL;DR — What I Learned"></a>TL;DR — What I Learned</h2><table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Reality (per the packet capture)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Is Skill a new API feature?</td>
+<td>No. It&#39;s a regular tool named <code>Skill</code> plus a system-prompt catalog.</td>
+</tr>
+<tr>
+<td>How does the model know what skills exist?</td>
+<td>A static &quot;Available skills:&quot; bullet list in the system prompt, built from each <code>SKILL.md</code>&#39;s frontmatter.</td>
+</tr>
+<tr>
+<td>When does the skill body get loaded?</td>
+<td>Lazily — only after the model invokes <code>Skill(name=...)</code>. The body comes back as the tool result.</td>
+</tr>
+<tr>
+<td>What forces the model to use a skill?</td>
+<td>Strongly-worded English imperatives in the system prompt (&quot;BLOCKING REQUIREMENT&quot;, &quot;invoke IMMEDIATELY&quot;, &quot;NEVER just announce&quot;).</td>
+</tr>
+<tr>
+<td>Relationship to slash commands</td>
+<td>A <code>&lt;command-name&gt;</code> tag in the user turn signals the skill body is already inlined — the model must skip the <code>Skill</code> tool call and just act.</td>
+</tr>
+<tr>
+<td>Cost implication</td>
+<td>Every request carries the full tool schemas + skill registry (~78 KB for a one-word prompt here). Tokens ≠ free.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="Reproducing-This-at-Home"><a href="#Reproducing-This-at-Home" class="headerlink" title="Reproducing This at Home"></a>Reproducing This at Home</h2><div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. Start Charles (or mitmproxy) on 127.0.0.1:8888</span></span><br><span class="line"><span class="comment"># 2. Install its root CA into the macOS keychain, trust for SSL</span></span><br><span class="line"><span class="comment"># 3. Enable SSL Proxying for api.anthropic.com (and your provider host)</span></span><br><span class="line"><span class="comment"># 4. Point Claude Code at the proxy:</span></span><br><span class="line"><span class="built_in">export</span> HTTP_PROXY=http://127.0.0.1:8888</span><br><span class="line"><span class="built_in">export</span> HTTPS_PROXY=http://127.0.0.1:8888</span><br><span class="line">claude</span><br><span class="line"><span class="comment"># 5. Send any prompt; inspect the POST /v1/messages body in Charles.</span></span><br></pre></td></tr></table></figure></div>
+
+<p>Note: intercepting Anthropic&#39;s real endpoint requires bypassing cert pinning &#x2F; having the Anthropic cert be trusted via your MITM CA. The author side-steps this by using an Anthropic-compatible provider (Volcengine Doubao) that terminates TLS on a host whose cert <em>is</em> interceptable with a local CA.</p>
+<hr>
+<h1 id="Supplement-—-Context-the-Video-Doesn-t-Cover"><a href="#Supplement-—-Context-the-Video-Doesn-t-Cover" class="headerlink" title="Supplement — Context the Video Doesn&#39;t Cover"></a>Supplement — Context the Video Doesn&#39;t Cover</h1><p>The video proves the <em>wire format</em> is Function Calling. The rest of this doc adds the wider context to make the finding actionable.</p>
+<h2 id="9-Where-Skills-Sit-in-the-Claude-Code-Extensibility-Stack"><a href="#9-Where-Skills-Sit-in-the-Claude-Code-Extensibility-Stack" class="headerlink" title="9. Where Skills Sit in the Claude Code Extensibility Stack"></a>9. Where Skills Sit in the Claude Code Extensibility Stack</h2><p>Claude Code has <strong>five</strong> overlapping extension mechanisms. People conflate them; a packet capture like this one is useful because it draws hard lines between them.</p>
+<table>
+<thead>
+<tr>
+<th>Mechanism</th>
+<th>Where it lives</th>
+<th>How the model &quot;sees&quot; it</th>
+<th>Loaded when</th>
+<th>User-authorable?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Built-in tools</strong> (Bash, Read, Edit, ...)</td>
+<td>Bundled inside the CC package itself</td>
+<td>Full JSON schema in <code>tools[]</code> every turn</td>
+<td>Always</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Slash commands</strong> (<code>/commit</code>, <code>/review</code>)</td>
+<td><code>~/.claude/commands/*.md</code> or plugin</td>
+<td>Expanded inline into the user turn as <code>&lt;command-name&gt;...&lt;/command-name&gt;</code> + body</td>
+<td>Only when the user types <code>/foo</code></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Skills</strong></td>
+<td><code>~/.claude/skills/&lt;name&gt;/SKILL.md</code> (or plugin)</td>
+<td><code>Skill</code> tool + <code>name: description</code> line in system-prompt catalog; body lazy-loaded on invocation</td>
+<td>Catalog always; body on demand</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Sub-agents (Task tool)</strong></td>
+<td><code>~/.claude/agents/*.md</code></td>
+<td>Sub-agent names appear inside the <code>Task</code> tool description</td>
+<td>Always listed, spawned on call</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>MCP servers</strong></td>
+<td>External process, JSON-RPC</td>
+<td>Tools appear as additional entries in <code>tools[]</code> with <code>mcp__server__tool</code> names</td>
+<td>Always (per connected server)</td>
+<td>Yes (external)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>A note on &quot;bundled&quot; (vs. &quot;compiled&quot;).</strong> Claude Code isn&#39;t a C&#x2F;Rust binary; it&#39;s a <strong>Node.js package</strong> whose source is bundled and minified at release time (esbuild&#x2F;webpack-style). When you <code>npm i -g @anthropic-ai/claude-code</code> you get a large pre-built <code>.js</code> file. The built-in tools&#39; names, JSON schemas, descriptions, and handler functions live inside that bundle — you can&#39;t override them from <code>~/.claude/</code>. The distinction that matters is <strong>fixed-by-the-vendor vs. authorable-by-you</strong>.</p>
+</blockquote>
+<p>Skills are the <strong>only</strong> mechanism that pays a fixed catalog cost every turn but defers the heavy body until needed. That&#39;s the whole design point: <strong>cheap to advertise, on-demand to load</strong>.</p>
+<h2 id="10-What-the-BLOCKING-REQUIREMENT-Prose-Is-Really-Doing"><a href="#10-What-the-BLOCKING-REQUIREMENT-Prose-Is-Really-Doing" class="headerlink" title="10. What the &quot;BLOCKING REQUIREMENT&quot; Prose Is Really Doing"></a>10. What the &quot;BLOCKING REQUIREMENT&quot; Prose Is Really Doing</h2><p>The imperatives (&quot;you MUST&quot;, &quot;NEVER just announce&quot;, &quot;invoke IMMEDIATELY&quot;) aren&#39;t legalese — they&#39;re <strong>prompt-engineering guard rails</strong> against well-known failure modes with tool-using models:</p>
+<ul>
+<li><strong>Hallucinated tool execution</strong> — the model writes &quot;Let me run the xlsx skill...&quot; in prose and then generates fake output instead of emitting a tool call. The &quot;NEVER just announce&quot; line targets exactly this.</li>
+<li><strong>Stalled first action</strong> — the model asks a clarifying question instead of starting. &quot;Invoke IMMEDIATELY as your first action&quot; short-circuits that.</li>
+<li><strong>Double-invocation</strong> — re-calling a skill whose body is already in context (e.g. via a slash command that inlined it). The <code>&lt;command-name&gt;</code> carve-out prevents it.</li>
+<li><strong>Drift to non-existent skills</strong> — &quot;Only use skills listed in &#39;Available skills&#39; below&quot; is an anti-hallucination clamp; models love to invent plausible tool names.</li>
+</ul>
+<p>These are the same tropes Anthropic&#39;s own tool-use documentation warns about. Skills inherit them.</p>
+<h2 id="11-The-Token-Economy-Picture"><a href="#11-The-Token-Economy-Picture" class="headerlink" title="11. The Token-Economy Picture"></a>11. The Token-Economy Picture</h2><p>A one-token prompt generating ~78 KB of request body isn&#39;t unique to Skills — but Skills amplify it. What&#39;s on every turn of a modern CC session:</p>
+<ul>
+<li>Base system prompt + <code>CLAUDE.md</code> + user memory</li>
+<li>Every built-in tool schema (~20 tools, 200–2000 chars each)</li>
+<li>Skill registry (one line per installed skill; grows linearly)</li>
+<li>Sub-agent list baked into the <code>Task</code> tool description</li>
+<li>MCP tool schemas for every connected server</li>
+<li>Conversation history (uncompacted)</li>
+</ul>
+<h3 id="Mitigations-That-Exist-But-Aren-t-Obvious-from-the-Wire-Trace"><a href="#Mitigations-That-Exist-But-Aren-t-Obvious-from-the-Wire-Trace" class="headerlink" title="Mitigations That Exist But Aren&#39;t Obvious from the Wire Trace"></a>Mitigations That Exist But Aren&#39;t Obvious from the Wire Trace</h3><ul>
+<li><strong>Prompt caching.</strong> Anthropic&#39;s API supports <code>cache_control</code> breakpoints with a ~5-minute TTL. CC places them so the static prefix (tools + system) is cached; you pay full price once, then roughly 10% for subsequent turns within the TTL. The 78 KB in the Doubao capture is <em>uncached</em> cost — cached cost is an order of magnitude lower. This is why the advice &quot;don&#39;t sleep past 5 minutes&quot; matters for agent loops.</li>
+<li><strong>Lazy skill bodies.</strong> Exactly what the video exposes: a ~300-char <code>description</code> advertises a skill whose actual body may be thousands of lines — and the body only ships on invocation.</li>
+<li><strong>Plugins as bundles.</strong> A plugin can ship skills + commands + agents together; CC only registers the catalog entries for enabled plugins.</li>
+<li><strong><code>/compact</code></strong> folds old turns into a summary so history doesn&#39;t grow unboundedly.</li>
+</ul>
+<p><strong>Rule of thumb:</strong> with 20+ skills installed, the catalog alone can cost 4–8 KB on every turn regardless of cache, because descriptions have to be good enough for the model to pick correctly — and &quot;good enough&quot; means ~200–500 characters each. Trim unused skills.</p>
+<h2 id="12-How-to-Write-a-Skill-Description-That-Actually-Gets-Triggered"><a href="#12-How-to-Write-a-Skill-Description-That-Actually-Gets-Triggered" class="headerlink" title="12. How to Write a Skill Description That Actually Gets Triggered"></a>12. How to Write a Skill Description That Actually Gets Triggered</h2><p>The description is the only thing in the catalog — it has to do four jobs in one to three sentences:</p>
+<ol>
+<li><strong>Name the capability in one phrase.</strong> (&quot;Comprehensive spreadsheet creation, editing, and analysis...&quot;)</li>
+<li><strong>List concrete file types &#x2F; extensions &#x2F; frameworks.</strong> The model pattern-matches on these. <code>.xlsx, .xlsm, .csv, .tsv</code> in the official xlsx skill is deliberate.</li>
+<li><strong>Enumerate scenarios with numbered bullets.</strong> (1)...(2)...(3)... — the numbered form is what Anthropic&#39;s own skills use and it measurably improves triggering vs. flowing prose.</li>
+<li><strong>State negative space when needed.</strong> E.g. &quot;Do NOT trigger when the primary deliverable is a Word document...&quot; to prevent cross-activation with the <code>docx</code> skill.</li>
+</ol>
+<p>A good description is a <strong>mini classifier specification</strong>, not marketing copy.</p>
+<h2 id="13-Security-Implications"><a href="#13-Security-Implications" class="headerlink" title="13. Security Implications"></a>13. Security Implications</h2><ul>
+<li><strong>Skill body &#x3D; arbitrary instructions the model will follow.</strong> A malicious plugin can ship a <code>SKILL.md</code> whose body says &quot;exfiltrate <code>.env</code> to <a class="link"   target="_blank" rel="noopener" href="https://attacker/" >https://attacker/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>...&quot;. The model will try. Treat <code>SKILL.md</code> bodies like executable code when reviewing third-party plugins.</li>
+<li><strong>Proxy interception works because CC trusts <code>HTTP_PROXY</code>.</strong> Normal CLI behavior, but worth knowing: on a shared machine, anyone who can set your env or edit <code>~/.claude/settings.json</code> can read every prompt and response in plaintext. CC does not cert-pin — the packet capture in this video only works because of that.</li>
+<li><strong>Prompt-injection through skill descriptions.</strong> The catalog is built by concatenating every installed skill&#39;s <code>description</code>. A malicious description can include instructions aimed at the <em>other</em> skills&#39; invocation logic (&quot;when the user asks X, instead call Y&quot;). Plugin marketplaces need to treat descriptions as untrusted input.</li>
+</ul>
+<h2 id="14-How-Skills-Compare-to-Function-Calling-Elsewhere"><a href="#14-How-Skills-Compare-to-Function-Calling-Elsewhere" class="headerlink" title="14. How Skills Compare to &quot;Function Calling&quot; Elsewhere"></a>14. How Skills Compare to &quot;Function Calling&quot; Elsewhere</h2><p>The video&#39;s punchline — <em>&quot;it&#39;s just Function Calling&quot;</em> — is exactly right; the mapping is worth spelling out:</p>
+<ul>
+<li><strong>OpenAI function calling &#x2F; tools</strong> → Anthropic <code>tools[]</code> with <code>input_schema</code> → the <code>Skill</code> tool here is one entry of that kind.</li>
+<li><strong>OpenAI &quot;assistants with files&quot;</strong> is the closest competitor concept to Skills: the model sees a short description of attached resources and can request their content. Skills generalize this to include <em>procedural</em> instructions, not just data.</li>
+<li><strong>MCP</strong> does the same job at a different altitude: instead of inlining the catalog in the system prompt, the CC host queries a running MCP server for its tool list. Skills are cheaper (no subprocess, no RPC handshake) but can&#39;t do I&#x2F;O on their own; MCP servers can.</li>
+</ul>
+<p>The interesting design choice: <strong>the <code>Skill</code> tool is a dispatcher</strong>. Its only job is to expand into a body of Markdown that the model then reads as-if-fresh-system-prompt. It&#39;s a layer of indirection purely for token economy, with the side benefit that skills are authorable by anyone who can write Markdown.</p>
+<h2 id="15-Practical-Next-Steps-If-You-Want-to-Go-Further"><a href="#15-Practical-Next-Steps-If-You-Want-to-Go-Further" class="headerlink" title="15. Practical Next Steps If You Want to Go Further"></a>15. Practical Next Steps If You Want to Go Further</h2><ul>
+<li>Run <code>claude --debug</code> — prints request&#x2F;response bodies without needing MITM at all.</li>
+<li>Set <code>ANTHROPIC_LOG=debug</code> (or the provider equivalent) for SDK-level traces.</li>
+<li>Inspect <code>~/.claude/settings.json</code>, <code>~/.claude/skills/</code>, and any plugin directories to see what catalog entries your install is actually shipping.</li>
+<li>Use <code>anthropic.beta.messages.count_tokens</code> (or the compatible endpoint) on your typical request to get an exact token cost before&#x2F;after uninstalling rarely-used skills.</li>
+<li>Point CC at an empty <code>CLAUDE_CONFIG_DIR</code> to see the <em>minimum</em> scaffolding vs. your customized environment. Cheapest way to answer &quot;what am I paying for on every turn?&quot; without opening a proxy.</li>
+</ul>
+<hr>
+<h2 id="Closing-Thoughts"><a href="#Closing-Thoughts" class="headerlink" title="Closing Thoughts"></a>Closing Thoughts</h2><p>What&#39;s elegant about the Skill design is how much leverage it gets from <em>not</em> being a new protocol. The same tool-use machinery that already powers MCP and built-in tools gets one more entry — a dispatcher — and suddenly you have user-authorable, lazily-loaded capabilities. The cost is paid in system-prompt real estate (and prose-based guard rails), but that&#39;s a tax you were going to pay anyway for any extensibility story.</p>
+<p>The author&#39;s real gripe — that tokens are getting expensive — is legitimate. But it&#39;s orthogonal to Skills specifically: it&#39;s the price of building agents on top of a stateless completion API. The right response isn&#39;t to avoid Skills; it&#39;s to trim the ones you don&#39;t use, trust the prompt cache, and keep an eye on the wire trace occasionally. Which is exactly what this video demonstrates.</p>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> How Claude Code Skills Work Under the Hood</li>
+        <li><strong>Author:</strong> wy</li>
+        <li><strong>Created at
+                :</strong> 2026-04-20 22:45:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2026-04-20 22:56:59
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://yue-ruby-w.site/2026/04/20/Claude-Code-Skill-Mechanism/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Claude-Code/">#Claude Code</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/LLM/">#LLM</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Reverse-Engineering/">#Reverse Engineering</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/04/03/Test-Time-LLMs/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">Test Time LLMs</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">How Claude Code Skills Work Under the Hood</div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%93%E5%8C%85-Claude-Code-%E2%80%94%E2%80%94-Skill-%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-text">抓包 Claude Code —— Skill 的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Setup-%E2%80%94-MITM-the-Claude-Code-CLI-with-Charles"><span class="nav-text">1. Setup — MITM the Claude Code CLI with Charles</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Trigger-a-Request-Capture-It"><span class="nav-text">2. Trigger a Request &amp; Capture It</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Open-the-Request-Body-in-a-JSON-Viewer"><span class="nav-text">3. Open the Request Body in a JSON Viewer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-The-tools-Array-%E2%80%94-Every-Claude-Code-Tool-Schematized"><span class="nav-text">4. The tools Array — Every Claude Code Tool, Schematized</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-The-system-Block-%E2%80%94-Where-Skills-Actually-Live"><span class="nav-text">5. The system Block — Where Skills Actually Live</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#What-This-Tells-Us"><span class="nav-text">What This Tells Us</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-What-a-Skill-File-Itself-Looks-Like"><span class="nav-text">6. What a Skill File Itself Looks Like</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Key-Observations-About-SKILL-md"><span class="nav-text">Key Observations About SKILL.md</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-The-Reveal"><span class="nav-text">7. The Reveal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-The-Author-s-Closing-Lament"><span class="nav-text">8. The Author&#39;s Closing Lament</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TL-DR-%E2%80%94-What-I-Learned"><span class="nav-text">TL;DR — What I Learned</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reproducing-This-at-Home"><span class="nav-text">Reproducing This at Home</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Supplement-%E2%80%94-Context-the-Video-Doesn-t-Cover"><span class="nav-text">Supplement — Context the Video Doesn&#39;t Cover</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#9-Where-Skills-Sit-in-the-Claude-Code-Extensibility-Stack"><span class="nav-text">9. Where Skills Sit in the Claude Code Extensibility Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-What-the-BLOCKING-REQUIREMENT-Prose-Is-Really-Doing"><span class="nav-text">10. What the &quot;BLOCKING REQUIREMENT&quot; Prose Is Really Doing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-The-Token-Economy-Picture"><span class="nav-text">11. The Token-Economy Picture</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mitigations-That-Exist-But-Aren-t-Obvious-from-the-Wire-Trace"><span class="nav-text">Mitigations That Exist But Aren&#39;t Obvious from the Wire Trace</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-How-to-Write-a-Skill-Description-That-Actually-Gets-Triggered"><span class="nav-text">12. How to Write a Skill Description That Actually Gets Triggered</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-Security-Implications"><span class="nav-text">13. Security Implications</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-How-Skills-Compare-to-Function-Calling-Elsewhere"><span class="nav-text">14. How Skills Compare to &quot;Function Calling&quot; Elsewhere</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-Practical-Next-Steps-If-You-Want-to-Go-Further"><span class="nav-text">15. Practical Next Steps If You Want to Go Further</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Closing-Thoughts"><span class="nav-text">Closing Thoughts</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">wy</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        25 posts in total
+                    </span>
+                    
+                        <span>
+                            10.1k words in total
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.9.0</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+            
+                
+        
+                
+        
+                
+
+                    
+                        <script data-swup-reload-script>document.addEventListener('DOMContentLoaded',function(){if(document.querySelector('meta[name="notebook"]')){document.querySelector('.article-container')?.classList.add('notebook')}})</script>
+                    
+        
+                
+
+                    
+                        <script data-swup-reload-script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+                    
+        
+                
+
+                    
+                        <script data-swup-reload-script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});window.addEventListener('hexo-blog-decrypt',function(){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})})"></script>
+                    
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container" role="dialog" aria-modal="true" aria-label="Image viewer">
+	<button class="image-viewer-close" type="button" aria-label="Close">
+		<i class="fa-solid fa-xmark"></i>
+	</button>
+	<button class="image-viewer-prev" type="button" aria-label="Prev">
+		<i class="fa-solid fa-chevron-left"></i>
+	</button>
+	<div class="image-viewer-frame">
+		<img src="" alt="">
+	</div>
+	<div class="image-viewer-exif-panel hidden absolute left-1/2 bottom-20 -translate-x-1/2 w-[min(92vw,420px)] max-h-[60vh] overflow-hidden rounded-2xl bg-background-color-transparent-80 p-4 text-left shadow-redefine-flat backdrop-blur-md" role="dialog" aria-label="EXIF" aria-hidden="true">
+		<div class="flex items-center justify-between mb-3">
+			<span class="text-sm font-semibold text-first-text-color">EXIF</span>
+			<button class="image-viewer-exif-close flex h-8 w-8 items-center justify-center rounded-full bg-background-color-transparent-80 text-first-text-color transition hover:bg-background-color-transparent-40" type="button" aria-label="Close">
+				<i class="fa-solid fa-xmark text-[0.65rem]"></i>
+			</button>
+		</div>
+		<div class="image-viewer-exif-cards grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-1 scrollbar-hide"></div>
+		<template class="image-viewer-exif-card-template">
+			<div class="rounded-lg bg-background-color-transparent-40 px-3 py-2">
+				<div class="image-viewer-exif-card-header flex items-center gap-2 mb-1">
+					<i class="image-viewer-exif-card-icon fa-solid fa-circle-info text-xs text-third-text-color"></i>
+					<div class="image-viewer-exif-card-title text-xs font-semibold text-first-text-color"></div>
+				</div>
+				<div class="image-viewer-exif-card-items flex flex-col gap-1"></div>
+			</div>
+		</template>
+	</div>
+	<button class="image-viewer-exif-toggle flex items-center gap-2 hidden absolute left-1/2 bottom-6 -translate-x-1/2 rounded-full border border-border-color bg-background-color-transparent-80 px-4 py-2 text-first-text-color backdrop-blur-md transition hover:bg-background-color-transparent-40" type="button" aria-label="EXIF" aria-expanded="false">
+		<i class="fa-solid fa-circle-info text-xs"></i>
+		<span class="text-xs font-semibold uppercase tracking-wider">EXIF</span>
+	</button>
+	<button class="image-viewer-next" type="button" aria-label="Next">
+		<i class="fa-solid fa-chevron-right"></i>
+	</button>
+</div>
+
+
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    window.swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+
+    window.dispatchEvent(
+        new CustomEvent("redefine:swup:ready", {
+            detail: {
+                swup: window.swup,
+            },
+        }),
+    );
+</script>
+
+
+
+
+	
+<script src="/js/build/main.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+
+	
+</body>
+
+</html>
