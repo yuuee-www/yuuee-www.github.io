@@ -78,7 +78,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://yue-ruby-w.site/tags/reverse-engineering/"/>
+    <link rel="canonical" href="https://yue-ruby-w.site/2026/04/22/claude-code-skills-design-philosophy/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -86,13 +86,18 @@
     
         
         <meta name="description" content="Ruby&#39;s Blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="hola">
-<meta property="og:url" content="https://yue-ruby-w.site/tags/Reverse-Engineering/index.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="From Wire Format to Design Philosophy — Why Claude Code Skills Look The Way They Do">
+<meta property="og:url" content="https://yue-ruby-w.site/2026/04/22/Claude-Code-Skills-Design-Philosophy/index.html">
 <meta property="og:site_name" content="hola">
 <meta property="og:description" content="Ruby&#39;s Blog">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-22T07:30:00.000Z">
+<meta property="article:modified_time" content="2026-04-22T06:24:54.693Z">
 <meta property="article:author" content="wy">
+<meta property="article:tag" content="Agent Design">
+<meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="LLM">
 <meta name="twitter:card" content="summary">
     
     
@@ -105,7 +110,7 @@
     
     <title>
         
-            Tag: Reverse Engineering | hola
+            From Wire Format to Design Philosophy — Why Claude Code Skills Look The Way They Do | hola
         
     </title>
 
@@ -518,58 +523,361 @@
 			
 
 			<div class="main-content">
-				<div class="page-template-container">
-	
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
 
-	
-	<div class="tag-name">
-    <i class="fa-solid fa-tag"></i>&nbsp;Reverse Engineering
-</div>
-<div class="tag-post-list">
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">From Wire Format to Design Philosophy — Why Claude Code Skills Look The Way They Do</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/images/redefine-avatar.svg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">wy</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-04-22 15:30</span>
+        <span class="mobile">2026-04-22 15:30</span>
+        <span class="hover-info">Created</span>
+    </span>
     
-<div class="archive-list-container">
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-04-22 14:24:54</span>
+            <span class="mobile">2026-04-22 14:24:54</span>
+            <span class="hover-info">Updated</span>
+        </span>
     
-        <section class="archive-item mb-spacing-unit last:mb-0">
-            <div class="archive-item-header flex flex-row items-center mb-2">
-                <span class="archive-year font-semibold text-3xl mr-2">2026</span>
-                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">1</span>
-            </div>
-            
-            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
                 
                     
+                        
+                        <li>
+                            <a href="/categories/Tools/">Tools</a>&nbsp;
+                        </li>
                     
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='04-20'>
-                    
-                    <a href="/2026/04/20/Claude-Code-Skill-Mechanism/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">How Claude Code Skills Work Under the Hood</span>
-                    </a>
                     
                 
-                </li> <!-- Ensure the last item is properly closed -->
             </ul>
-        </section>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Claude-Code/">Claude Code</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/LLM/">LLM</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Agent-Design/">Agent Design</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.4k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>14 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
     
 </div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h1 id="From-Wire-Format-to-Design-Philosophy"><a href="#From-Wire-Format-to-Design-Philosophy" class="headerlink" title="From Wire Format to Design Philosophy"></a>From Wire Format to Design Philosophy</h1><p>A follow-up to <a href="/2026/04/20/Claude-Code-Skill-Mechanism/"><strong>How Claude Code Skills Work Under the Hood</strong></a>.</p>
+<h2 id="Recap-—-What-the-Packet-Capture-Told-Us"><a href="#Recap-—-What-the-Packet-Capture-Told-Us" class="headerlink" title="Recap — What the Packet Capture Told Us"></a>Recap — What the Packet Capture Told Us</h2><p>The previous post was a <strong>wire-level</strong> reverse-engineering exercise. By MITM-intercepting Claude Code&#39;s outgoing HTTPS, the author of the Xiaohongshu video proved four things about Skills:</p>
+<ol>
+<li>There&#39;s a single <code>Skill</code> tool registered in <code>tools[]</code> — one string argument, plain Anthropic function-calling schema.</li>
+<li>The &quot;available skills&quot; catalog is a plain-English bullet list pasted into the <code>system</code> prompt.</li>
+<li>Each <code>SKILL.md</code> body is <strong>lazy-loaded</strong>: advertised by its description in the catalog, only shipped when the tool is actually invoked.</li>
+<li>The model is forced to use the tool via strongly-worded imperatives in the system prompt (&quot;BLOCKING REQUIREMENT&quot;, &quot;invoke IMMEDIATELY&quot;, &quot;NEVER just announce&quot;).</li>
+</ol>
+<p>The punchline was the big overlay text <strong>&quot;Function Calling&quot;</strong> — no new API, no out-of-band protocol, just tool-use plus text.</p>
+<p>That answered <strong>how</strong>. It did not answer <strong>why</strong>.</p>
+<ul>
+<li>Why a dispatcher tool rather than one tool per skill?</li>
+<li>Why a plain-text catalog rather than a structured registry?</li>
+<li>Why prose enforcement rather than harness-level rules?</li>
+<li>Why lazy-load the body instead of shipping everything?</li>
+</ul>
+<p>These choices look arbitrary until you read the design brief from someone who actually works on the harness.</p>
+<hr>
+<h2 id="Enter-Thariq-s-Seeing-Like-an-Agent"><a href="#Enter-Thariq-s-Seeing-Like-an-Agent" class="headerlink" title="Enter Thariq&#39;s &quot;Seeing Like an Agent&quot;"></a>Enter Thariq&#39;s &quot;Seeing Like an Agent&quot;</h2><p>Thariq Shihipar (member of technical staff at Anthropic, one of the people building Claude Code) published a piece titled <a target="_blank" rel="noopener" href="https://claude.com/blog/seeing-like-an-agent"><strong>&quot;Seeing Like an Agent: Tool Design for Claude Code&quot;</strong></a>. It&#39;s the clearest public articulation of the design philosophy behind the harness we just reverse-engineered.</p>
+<blockquote>
+<p>&quot;You want to give it tools that are <strong>shaped to its own abilities</strong>.&quot;</p>
+</blockquote>
+<p>That one sentence reframes every weird choice we saw on the wire.</p>
+<h3 id="The-Core-Principle-The-Bar-for-Adding-a-Tool-Is-High"><a href="#The-Core-Principle-The-Bar-for-Adding-a-Tool-Is-High" class="headerlink" title="The Core Principle: The Bar for Adding a Tool Is High"></a>The Core Principle: The Bar for Adding a Tool Is High</h3><p>Thariq writes:</p>
+<blockquote>
+<p>&quot;The bar to add a new tool is high, because this gives the model one more option to think about.&quot;</p>
+</blockquote>
+<p>Every tool is a <strong>cognitive tax on the model</strong>. More tools means a bigger decision each turn: which one to pick, when to pick nothing at all, when two tools overlap. The harness designer is trading off coverage (can the model do X?) against confusion (does adding an X tool make the model worse at Y?).</p>
+<p>This is why the <code>Skill</code> tool is a <strong>dispatcher</strong> and not one tool per skill. If every skill — <code>xlsx</code>, <code>pdf</code>, <code>pptx</code>, <code>docx</code>, <code>mcp-builder</code>, <code>skill-creator</code>, ... — were its own top-level tool, the <code>tools[]</code> array would balloon, every tool description would compete with every other for the model&#39;s attention, and pick-the-right-tool errors would multiply.</p>
+<p>Instead: <strong>one dispatcher tool, N catalog entries</strong>. The decision space the model sees is &quot;do I need any skill?&quot; (binary), followed by &quot;which one?&quot; (multi-class). That factored decision is cheaper and more robust than a flat <code>N + 1</code>-way choice.</p>
+<h3 id="Iterative-Refinement-The-AskUserQuestion-Story"><a href="#Iterative-Refinement-The-AskUserQuestion-Story" class="headerlink" title="Iterative Refinement: The AskUserQuestion Story"></a>Iterative Refinement: The AskUserQuestion Story</h3><p>Thariq&#39;s case study on the <code>AskUserQuestion</code> tool is the best public illustration of &quot;shape the tool to the model&quot;. The team went through <strong>three attempts</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Attempt</th>
+<th>Approach</th>
+<th>Failure Mode</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1</strong></td>
+<td>Add a <code>question</code> parameter to the existing <code>ExitPlanMode</code> tool</td>
+<td>Model got confused when user answers conflicted with generated plans; unclear when to re-invoke</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>Ask Claude to output questions as structured markdown</td>
+<td>Model &quot;appended extra sentences, dropped options, abandoned the structure altogether&quot; — unreliable format</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>Dedicated <code>AskUserQuestion</code> tool, callable any time, renders a blocking modal</td>
+<td><strong>Worked</strong>: structured output that also respects how Claude naturally interacts</td>
+</tr>
+</tbody></table>
+<p>The lesson: <strong>the right tool isn&#39;t obvious a priori</strong>. It&#39;s the one that survives contact with the model&#39;s actual failure modes. Design → ship → watch logs → redesign.</p>
+<p>This is also why the Skills system has so many rough prose edges in the system prompt. &quot;BLOCKING REQUIREMENT&quot;, &quot;NEVER just announce&quot;, &quot;invoke IMMEDIATELY&quot; — every one of those imperatives almost certainly exists because someone watched a session where the model hallucinated invocation in prose, asked a clarifying question instead of calling the tool, or re-invoked a skill whose body was already in context.</p>
+<h3 id="Tools-That-Are-Now-Constraining-TodoWrite-→-Task"><a href="#Tools-That-Are-Now-Constraining-TodoWrite-→-Task" class="headerlink" title="Tools That Are Now Constraining: TodoWrite → Task"></a>Tools That Are Now Constraining: TodoWrite → Task</h3><p>Thariq has a striking observation:</p>
+<blockquote>
+<p>&quot;Being sent reminders of the todo list made Claude think that it had to <strong>stick to</strong> the list instead of modifying it.&quot;</p>
+</blockquote>
+<p>Early Claude Code had a <code>TodoWrite</code> tool with a system reminder every five turns. As models got better, the reminder became counterproductive — Claude treated the list as a commitment rather than a plan. The team <strong>replaced</strong> <code>TodoWrite</code> with a <code>Task</code> tool supporting dependencies and cross-agent coordination.</p>
+<blockquote>
+<p>&quot;The tools your models once needed might now be constraining them.&quot;</p>
+</blockquote>
+<p>This is a posture most harness designers don&#39;t adopt. Tools are usually added monotonically — remove one and you might break a user flow. Anthropic is willing to remove them because model capability is moving and a useful tool at model version N can become dead weight at N+1.</p>
+<p>The packet capture still showed <code>TodoWrite</code> in the tools array — so as of the capture it hasn&#39;t been removed, but the internal trajectory (per Thariq) is &quot;shrink the harness as the model grows into it.&quot;</p>
+<h3 id="Progressive-Disclosure-The-Real-Reason-Skills-Lazy-Load"><a href="#Progressive-Disclosure-The-Real-Reason-Skills-Lazy-Load" class="headerlink" title="Progressive Disclosure: The Real Reason Skills Lazy-Load"></a>Progressive Disclosure: The Real Reason Skills Lazy-Load</h3><p>The single sharpest design choice the video exposed — ship a short description, lazy-load the body — has a name in Thariq&#39;s framework: <strong>progressive disclosure</strong>.</p>
+<blockquote>
+<p>&quot;Rather than embedding comprehensive documentation in the system prompt, Claude receives links to searchable docs it can access when needed.&quot;</p>
+</blockquote>
+<p>The principle: <strong>don&#39;t pay for context you don&#39;t need yet.</strong> The advertisement (the description) is always present so the model knows the capability exists; the body is pulled in only when the model decides the capability is relevant.</p>
+<p>This generalizes beyond Skills. It&#39;s the same principle behind:</p>
+<ul>
+<li><strong>The Claude Code Guide subagent</strong>: searches documentation independently and returns only relevant answers, keeping the main agent&#39;s context clean.</li>
+<li><strong>Grep &#x2F; Glob &#x2F; Read</strong> instead of stuffing files into the system prompt.</li>
+<li><strong>WebFetch</strong> instead of pre-caching pages.</li>
+<li><strong>MCP tool lists</strong> being queryable rather than inlined up front (at least in principle; in practice CC inlines them too).</li>
+</ul>
+<p>Progressive disclosure is what makes Skills economically viable at scale. A single skill with a 2000-line body would be catastrophic to ship every turn; advertised in 300 characters, it&#39;s cheap.</p>
+<h3 id="From-RAG-to-Agent-Led-Search"><a href="#From-RAG-to-Agent-Led-Search" class="headerlink" title="From RAG to Agent-Led Search"></a>From RAG to Agent-Led Search</h3><p>Thariq&#39;s other big evolution story:</p>
+<blockquote>
+<p>&quot;Claude went from not really being able to build its own context to being able to do nested search across several layers of files to find the exact context it needed.&quot;</p>
+</blockquote>
+<p>Early agent systems (pre-Claude 3.5, roughly) relied heavily on <strong>RAG</strong> — pre-indexed vector databases, chunk retrieval, context injection. The shift to giving the model <strong>search tools directly</strong> and letting it decide what to fetch is a bet on capability growth: the model is now good enough that <strong>agent-led retrieval beats retrieval-engineered-for-the-model</strong>.</p>
+<p>Skills ride on the same bet. The catalog description is a <strong>search hint</strong>; the model decides when to &quot;retrieve&quot; the skill body. Anthropic trusts the model to pick correctly, and writes descriptions with enough concrete file-type &#x2F; scenario triggers to make the pick easy.</p>
+<hr>
+<h2 id="Tying-It-Together-—-Why-The-Wire-Format-Looks-The-Way-It-Does"><a href="#Tying-It-Together-—-Why-The-Wire-Format-Looks-The-Way-It-Does" class="headerlink" title="Tying It Together — Why The Wire Format Looks The Way It Does"></a>Tying It Together — Why The Wire Format Looks The Way It Does</h2><p>Now we can read the packet capture as an intentional design, not an accident of implementation:</p>
+<table>
+<thead>
+<tr>
+<th>Wire-format observation</th>
+<th>Design rationale (per Thariq)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>One <code>Skill</code> dispatcher tool instead of N skill tools</td>
+<td>Keep the top-level decision space small; raise the bar for per-tool cognitive tax</td>
+</tr>
+<tr>
+<td>Plain-text &quot;Available skills:&quot; catalog in system prompt</td>
+<td>Minimum viable advertisement; descriptions are <strong>classifier specs</strong>, not marketing</td>
+</tr>
+<tr>
+<td><code>SKILL.md</code> body shipped only on invocation</td>
+<td><strong>Progressive disclosure</strong> — don&#39;t pay for context you don&#39;t need</td>
+</tr>
+<tr>
+<td>Strong prose imperatives (&quot;BLOCKING REQUIREMENT&quot;)</td>
+<td>Guard rails against observed failure modes (hallucinated invocation, stalling, double-invocation)</td>
+</tr>
+<tr>
+<td><code>&lt;command-name&gt;</code> carve-out for slash commands</td>
+<td>Case-analysis in prose prevents double-invocation; preserves a single clean control flow</td>
+</tr>
+<tr>
+<td>Skills authorable by writing markdown, no code needed</td>
+<td>Lowers the authoring bar; makes the extension surface match the dominant model input modality</td>
+</tr>
+<tr>
+<td>~78 KB request for a one-word prompt</td>
+<td>Accepted cost of the catalog — relies on <strong>prompt caching</strong> (5-min TTL) to amortize over a session</td>
+</tr>
+</tbody></table>
+<p>Each of these isn&#39;t a shortcut — it&#39;s a conscious trade in a principled framework.</p>
+<hr>
+<h2 id="My-Commentary-—-What-This-Actually-Means-for-Agent-Builders"><a href="#My-Commentary-—-What-This-Actually-Means-for-Agent-Builders" class="headerlink" title="My Commentary — What This Actually Means for Agent Builders"></a>My Commentary — What This Actually Means for Agent Builders</h2><h3 id="1-Tools-are-a-cognitive-budget-not-a-feature-list"><a href="#1-Tools-are-a-cognitive-budget-not-a-feature-list" class="headerlink" title="1. Tools are a cognitive budget, not a feature list"></a>1. Tools are a cognitive budget, not a feature list</h3><p>If you&#39;re building an agent (via MCP, Claude SDK, your own harness), the temptation is to expose every capability as a distinct tool because &quot;more tools &#x3D; more features.&quot; <strong>Don&#39;t.</strong> Every tool you add is a decision the model has to make every turn. A dispatcher tool with a catalog is almost always more robust than a flat list once you get past ~10 capabilities.</p>
+<p>The implicit rule Anthropic seems to use: <strong>if two tools are chosen in the same context, at least one of them is wrong.</strong></p>
+<h3 id="2-Progressive-disclosure-is-the-default-not-the-optimization"><a href="#2-Progressive-disclosure-is-the-default-not-the-optimization" class="headerlink" title="2. Progressive disclosure is the default, not the optimization"></a>2. Progressive disclosure is the default, not the optimization</h3><p>It&#39;s tempting to &quot;just inline&quot; documentation, examples, schemas in the system prompt because the model will use them better that way. That works at 1K tokens. At 100K tokens of context, the model gets worse at picking — and you pay for it every turn. Progressive disclosure flips this: <strong>advertise, then load on demand.</strong> That&#39;s what skills, agent files, doc searches, and KV-caching-friendly prompt designs all share.</p>
+<p>The generalized rule: <strong>present only the decision surface; hide the expansion behind a tool call.</strong></p>
+<h3 id="3-Prose-enforcement-is-a-real-engineering-discipline"><a href="#3-Prose-enforcement-is-a-real-engineering-discipline" class="headerlink" title="3. Prose enforcement is a real engineering discipline"></a>3. Prose enforcement is a real engineering discipline</h3><p>The &quot;BLOCKING REQUIREMENT&quot; &#x2F; &quot;NEVER just announce&quot; &#x2F; &quot;invoke IMMEDIATELY&quot; style looks hacky, but it&#39;s actually a serious craft. Every one of those imperatives is a <strong>patch against a specific observed failure</strong>. If you build agents and don&#39;t have a growing prose-rules section in your system prompt, either your harness is too young or you haven&#39;t been reading your logs.</p>
+<p>The discipline is: <strong>when the model does something wrong, add a rule; when the model reliably follows the rule, consider whether the rule is still needed.</strong> Prompts, like code, accumulate debt.</p>
+<h3 id="4-Be-willing-to-remove-tools"><a href="#4-Be-willing-to-remove-tools" class="headerlink" title="4. Be willing to remove tools"></a>4. Be willing to remove tools</h3><p>Thariq&#39;s point about <code>TodoWrite</code> → <code>Task</code> is the one most builders ignore. It&#39;s much easier to add a tool than to remove one, because removal feels like a regression. But as models improve, tools you added to compensate for weaknesses become scaffolding that constrains them. The <code>TodoWrite</code> example is instructive: a tool that helped Claude 3 plan became a tool that made Claude 4 rigid.</p>
+<p>The heuristic: <strong>every 3–6 months, ask &quot;which tools am I still shipping only because the model used to need them?&quot;</strong></p>
+<h3 id="5-Trust-model-led-retrieval-but-design-the-hints"><a href="#5-Trust-model-led-retrieval-but-design-the-hints" class="headerlink" title="5. Trust model-led retrieval, but design the hints"></a>5. Trust model-led retrieval, but design the hints</h3><p>The shift from RAG to agent-led search only works if the hints (tool descriptions, skill catalog entries, subagent names) are good enough for the model to pick correctly. That puts the engineering work in a different place: instead of building a retrieval pipeline, you&#39;re building a <strong>classifier specification</strong> encoded in English prose. The <code>xlsx</code> skill description listing <code>.xlsx, .xlsm, .csv, .tsv</code> and five numbered scenarios isn&#39;t incidental — it&#39;s the key to making the model reach for it at the right time.</p>
+<p>The principle: <strong>retrieval quality &#x3D; hint quality × model capability.</strong> Model capability you don&#39;t control; hint quality you do.</p>
+<h3 id="6-Tokens-are-a-design-constraint-not-just-a-billing-line"><a href="#6-Tokens-are-a-design-constraint-not-just-a-billing-line" class="headerlink" title="6. Tokens are a design constraint, not just a billing line"></a>6. Tokens are a design constraint, not just a billing line</h3><p>The Xiaohongshu author&#39;s real complaint — <em>&quot;TOKEN 对我们来说是真的越来越重要了&quot;</em> (tokens are getting more and more important for us) — is the same observation from a different angle. The 78 KB wire trace is the cost of a rich agent. You can reduce it with prompt caching (amortize over session), lazy loading (skills), summarization (<code>/compact</code>), and trimming (uninstall unused skills) — but you can&#39;t eliminate it without giving up capability.</p>
+<p>The design question isn&#39;t <strong>&quot;how do I minimize tokens?&quot;</strong> — it&#39;s <strong>&quot;which tokens earn their keep every turn, and which are parked behind a gate?&quot;</strong> Skills are Anthropic&#39;s answer to that second question.</p>
+<hr>
+<h2 id="Closing"><a href="#Closing" class="headerlink" title="Closing"></a>Closing</h2><p>The packet capture proved <strong>what</strong> Claude Code is sending. Thariq&#39;s piece explains <strong>why it&#39;s shaped that way</strong>. Reading them together turns a piece of reverse-engineered trivia into an actionable design framework:</p>
+<ul>
+<li><strong>Tools as cognitive budget</strong>, not feature flags.</li>
+<li><strong>Progressive disclosure</strong> as the default for any non-trivial context.</li>
+<li><strong>Prose guard rails</strong> as a real engineering artifact, maintained with the same discipline as code.</li>
+<li><strong>Willingness to remove</strong> tools as model capability grows.</li>
+<li><strong>Agent-led retrieval</strong> gated by hand-crafted hints.</li>
+<li><strong>Tokens as a design axis</strong>, not just a cost line.</li>
+</ul>
+<p>The elegance of the Skills design isn&#39;t in any single piece. It&#39;s in how all of these principles compose — one dispatcher tool + one catalog + N markdown files + prompt caching, and you have an extension system that&#39;s cheap to advertise, on-demand to load, user-authorable in markdown, and robust against model drift.</p>
+<p>If you&#39;re building agents and you squint at the wire trace, you can see every one of Thariq&#39;s lessons encoded in those ~78 KB. The surprising thing isn&#39;t that a one-token prompt produces 78 KB of request body — it&#39;s that the 78 KB encodes a <strong>consistent design philosophy</strong>, not a pile of hacks.</p>
+<hr>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://x.com/trq212/status/2027463795355095314" >Thariq — &quot;Lessons from Building Claude Code: Seeing like an Agent&quot; (tweet)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://claude.com/blog/seeing-like-an-agent" >Anthropic — &quot;Seeing like an agent: how we design tools in Claude Code&quot; (blog post)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://x.com/trq212/highlights" >Thariq&#39;s other Claude Code lessons<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> (prompt caching, skills, slash commands)</li>
+<li><a href="/2026/04/20/Claude-Code-Skill-Mechanism/">Previous post — How Claude Code Skills Work Under the Hood (packet capture)</a></li>
+</ul>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> From Wire Format to Design Philosophy — Why Claude Code Skills Look The Way They Do</li>
+        <li><strong>Author:</strong> wy</li>
+        <li><strong>Created at
+                :</strong> 2026-04-22 15:30:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2026-04-22 14:24:54
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://yue-ruby-w.site/2026/04/22/Claude-Code-Skills-Design-Philosophy/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
 </div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Claude-Code/">#Claude Code</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/LLM/">#LLM</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Agent-Design/">#Agent Design</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/04/20/Claude-Code-Skill-Mechanism/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">How Claude Code Skills Work Under the Hood</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+	</div>
+
 	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">From Wire Format to Design Philosophy — Why Claude Code Skills Look The Way They Do</div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#From-Wire-Format-to-Design-Philosophy"><span class="nav-text">From Wire Format to Design Philosophy</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Recap-%E2%80%94-What-the-Packet-Capture-Told-Us"><span class="nav-text">Recap — What the Packet Capture Told Us</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Enter-Thariq-s-Seeing-Like-an-Agent"><span class="nav-text">Enter Thariq&#39;s &quot;Seeing Like an Agent&quot;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Core-Principle-The-Bar-for-Adding-a-Tool-Is-High"><span class="nav-text">The Core Principle: The Bar for Adding a Tool Is High</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Iterative-Refinement-The-AskUserQuestion-Story"><span class="nav-text">Iterative Refinement: The AskUserQuestion Story</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tools-That-Are-Now-Constraining-TodoWrite-%E2%86%92-Task"><span class="nav-text">Tools That Are Now Constraining: TodoWrite → Task</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Progressive-Disclosure-The-Real-Reason-Skills-Lazy-Load"><span class="nav-text">Progressive Disclosure: The Real Reason Skills Lazy-Load</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#From-RAG-to-Agent-Led-Search"><span class="nav-text">From RAG to Agent-Led Search</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tying-It-Together-%E2%80%94-Why-The-Wire-Format-Looks-The-Way-It-Does"><span class="nav-text">Tying It Together — Why The Wire Format Looks The Way It Does</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#My-Commentary-%E2%80%94-What-This-Actually-Means-for-Agent-Builders"><span class="nav-text">My Commentary — What This Actually Means for Agent Builders</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Tools-are-a-cognitive-budget-not-a-feature-list"><span class="nav-text">1. Tools are a cognitive budget, not a feature list</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Progressive-disclosure-is-the-default-not-the-optimization"><span class="nav-text">2. Progressive disclosure is the default, not the optimization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Prose-enforcement-is-a-real-engineering-discipline"><span class="nav-text">3. Prose enforcement is a real engineering discipline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Be-willing-to-remove-tools"><span class="nav-text">4. Be willing to remove tools</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Trust-model-led-retrieval-but-design-the-hints"><span class="nav-text">5. Trust model-led retrieval, but design the hints</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-Tokens-are-a-design-constraint-not-just-a-billing-line"><span class="nav-text">6. Tokens are a design constraint, not just a billing line</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Closing"><span class="nav-text">Closing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-text">References</span></a></li></ol></li></ol>
 
-	<div class="page-template-content markdown-body">
-		
-
-		
-	</div>
-
-	<div class="page-template-comments">
-		
 	</div>
 </div>
-
-<div class="paginator">
-	<span class="page-number current">1</span>
+	</div>
+	
 </div>
-  
+
 			</div>
 
 			
@@ -674,6 +982,22 @@
 		</div>
 	</div>
 
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+	</ul>
+</div>
+	</div>
 	
 
 	<div class="right-side-tools-container">
@@ -798,6 +1122,7 @@
         }),
     );
 </script>
+
 
 
 
