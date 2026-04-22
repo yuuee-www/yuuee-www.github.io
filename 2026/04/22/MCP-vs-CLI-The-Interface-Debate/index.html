@@ -78,7 +78,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://yue-ruby-w.site/2023/07/23/2023-07-23-rl-step6-rlstep6/"/>
+    <link rel="canonical" href="https://yue-ruby-w.site/2026/04/22/mcp-vs-cli-the-interface-debate/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -87,26 +87,20 @@
         
         <meta name="description" content="Ruby&#39;s Blog">
 <meta property="og:type" content="article">
-<meta property="og:title" content="rl-Convergence and divergence">
-<meta property="og:url" content="https://yue-ruby-w.site/2023/07/23/2023-07-23-RL-step6-RLstep6/index.html">
+<meta property="og:title" content="MCP 还没做完，又要 CLI 了 — The Token-Budget Debate Behind AI Agent Interfaces">
+<meta property="og:url" content="https://yue-ruby-w.site/2026/04/22/MCP-vs-CLI-The-Interface-Debate/index.html">
 <meta property="og:site_name" content="hola">
 <meta property="og:description" content="Ruby&#39;s Blog">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled.png">
-<meta property="og:image" content="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled1.png">
-<meta property="og:image" content="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled2.png">
-<meta property="og:image" content="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled3.png">
-<meta property="og:image" content="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled4.png">
-<meta property="og:image" content="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled5.png">
-<meta property="og:image" content="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled6.png">
-<meta property="og:image" content="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled7.png">
-<meta property="og:image" content="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled8.png">
-<meta property="og:image" content="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled9.png">
-<meta property="article:published_time" content="2023-07-23T00:35:14.000Z">
-<meta property="article:modified_time" content="2023-07-23T00:41:31.000Z">
+<meta property="article:published_time" content="2026-04-22T11:30:00.000Z">
+<meta property="article:modified_time" content="2026-04-22T07:47:26.128Z">
 <meta property="article:author" content="wy">
+<meta property="article:tag" content="Agent Design">
+<meta property="article:tag" content="CLI">
+<meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="MCP">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled.png">
     
     
     <!--- Icon Part-->
@@ -118,7 +112,7 @@
     
     <title>
         
-            rl-Convergence and divergence | hola
+            MCP 还没做完，又要 CLI 了 — The Token-Budget Debate Behind AI Agent Interfaces | hola
         
     </title>
 
@@ -537,7 +531,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">rl-Convergence and divergence</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">MCP 还没做完，又要 CLI 了 — The Token-Budget Debate Behind AI Agent Interfaces</h1>
 			</div>
 			
 		</div>
@@ -558,31 +552,74 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2023-07-23 08:35:14</span>
-        <span class="mobile">2023-07-23 08:35:14</span>
+        <span class="desktop">2026-04-22 19:30</span>
+        <span class="mobile">2026-04-22 19:30</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2023-07-23 08:41:31</span>
-            <span class="mobile">2023-07-23 08:41:31</span>
+            <span class="desktop">2026-04-22 15:47:26</span>
+            <span class="mobile">2026-04-22 15:47:26</span>
             <span class="hover-info">Updated</span>
         </span>
     
 
     
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/Tools/">Tools</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Claude-Code/">Claude Code</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/LLM/">LLM</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Agent-Design/">Agent Design</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/MCP/">MCP</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/CLI/">CLI</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
     
 
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>143 Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>1 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>18 Mins</span>
         </span>
     
     
@@ -601,214 +638,330 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h1 id="rl-Convergence-and-divergence"><a href="#rl-Convergence-and-divergence" class="headerlink" title="rl-Convergence and divergence"></a>rl-Convergence and divergence</h1><p><strong>Convergence Questions</strong></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled.png"
-                     
-                ></p>
-<p><strong>Convergence of MC</strong></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled1.png"
-                     
-                ></p>
-<p><strong>Convergence of TD</strong></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled2.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled3.png"
-                     
-                ></p>
-<p><strong>Theorem:</strong></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled4.png"
-                     
-                ></p>
-<p><strong>TD is not a gradient</strong></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled5.png"
-                     
-                ></p>
-<p><strong>Example of divergence</strong></p>
-<p>use TD only on this transition</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled6.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled7.png"
-                     
-                ></p>
-<p><strong>Residual Bellman updates</strong></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled8.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://yuuee-www.github.io/2023/07/23/RL/step6/RLstep6/Untitled9.png"
-                     
-                ></p>
+			<h1 id="MCP-还没做完，又要-CLI-了"><a href="#MCP-还没做完，又要-CLI-了" class="headerlink" title="MCP 还没做完，又要 CLI 了"></a>MCP 还没做完，又要 CLI 了</h1><p><strong>Inspired by</strong> a Xiaohongshu post from <strong>爱吉尼亚羊</strong> with that exact title (<em>&quot;MCP isn&#39;t finished yet, and now it&#39;s CLI&quot;</em>). The post captures a sentiment that&#39;s been building across the Chinese AI engineering community throughout 2026: the industry&#39;s protocol-of-the-month cycle is producing real fatigue. Every month a new framework asks for a new integration effort. Teams that bet on MCP in late 2025 are now watching Vercel&#39;s CEO say <strong>&quot;CLIs are the de-facto MCPs for agents&quot;</strong>, Perplexity&#39;s CTO announce they&#39;re abandoning MCP in favor of API + CLI, and OpenClaw (the fastest-growing agent runtime, whose founder just joined OpenAI) ship <strong>Skills + CLI without MCP support at all</strong>.</p>
+<p>Is MCP dead? Was it ever alive in the sense the protocol spec implied? This post walks through the debate, tries to put real numbers on the trade-offs, and ties it back to the <a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">three</a>-<a href="/2026/04/22/QED-Multi-Agent-Math-Proof-Pipeline/">post</a> <a href="/2026/04/22/AReaL-Asynchronous-RL-for-Agents/">trilogy</a> we&#39;ve been building about agent architecture.</p>
+<p><strong>Note on sourcing.</strong> I wasn&#39;t able to read the original Xiaohongshu post&#39;s body directly — the platform gates content behind authentication — so I&#39;ve reconstructed the conversation from Chinese tech blogs (Zhihu, CSDN, cnblogs) and the Tencent News piece <em>&quot;&#39;MCP已死&#39;是AI圈最大的技术谎言？&quot;</em> that cover the same debate. If the original post had specific technical details I&#39;m missing, consider this my best-effort synthesis rather than a verbatim transcription.</p>
+<hr>
+<h2 id="1-The-Meme-MCP-Is-Dead-Long-Live-CLI"><a href="#1-The-Meme-MCP-Is-Dead-Long-Live-CLI" class="headerlink" title="1. The Meme: &quot;MCP Is Dead, Long Live CLI&quot;"></a>1. The Meme: &quot;MCP Is Dead, Long Live CLI&quot;</h2><p>The phrase propagated in 2026 Q1 after three things happened almost simultaneously:</p>
+<ol>
+<li><strong>Anthropic&#39;s own team</strong> published benchmarks showing that letting Claude write <strong>programmatic tool calls</strong> (i.e. bash scripts that call APIs directly) produced <strong>98.7% token savings</strong> vs. loading the full MCP tool catalog.</li>
+<li><strong>Vercel&#39;s CEO rauchg</strong> tweeted <em>&quot;CLIs are the de-facto MCPs for agents&quot;</em> — essentially saying that a well-designed command-line tool provides everything MCP provides, minus the protocol overhead.</li>
+<li><strong>OpenClaw&#39;s founder</strong> (Kaili Gu, who shortly after joined OpenAI) shipped a popular agent runtime that was built <strong>entirely on Skills + CLI</strong>, no MCP. It became one of the top-starred agent frameworks of the quarter.</li>
+</ol>
+<p>Chinese tech Twitter (and Xiaohongshu, and Zhihu) reacted with some version of: <em>&quot;Wait, we just finished standing up the MCP server, do we now need to rewrite everything as CLI?&quot;</em> That&#39;s where the <strong>&quot;MCP 还没做完，又要 CLI 了&quot;</strong> title comes from — half exhausted, half sardonic.</p>
+<p>The question that gets lost in the meme is: <strong>what specifically is wrong with MCP, and for whom?</strong></p>
+<hr>
+<h2 id="2-What-MCP-Actually-Costs"><a href="#2-What-MCP-Actually-Costs" class="headerlink" title="2. What MCP Actually Costs"></a>2. What MCP Actually Costs</h2><p>Let&#39;s put real numbers on this, because the debate mostly runs on vibes.</p>
+<h3 id="Token-consumption-at-a-glance"><a href="#Token-consumption-at-a-glance" class="headerlink" title="Token consumption at a glance"></a>Token consumption at a glance</h3><table>
+<thead>
+<tr>
+<th>Extension mechanism</th>
+<th align="right">Tokens paid on every turn</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>GitHub MCP Server</strong> (90+ tools)</td>
+<td align="right"><strong>~55,000</strong></td>
+<td>JSON schemas for every tool, loaded on session init</td>
+</tr>
+<tr>
+<td><strong>Playwright MCP Server</strong></td>
+<td align="right"><strong>~16,000</strong> (≈8% of 200K)</td>
+<td>Smaller than GitHub but still non-trivial</td>
+</tr>
+<tr>
+<td><strong>Claude Code Skill catalog</strong> (10 skills × ~300 chars)</td>
+<td align="right">~750</td>
+<td>Just the <code>name: description</code> list; bodies lazy-loaded</td>
+</tr>
+<tr>
+<td><strong>Per-skill body</strong> (loaded on use)</td>
+<td align="right">500 – 10,000</td>
+<td>Paid only when <code>Skill(skill=&quot;...&quot;)</code> is called</td>
+</tr>
+<tr>
+<td><strong>Claude Code built-in tools</strong> (Bash, Read, Edit, Grep, Glob, Write, WebFetch, WebSearch, TodoWrite, Task)</td>
+<td align="right">~5,000</td>
+<td>Full JSON schemas, always present</td>
+</tr>
+<tr>
+<td><strong>Single CLI tool call</strong> (e.g., <code>gh pr create</code>)</td>
+<td align="right"><strong>200–500</strong></td>
+<td>The model already knows <code>gh</code>; no schema needed</td>
+</tr>
+</tbody></table>
+<p>A 200K-token context window is a lot. But:</p>
 <ul>
-<li><p><strong>Title:</strong> </p>
-</li>
-<li><p><strong>Author:</strong> wy</p>
-</li>
-<li><p><strong>Created at<br>          :</strong> 2023-07-23 16:35:14
-  
-      </p>
-</li>
-<li><pre><code>          **Updated at
-              :** 2023-07-23 16:41:31
-      
-  
-  
-</code></pre>
-</li>
-<li><pre><code>      **Link:** https://yuuee-www.github.io/blog/2023/07/23/RL/step6/RLstep6/
-  
-  
-</code></pre>
-</li>
-<li><pre><code>      **
-          License:
-      **
-      
+<li><strong>GitHub MCP alone eats 27%</strong> of it before you start work.</li>
+<li>Add Playwright MCP, a file-system MCP, a database MCP, and you&#39;re past 40% <strong>of context taken by tool schemas</strong>, leaving less room for the actual task.</li>
+<li>Every one of those tokens is charged on <strong>every turn</strong> (modulo prompt caching).</li>
+</ul>
+<h3 id="The-98-7-savings-claim-demystified"><a href="#The-98-7-savings-claim-demystified" class="headerlink" title="The &quot;98.7% savings&quot; claim, demystified"></a>The &quot;98.7% savings&quot; claim, demystified</h3><p>Anthropic&#39;s own internal benchmark (loosely paraphrased from their team posts): a task that took 78 KB of MCP-mediated tool schemas + turns could be accomplished by <strong>writing a single bash script that calls the GitHub REST API via <code>curl</code></strong>, consuming ~1 KB for the whole task. The model already knows <code>curl</code>; it already knows the GitHub API; it doesn&#39;t need a schema to be told about either.</p>
+<p>The 98.7% number is cherry-picked for the specific case where the task is well-served by a CLI. It doesn&#39;t generalize. But it illustrates the direction: <strong>for tasks inside the model&#39;s pre-training distribution, the schema is redundant overhead.</strong></p>
+<hr>
+<h2 id="3-Why-CLI-Wins-for-the-Common-Case"><a href="#3-Why-CLI-Wins-for-the-Common-Case" class="headerlink" title="3. Why CLI Wins for the Common Case"></a>3. Why CLI Wins for the Common Case</h2><p>Four structural advantages:</p>
+<h3 id="a-Pre-training-distribution"><a href="#a-Pre-training-distribution" class="headerlink" title="(a) Pre-training distribution"></a>(a) Pre-training distribution</h3><p>Claude has seen approximately all of GitHub, all of Stack Overflow, all of man pages, all of <code>--help</code> output ever written. When you tell it &quot;use <code>git log</code> to find the commit where this bug appeared,&quot; it just does it. No schema required. The model has the schema <strong>in its weights</strong>.</p>
+<p>Contrast with an MCP tool that wraps the same git operation: the model needs the schema loaded into context every turn to remember that the tool exists, what its parameter names are, what it returns.</p>
+<h3 id="b-Composability-Unix-pipes"><a href="#b-Composability-Unix-pipes" class="headerlink" title="(b) Composability (Unix pipes)"></a>(b) Composability (Unix pipes)</h3><p>CLI tools compose natively through pipes and substitution:</p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">log</span> --oneline | grep <span class="string">&#x27;bug&#x27;</span> | <span class="built_in">head</span> -5 | awk <span class="string">&#x27;&#123;print $1&#125;&#x27;</span> | xargs -I &#123;&#125; git show &#123;&#125;</span><br></pre></td></tr></table></figure></div>
 
-      
-          This work is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0).
-      
-  
-
-
-      
-  
-
-  
-
-  
-
-  
-      
-          
-              
-                  [Prev posts](/2023/07/23/RL/step7/RLstep7/)
-              
-          
-          
-              
-                  [Next posts](/2023/07/23/RL/step5/RLstep5/)
-              
-          
-      
-  
-
-  
-      
-          
-
-
-  Comments
-
-
-
-  
-      
-
-
-
-  
-
-
-      
-  
-
-
-
-  
-      
-
-  On this page
-</code></pre>
+<p>An MCP-tool equivalent requires either (a) one mega-tool that does all of this, (b) the agent to make five separate MCP tool calls with intermediate state, or (c) the agent to write a helper script that chains them — at which point you&#39;re just writing shell anyway.</p>
+<p>Unix compositionality <strong>doesn&#39;t take up any extra context tokens</strong> because the model learned piping during pre-training.</p>
+<h3 id="c-Transparency-and-debuggability"><a href="#c-Transparency-and-debuggability" class="headerlink" title="(c) Transparency and debuggability"></a>(c) Transparency and debuggability</h3><p>A CLI tool&#39;s behavior is: you can see the exact command the model executed. You can re-run it yourself. You can <code>set -x</code> it, <code>strace</code> it, tee its output.</p>
+<p>An MCP tool call is a JSON-RPC message between two opaque processes. You need MCP-specific tracing, and when it fails you&#39;re debugging both the agent and the server.</p>
+<h3 id="d-Mature-authentication"><a href="#d-Mature-authentication" class="headerlink" title="(d) Mature authentication"></a>(d) Mature authentication</h3><p>CLI tools inherit decades of accumulated auth machinery: SSH keys, OAuth tokens, keyring integration, <code>~/.netrc</code>, <code>~/.aws/credentials</code>, <code>GITHUB_TOKEN</code> env var conventions. The model knows these conventions because it learned them.</p>
+<p>MCP&#39;s auth story is newer, less standardized, and varies per server implementation. In 2026 you&#39;re still reading blog posts titled &quot;How to properly auth your MCP server.&quot;</p>
+<hr>
+<h2 id="4-Why-MCP-Is-Not-Actually-Dead"><a href="#4-Why-MCP-Is-Not-Actually-Dead" class="headerlink" title="4. Why MCP Is Not Actually Dead"></a>4. Why MCP Is Not Actually Dead</h2><p>The &quot;MCP is dead&quot; meme is propagating mostly among <strong>solo developers and small teams</strong> — the group for whom CLI&#39;s advantages are cleanest. For larger organizations, the picture inverts.</p>
+<h3 id="The-team-scale-threshold"><a href="#The-team-scale-threshold" class="headerlink" title="The team scale threshold"></a>The team scale threshold</h3><p>A key insight from the Tencent News article on this debate: the MCP-vs-CLI argument is really an argument about <strong>organizational scale</strong>. As soon as you&#39;re building a system that:</p>
+<ul>
+<li><strong>Multiple teams</strong> depend on</li>
+<li><strong>Multiple tech stacks</strong> access</li>
+<li>Needs <strong>audit trails</strong></li>
+<li>Needs <strong>fine-grained permissions</strong></li>
+<li>Needs <strong>centralized credentials management</strong></li>
+<li>Needs <strong>SLAs on tool availability</strong></li>
+</ul>
+<p>... MCP is actually <em>better positioned</em> than CLI, because:</p>
+<ul>
+<li>MCP&#39;s HTTP-based deployment model lets you run the server centrally (behind load balancers, with monitoring)</li>
+<li>MCP has a natural place to attach auth&#x2F;authz&#x2F;logging middleware</li>
+<li>MCP&#39;s schema serves as a contract between agent versions and tool versions</li>
+<li>MCP&#39;s tool namespacing (<code>mcp__server__tool</code>) prevents collisions when multiple teams add tools</li>
+</ul>
+<p>The CLI story for the same requirements is: &quot;just ship binaries and config files.&quot; That works at 1 developer, gets painful at 10, and is untenable at 100.</p>
+<h3 id="Enterprise-middleware-is-where-MCP-probably-settles"><a href="#Enterprise-middleware-is-where-MCP-probably-settles" class="headerlink" title="Enterprise middleware is where MCP probably settles"></a>Enterprise middleware is where MCP probably settles</h3><p>The most likely endgame, per most analyses:</p>
+<table>
+<thead>
+<tr>
+<th>Context</th>
+<th>Winning interface</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Solo developer, prototype, disposable project</td>
+<td><strong>CLI</strong> + maybe Skills</td>
+</tr>
+<tr>
+<td>Small team, production agent</td>
+<td><strong>CLI + Skills</strong> with occasional MCP for hard-to-integrate services</td>
+</tr>
+<tr>
+<td>Enterprise platform, multi-team, audited</td>
+<td><strong>MCP</strong> as the standardized boundary; CLI behind it</td>
+</tr>
+<tr>
+<td>Agent marketplace &#x2F; third-party integrations</td>
+<td><strong>MCP</strong> (vendor-neutral protocol is the whole point)</td>
+</tr>
+</tbody></table>
+<p>So MCP doesn&#39;t die — it <strong>descends a layer</strong>, from &quot;direct agent tool&quot; to &quot;middleware for enterprise integration.&quot;</p>
+<hr>
+<h2 id="5-The-Three-Way-Comparison-MCP-vs-CLI-vs-Skills"><a href="#5-The-Three-Way-Comparison-MCP-vs-CLI-vs-Skills" class="headerlink" title="5. The Three-Way Comparison: MCP vs CLI vs Skills"></a>5. The Three-Way Comparison: MCP vs CLI vs Skills</h2><p>This is what the Xiaohongshu post is really gesturing at. In 2025 the choice was MCP vs. nothing. In 2026 it&#39;s a three-way: MCP, CLI, or Skills — and the answer depends on what exactly you&#39;re trying to do.</p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th><strong>MCP</strong></th>
+<th><strong>CLI</strong></th>
+<th><strong>Skills</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>What it is</strong></td>
+<td>Protocol for AI ↔ tool integration</td>
+<td>Existing command-line programs the model already knows</td>
+<td>Markdown file advertising a procedural capability</td>
+</tr>
+<tr>
+<td><strong>Primary audience</strong></td>
+<td>AI systems + tool servers</td>
+<td>Developers (used to be); now both</td>
+<td>AI agents (via the <code>Skill</code> dispatcher tool)</td>
+</tr>
+<tr>
+<td><strong>Token cost at rest</strong></td>
+<td>Full schema (5K–55K per server)</td>
+<td>Built-in tools only (~5K)</td>
+<td>Tiny (~100 tokens per skill description)</td>
+</tr>
+<tr>
+<td><strong>Token cost when used</strong></td>
+<td>Same as at rest</td>
+<td>Each invocation: 200–500 tokens</td>
+<td>Skill body loaded lazily (500–10K)</td>
+</tr>
+<tr>
+<td><strong>Progressive disclosure</strong></td>
+<td>No (schemas always present)</td>
+<td>N&#x2F;A (no schema)</td>
+<td>Yes (catalog short, body lazy)</td>
+</tr>
+<tr>
+<td><strong>Composability</strong></td>
+<td>Via agent orchestration</td>
+<td>Via Unix pipes (native)</td>
+<td>Via agent following markdown instructions</td>
+</tr>
+<tr>
+<td><strong>Auth &#x2F; logging</strong></td>
+<td>Centralized possible</td>
+<td>Per-tool (diverse)</td>
+<td>Inherits from underlying tools</td>
+</tr>
+<tr>
+<td><strong>Right for</strong></td>
+<td>Enterprise integration, external APIs, multi-team</td>
+<td>Most developer tasks</td>
+<td>Procedural knowledge (&quot;how to do X&quot;)</td>
+</tr>
+</tbody></table>
+<h3 id="The-key-insight-they-re-solving-different-problems"><a href="#The-key-insight-they-re-solving-different-problems" class="headerlink" title="The key insight: they&#39;re solving different problems"></a>The key insight: they&#39;re solving different problems</h3><p>Notice from the table that <strong>these three mechanisms aren&#39;t really substitutes for each other</strong> — they operate on different layers:</p>
+<ul>
+<li><strong>MCP</strong> standardizes the <strong>connection</strong> to external systems.</li>
+<li><strong>CLI</strong> is the <strong>execution</strong> layer — what the model types into the terminal.</li>
+<li><strong>Skills</strong> encode <strong>procedural knowledge</strong> — the methodology for doing a task.</li>
+</ul>
+<p>The apparent substitution (<em>&quot;use CLI instead of MCP&quot;</em>) only works because for most developer tasks, the external system (GitHub, the filesystem, Docker) <strong>already has a CLI</strong> — so the connection layer is unnecessary, and the procedural knowledge can live in a Skill body that tells the model which CLI commands to use.</p>
+<p>A cleaner way to think about it:</p>
+<blockquote>
+<p><strong>MCP &#x3D; USB driver</strong> (protocol for connecting to a device)</p>
+<p><strong>CLI &#x3D; the device itself</strong> (the thing you actually operate)</p>
+<p><strong>Skills &#x3D; the user manual</strong> (the procedural knowledge for operating it correctly)</p>
+</blockquote>
+<p>You don&#39;t need the driver if your device already exposes a standard interface the host speaks natively.</p>
+<hr>
+<h2 id="6-A-Real-Benchmark-Device-Operations-Scenario"><a href="#6-A-Real-Benchmark-Device-Operations-Scenario" class="headerlink" title="6. A Real Benchmark: Device Operations Scenario"></a>6. A Real Benchmark: Device Operations Scenario</h2><p>One of the most interesting Chinese tech blog pieces (from Zhihu) ran a real comparison: a <strong>device operations scenario</strong> where an AI agent has to diagnose a server problem, identify anomalies, and recommend spare parts.</p>
+<p>The author implemented the same workflow three ways:</p>
+<ul>
+<li><strong>CLI</strong> — shell scripts and standard tools</li>
+<li><strong>MCP</strong> — a custom MCP server wrapping diagnostic APIs</li>
+<li><strong>Skills</strong> — a markdown file describing the diagnostic methodology</li>
+</ul>
+<h3 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h3><p>All three methods produced <strong>equivalent outcomes</strong>:</p>
+<ul>
+<li>Same 6 anomalies detected</li>
+<li>Same spare parts recommendations</li>
+<li>Same time-to-diagnosis (within noise)</li>
+</ul>
+<p><strong>Differences were entirely in cost and developer experience:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th align="right">Token cost per session</th>
+<th align="right">Build time</th>
+<th>Iteration cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CLI (shell + standard tools)</td>
+<td align="right">Lowest</td>
+<td align="right">0 (tools exist)</td>
+<td>Low (edit scripts)</td>
+</tr>
+<tr>
+<td>MCP (custom server)</td>
+<td align="right">Highest (schema overhead)</td>
+<td align="right">1 week (server dev)</td>
+<td>High (server redeploy)</td>
+</tr>
+<tr>
+<td>Skills (markdown)</td>
+<td align="right">Low-medium</td>
+<td align="right">1 day (write markdown)</td>
+<td>Lowest (edit markdown)</td>
+</tr>
+</tbody></table>
+<p>The blog&#39;s conclusion: <strong>the three converge on the same answer because the underlying reasoning happens in the LLM&#39;s head, not in the protocol.</strong> The protocol just changes the cost structure and the developer experience.</p>
+<p>That aligns with what we saw in <a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">Claude Code&#39;s design philosophy</a> — the protocol is a <strong>decision surface</strong> for the model, and minimizing that surface (via progressive disclosure) is usually the right call.</p>
+<hr>
+<h2 id="7-Connecting-to-the-Trilogy"><a href="#7-Connecting-to-the-Trilogy" class="headerlink" title="7. Connecting to the Trilogy"></a>7. Connecting to the Trilogy</h2><p>This debate is the natural closing frame for the four-post arc we&#39;ve been writing:</p>
+<table>
+<thead>
+<tr>
+<th>Post</th>
+<th>Main idea</th>
+<th>Connection</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="/2026/04/20/Claude-Code-Skill-Mechanism/">Claude Code Skills mechanism</a></td>
+<td>Skills &#x3D; Function Calling + system prompt</td>
+<td>The wire-level proof that Skills aren&#39;t magic</td>
+</tr>
+<tr>
+<td><a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">Design philosophy</a></td>
+<td>Progressive disclosure, cognitive budget, protocol standardization</td>
+<td>The &quot;why&quot; behind the wire format</td>
+</tr>
+<tr>
+<td><a href="/2026/04/22/QED-Multi-Agent-Math-Proof-Pipeline/">QED multi-agent pipeline</a></td>
+<td>CLI subprocesses + structured prose do the work; no framework</td>
+<td>An independent validation of the &quot;ship shell pipes, not frameworks&quot; bet</td>
+</tr>
+<tr>
+<td><a href="/2026/04/22/AReaL-Asynchronous-RL-for-Agents/">AReaL async RL</a></td>
+<td>&quot;Just replace <code>base_url</code>&quot; — standardize the protocol, not the framework</td>
+<td>The training-layer version of the same principle</td>
+</tr>
+<tr>
+<td><strong>This post</strong></td>
+<td>MCP vs CLI is a debate about <strong>where you pay the token tax</strong></td>
+<td>The industry-level view of the same architectural question</td>
+</tr>
+</tbody></table>
+<p>The thread that runs through all of them: <strong>the right abstraction layer for AI agents is the one that minimizes the decision surface the model sees while maximizing composability with the ecosystem that already exists.</strong></p>
+<ul>
+<li>Claude Code Skills got this right: lazy-loaded markdown bodies (minimize surface) + OpenAI tool-use protocol (compose with the ecosystem).</li>
+<li>QED got this right: one dispatcher subprocess per vendor (minimize surface) + CLIs that already exist (compose with the ecosystem).</li>
+<li>AReaL got this right: OpenAI-compatible proxy (minimize surface) + existing agent frameworks unchanged (compose with the ecosystem).</li>
+<li>CLI-over-MCP gets this right: no custom schema per tool (minimize surface) + <code>bash</code> + Unix tools (compose with literally 40 years of ecosystem).</li>
+</ul>
+<h3 id="Where-MCP-still-fits"><a href="#Where-MCP-still-fits" class="headerlink" title="Where MCP still fits"></a>Where MCP still fits</h3><p>MCP gets this right <strong>in enterprise contexts</strong> — where the decision surface isn&#39;t any single task&#39;s schema, but the longer-term governance surface of having 50 teams ship tools consistently. In that scope, &quot;write docs for your custom schema&quot; is smaller than &quot;every team invents their own deployment story for their custom CLI tool.&quot;</p>
+<p>The mistake wasn&#39;t MCP. The mistake was <strong>treating MCP as the universal answer</strong> when most actual agent work fits comfortably on top of existing CLIs.</p>
+<hr>
+<h2 id="8-My-Take"><a href="#8-My-Take" class="headerlink" title="8. My Take"></a>8. My Take</h2><p>If I&#39;m building for myself or a small team in 2026:</p>
+<ul>
+<li><strong>Start with CLI</strong>. Most things I want to do (git, curl, sqlite3, docker, kubectl, the filesystem) have excellent CLIs that the model already knows.</li>
+<li><strong>Add Skills for procedural knowledge</strong>. When my task has specific methodology (&quot;to deploy, first run tests, then bump version, then tag, then push&quot;), that&#39;s a skill body. ~300 chars of description + 2000 chars of body &gt; 20 MCP tools.</li>
+<li><strong>Reach for MCP only when</strong>:<ul>
+<li>The target system doesn&#39;t have a CLI (or the CLI is too weak)</li>
+<li>I need centralized auth&#x2F;logging across many agents</li>
+<li>I&#39;m building something multiple teams will use</li>
+<li>The tool really benefits from a schema (e.g., complex structured outputs)</li>
+</ul>
 </li>
 </ul>
-<ol>
-<li><p><a href="#rl-Convergence-and-divergence">rl-Convergence and divergence</a></p>
-<pre><code>     ©
-     
-       2022
-       -
-     
-     2024    [wy](/)
-     
-         
-         
-
-             
-                 24 posts in total
-             
-             
-         
-
-     
- 
- 
-     
-     
-         
-             
-                 VISITOR COUNT
-                 
-             
-         
-         
-             
-                 TOTAL PAGE VIEWS
-                 
-             
-         
-     
- 
- 
-     POWERED BY [Hexo](https://hexo.io)
-     THEME [Redefine v2.6.4](https://github.com/EvanNotFound/hexo-theme-redefine)
- 
- 
- 
-     
-         Blog up for  days  hrs  Min  Sec
-</code></pre>
-</li>
-</ol>
-<p>- </p>
-<p>- </p>
-<p>- </p>
-<p>- </p>
-<p>- </p>
-<p>- </p>
-<p>- </p>
+<p>If I&#39;m building enterprise infrastructure:</p>
 <ul>
-<li></li>
+<li><strong>MCP is still the right answer</strong> for the integration boundary. Don&#39;t let the 2026 meme cycle convince you to rewrite everything as CLI — you&#39;ll regret it when you need audit trails and SOC2 compliance.</li>
+<li><strong>CLI + Skills are the right answer</strong> for everything behind that boundary. Let each team ship their internal tooling as CLIs + Skills; have the MCP server wrap the external contract.</li>
+</ul>
+<h3 id="The-meta-lesson"><a href="#The-meta-lesson" class="headerlink" title="The meta-lesson"></a>The meta-lesson</h3><p>Every 6–12 months the agent ecosystem produces a new &quot;protocol&#x2F;framework&#x2F;paradigm&quot; and the discourse flips from &quot;this is the future&quot; to &quot;actually this was a mistake.&quot; MCP in late 2024 → CLI in early 2026 is just the latest cycle.</p>
+<p>The robust strategy, for both frameworks and personal tech choices, is:</p>
+<ol>
+<li><strong>Bet on what pre-dates LLMs</strong> — Unix pipes, HTTP, OpenAI-compatible APIs, markdown. These survived because they compose well; they&#39;ll outlive every agent framework.</li>
+<li><strong>Minimize the &quot;new surface&quot;</strong> you&#39;re adding. Every protocol layer, every custom schema, every framework-specific DSL is a future migration cost.</li>
+<li><strong>Watch what the largest labs are doing</strong>, not what they&#39;re saying. Anthropic saying &quot;MCP is great&quot; while Claude Code&#39;s system prompt reveals they use it sparingly internally is <strong>the signal</strong>.</li>
+<li><strong>Remember that the winning interface is usually the one the LLM was trained on</strong>. In 2024 that was Python + bash. In 2026 it&#39;s still Python + bash. In 2028 it&#39;ll probably still be Python + bash.</li>
+</ol>
+<p>MCP isn&#39;t dead. But it&#39;s not the center of gravity anymore, and it probably shouldn&#39;t have been sold as such. The Xiaohongshu title captures the mood: we finished building the thing we were told was essential, and now we&#39;re being told it&#39;s optional. The right response isn&#39;t to feel tricked — it&#39;s to notice the pattern, and for the next wave, <strong>wait to see what survives</strong>.</p>
+<hr>
+<h2 id="References-and-Further-Reading"><a href="#References-and-Further-Reading" class="headerlink" title="References and Further Reading"></a>References and Further Reading</h2><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.xiaohongshu.com/explore/69ba7d87000000001a02044e" >原帖 · 爱吉尼亚羊, &quot;MCP 还没做完，又要 CLI 了&quot; (小红书)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — the Xiaohongshu post that inspired this piece (post body is login-gated)</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/2017741231225085959" >&quot;MCP 已死？一个设备运维场景跑完 CLI、MCP、Skills 三种方式后的真实结论&quot;<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — the device-operations benchmark referenced in §6</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://news.qq.com/rain/a/20260315A03H1A00" >&quot;MCP已死&quot;是AI圈最大的技术谎言？<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — the Tencent News rebuttal arguing MCP still matters for enterprise</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/informatics/p/19717591" >warm3snow, &quot;从 MCP 到 CLI：AI Agent 的&#39;接口之争&#39;，终端才是终局&quot;<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — the cnblogs piece that ran the full pivot argument</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42698421/article/details/159278097" >Zender Han, &quot;MCP、CLI 与 Skills：概念解析、差异对比与应用场景&quot;<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — the three-way comparison with the cleanest conceptual framing</li>
+<li><strong>Prior posts in this trilogy:</strong><ul>
+<li><a href="/2026/04/20/Claude-Code-Skill-Mechanism/">How Claude Code Skills Work Under the Hood</a></li>
+<li><a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">From Wire Format to Design Philosophy</a></li>
+<li><a href="/2026/04/22/QED-Multi-Agent-Math-Proof-Pipeline/">QED — Multi-Agent Math Proof Pipeline</a></li>
+<li><a href="/2026/04/22/AReaL-Asynchronous-RL-for-Agents/">AReaL — Asynchronous RL Infrastructure for LLM Agents</a></li>
+</ul>
+</li>
 </ul>
 
 		</div>
@@ -817,18 +970,18 @@
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> rl-Convergence and divergence</li>
+        <li><strong>Title:</strong> MCP 还没做完，又要 CLI 了 — The Token-Budget Debate Behind AI Agent Interfaces</li>
         <li><strong>Author:</strong> wy</li>
         <li><strong>Created at
-                :</strong> 2023-07-23 08:35:14</li>
+                :</strong> 2026-04-22 19:30:00</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2023-07-23 08:41:31
+                    :</strong> 2026-04-22 15:47:26
             </li>
         
         <li>
-            <strong>Link:</strong> https://yue-ruby-w.site/2023/07/23/2023-07-23-RL-step6-RLstep6/
+            <strong>Link:</strong> https://yue-ruby-w.site/2026/04/22/MCP-vs-CLI-The-Interface-Debate/
         </li>
         <li>
             <strong>
@@ -847,29 +1000,41 @@
 		
 
 		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Claude-Code/">#Claude Code</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/LLM/">#LLM</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Agent-Design/">#Agent Design</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/MCP/">#MCP</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/CLI/">#CLI</a>&nbsp;
+			</li>
+			
+		</ul>
+		
 
 		
 
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2023/07/23/2023-07-23-RL-step7-RLstep7/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">RL - step7 - RLstep7</span>
-						<span class="post-nav-item">Prev posts</span>
-					</span>
-				</a>
-			</div>
-			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2023/07/23/2023-07-23-RL-step5-RLstep5/">
+				<a class="next" rel="next" href="/2026/04/22/AReaL-Asynchronous-RL-for-Agents/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">RL - step5 - RLstep5</span>
+						<span class="post-nav-title-item truncate max-w-48">AReaL — Asynchronous RL Infrastructure for LLM Agents</span>
 						<span class="post-nav-item">Next posts</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -890,8 +1055,8 @@
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">rl-Convergence and divergence</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#rl-Convergence-and-divergence"><span class="nav-text">rl-Convergence and divergence</span></a></li></ol>
+		<div class="page-title">MCP 还没做完，又要 CLI 了 — The Token-Budget Debate Behind AI Agent Interfaces</div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MCP-%E8%BF%98%E6%B2%A1%E5%81%9A%E5%AE%8C%EF%BC%8C%E5%8F%88%E8%A6%81-CLI-%E4%BA%86"><span class="nav-text">MCP 还没做完，又要 CLI 了</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-The-Meme-MCP-Is-Dead-Long-Live-CLI"><span class="nav-text">1. The Meme: &quot;MCP Is Dead, Long Live CLI&quot;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-What-MCP-Actually-Costs"><span class="nav-text">2. What MCP Actually Costs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Token-consumption-at-a-glance"><span class="nav-text">Token consumption at a glance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-98-7-savings-claim-demystified"><span class="nav-text">The &quot;98.7% savings&quot; claim, demystified</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Why-CLI-Wins-for-the-Common-Case"><span class="nav-text">3. Why CLI Wins for the Common Case</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-Pre-training-distribution"><span class="nav-text">(a) Pre-training distribution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-Composability-Unix-pipes"><span class="nav-text">(b) Composability (Unix pipes)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-Transparency-and-debuggability"><span class="nav-text">(c) Transparency and debuggability</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-Mature-authentication"><span class="nav-text">(d) Mature authentication</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Why-MCP-Is-Not-Actually-Dead"><span class="nav-text">4. Why MCP Is Not Actually Dead</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-team-scale-threshold"><span class="nav-text">The team scale threshold</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Enterprise-middleware-is-where-MCP-probably-settles"><span class="nav-text">Enterprise middleware is where MCP probably settles</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-The-Three-Way-Comparison-MCP-vs-CLI-vs-Skills"><span class="nav-text">5. The Three-Way Comparison: MCP vs CLI vs Skills</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-key-insight-they-re-solving-different-problems"><span class="nav-text">The key insight: they&#39;re solving different problems</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-A-Real-Benchmark-Device-Operations-Scenario"><span class="nav-text">6. A Real Benchmark: Device Operations Scenario</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Results"><span class="nav-text">Results</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Connecting-to-the-Trilogy"><span class="nav-text">7. Connecting to the Trilogy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Where-MCP-still-fits"><span class="nav-text">Where MCP still fits</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-My-Take"><span class="nav-text">8. My Take</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-meta-lesson"><span class="nav-text">The meta-lesson</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References-and-Further-Reading"><span class="nav-text">References and Further Reading</span></a></li></ol></li></ol>
 
 	</div>
 </div>
