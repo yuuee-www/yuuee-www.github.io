@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    
+    <meta name="author" content="wy">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://yue-ruby-w.site/2026/04/22/areal-asynchronous-rl-for-agents/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+        
+        <meta name="description" content="Ruby&#39;s Blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AReaL — Asynchronous RL Infrastructure for LLM Agents">
+<meta property="og:url" content="https://yue-ruby-w.site/2026/04/22/AReaL-Asynchronous-RL-for-Agents/index.html">
+<meta property="og:site_name" content="hola">
+<meta property="og:description" content="Ruby&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-22T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-22T07:32:22.145Z">
+<meta property="article:author" content="wy">
+<meta property="article:tag" content="Agent Design">
+<meta property="article:tag" content="Distributed Systems">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="Reinforcement Learning">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/favicon.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            AReaL — Asynchronous RL Infrastructure for LLM Agents | hola
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+        
+            
+    
+            
+    
+            
+                
+                    <link rel="stylesheet" href="/css/notebook.css">
+                
+    
+            
+                
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+                
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+        <link href="/fonts/Geist/geist.css" rel="stylesheet">
+    
+    
+        <link href="/fonts/Chillax/chillax.css" rel="stylesheet">
+    
+    
+        
+<script src="/js/build/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"yue-ruby-w.site","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"Recommended","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":true,"family":"Geist","url":"/fonts/Geist/geist.css"},"title":{"enable":true,"family":"Chillax","url":"/fonts/Chillax/chillax.css"}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":true,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":null,"description":"Ruby's Blog"},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-8oxg61.jpg","dark":"/images/wallhaven-8oxg61.jpg"},"title":"Ruby's Blog","subtitle":{"text":["Hi!","你好～"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":[{"icon":"fa-brands fa-github","url":"https://github.com/yuuee-www"},{"icon":"fa-solid fa-at","url":"mailto:wy@yue-ruby-w.site"},{"icon":"fa-solid fa-at","url":"you@example.com"},{"icon":"fa-brands fa-telegram","url":null},{"icon":"/images/custom-icon.svg","url":null}],"qrs":[{"icon":"fa-brands fa-weixin","qr":null},{"icon":"/images/custom-icon.svg","qr":null}]}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1","theme":{"light":"default","dark":"dark"}}},"version":"2.9.0","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur","masonry":{"batch_size":12,"initial_batch_size":24}},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footer":{"runtime":true,"icon":"<i class=\"fa-solid fa-heart fa-beat\" style=\"--fa-animation-duration: 0.5s; color: #f54545\"></i>","start":"2023/06/13 00:00:00","statistics":true,"customize":null,"icp":{"enable":false,"number":null,"url":null}},"footerStart":"2023/06/13 00:00:00","mermaid":{"style":{"light":"default","dark":"dark"}}};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.i18n = {"search":"Search...","toc":"On this page","prev":"Prev","next":"Next","prev_posts":"Prev posts","next_posts":"Next posts","page":"Page %d","recent_posts":"Recent Posts","share":"Share","powered_by":"POWERED BY %s","theme":"THEME","rss_feed":"RSS Feed","category":"Category","categories":"Categories","tag":"Tag","tags":"Tags","post":"Post","posts":"Posts","tagcloud":"Tag Cloud","comment":"Comment","comments":"Comments","home":"Home","archive":"Archive","archives":"Archives","top":"TOP","sticky":"Sticky","go-back-home":"Go Back Home","masonry_loading":"Loading photos...","image_viewer":"Image viewer","close":"Close","exif":{"title":"EXIF","cards":{"camera":"Camera","lens":"Lens","exposure":"Exposure","other":"Other"},"fields":{"make":"Brand","model":"Model","date_taken":"Date taken","lens_model":"Lens","focal_length":"Focal length","focus_mode":"Focus mode","shutter":"Shutter","aperture":"Aperture","iso":"ISO","exposure_program":"Exposure program","exposure_compensation":"Exposure compensation","metering_mode":"Metering mode","flash":"Flash","white_balance":"White balance","latitude":"Latitude","longitude":"Longitude","altitude":"Altitude"},"status":{"loading":"Loading...","no_exif":"No EXIF available","library_missing":"EXIF library not loaded","image_source_missing":"Image source unavailable","unavailable":"EXIF unavailable (blocked by CORS or missing metadata)","flag_unavailable":"EXIF unavailable"}},"about":"About","changelog":"Changelog","links":"Links","link":"Link","friends":"Friends","friend":"Friend","timeline":"Timeline","shuoshuo":"Shuoshuo","bookmarks":"Bookmarks","site_uv":"VISITOR COUNT","site_pv":"TOTAL PAGE VIEWS","read_more":"Read more","wordcount":"Words","min2read":"Mins","status":"Status","runtime":"Blog up for","days":"days","hours":"hrs","minutes":"Min","seconds":"Sec","optimized_by":"and Optimized by Evan","rights":"All Rights Reserved","site_posts":"%s posts in total","site_wordcount":"%s words in total","copyright":{"author":"Author","title":"Title","link":"Link","create_time":"Created at","update_time":"Updated at","license_title":"License","license_content":"This work is licensed under %s.","all_rights_reserved":"All Rights Reserved &#169; %s","public_domain":"This work is in the public domain."},"ago":{"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"},"create_time":"Created","update_time":"Updated","expired":"This post is written %s days ago, and the content may not be up to date."};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        hola
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({ loop: true })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [20, 0],
+                translateZ: 0,
+                opacity: [0, 1],
+                filter: ['blur(5px)', 'blur(0px)'],
+                easing: "easeOutExpo",
+                duration: 1200,
+                delay: (el, i) => 300 + 20 * i,
+            })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [0, -20],
+                opacity: [1, 0],
+                filter: ['blur(0px)', 'blur(5px)'],
+                easing: "easeInExpo",
+                duration: 1000,
+                delay: (el, i) => 15 * i,
+                complete: function() {
+                    hidePreloader();
+                }
+            }, '-=700');
+
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                hola
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/categories"
+                        >
+                            <span>Categories</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">28</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">AReaL — Asynchronous RL Infrastructure for LLM Agents</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/images/redefine-avatar.svg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">wy</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-04-22 18:00</span>
+        <span class="mobile">2026-04-22 18:00</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-04-22 15:32:22</span>
+            <span class="mobile">2026-04-22 15:32:22</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/Projects/">Projects</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/LLM/">LLM</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Agent-Design/">Agent Design</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Distributed-Systems/">Distributed Systems</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3.8k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>23 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h1 id="AReaL-—-Asynchronous-RL-Infrastructure-for-LLM-Agents"><a href="#AReaL-—-Asynchronous-RL-Infrastructure-for-LLM-Agents" class="headerlink" title="AReaL — Asynchronous RL Infrastructure for LLM Agents"></a>AReaL — Asynchronous RL Infrastructure for LLM Agents</h1><p><strong>Repo:</strong> <a target="_blank" rel="noopener" href="https://github.com/inclusionAI/AReaL"><code>inclusionAI/AReaL</code></a> — Tsinghua IIIS + Ant Group. <a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/pdf/2505.24298" >Paper (arXiv 2505.24298)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>.</p>
+<p>AReaL is an RL training system aimed at two things the field has been struggling to reconcile: <strong>scalable online RL</strong> for large reasoning models, and <strong>agentic RL</strong> where the &quot;environment&quot; is a black-box agent runtime (OpenAI Agents SDK, CAMEL, LangChain, whatever) that you shouldn&#39;t have to rewrite. Its central trick is <em>fully asynchronous</em> training — decoupling rollout generation from policy updates so that inference and training run concurrently on disaggregated GPUs.</p>
+<p>This is a different kind of system from <a href="/2026/04/22/QED-Multi-Agent-Math-Proof-Pipeline/">QED</a>. QED is an orchestration pipeline that treats LLMs as <em>fixed components</em> and squeezes correctness out of them via multi-model voting and structured verification. AReaL is an infrastructure layer that <em>updates the weights themselves</em> via reinforcement learning, on agent trajectories that can be arbitrary user-defined loops. Both are practical, but they&#39;re operating at different layers of the stack.</p>
+<hr>
+<h2 id="1-High-Level-Indication"><a href="#1-High-Level-Indication" class="headerlink" title="1. High-Level Indication"></a>1. High-Level Indication</h2><p>If you only remember three things:</p>
+<ol>
+<li><strong>Asynchronous &gt; synchronous, by a lot.</strong> AReaL&#39;s v0.3 release shows 2.77× speedup over synchronous RL on comparable hardware. The trick is running rollouts (inference) and training (gradient steps) on separate GPU pools, overlapped in time, with principled handling of the staleness that introduces.</li>
+<li><strong>&quot;Just replace <code>base_url</code>&quot; is the API contract.</strong> The headline example (OpenClaw, CAMEL-SETA, OpenAI Agents SDK) is that you train an <strong>existing agent runtime</strong> by pointing it at AReaL&#39;s OpenAI-compatible proxy. No framework rewrite. The proxy is an HTTP server that speaks chat completions, logs token-level telemetry, and returns trajectories for RL — so any agent that talks OpenAI chat-completions protocol is suddenly RL-trainable.</li>
+<li><strong>Off-policyness is a controlled knob, not a defect.</strong> The entire async-RL literature lives or dies on how much stale data you can tolerate. AReaL exposes <code>max_head_offpolicyness</code> directly, pairs it with a <strong>decoupled PPO loss</strong> + <strong>recomputed logprobs</strong>, and lets the user tune the tradeoff. This is not a hidden implementation detail — it&#39;s a user-facing algorithmic choice.</li>
+</ol>
+<p>The bet: <strong>the bottleneck of online RL for agents is generation latency</strong>, and the right fix is system-level (asynchronous GPU pools) rather than algorithm-level (more sample-efficient algorithms).</p>
+<hr>
+<h2 id="2-The-Problem-AReaL-Is-Trying-to-Solve"><a href="#2-The-Problem-AReaL-Is-Trying-to-Solve" class="headerlink" title="2. The Problem AReaL Is Trying to Solve"></a>2. The Problem AReaL Is Trying to Solve</h2><p>Online RL for LLMs has two flavors of pain:</p>
+<h3 id="a-The-GPU-idleness-pain"><a href="#a-The-GPU-idleness-pain" class="headerlink" title="(a) The GPU-idleness pain"></a>(a) The GPU-idleness pain</h3><p>Traditional synchronous online RL (PPO, GRPO, etc.) does this every step:</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">while training:</span><br><span class="line">    rollouts = generate(policy)        # inference GPUs work, training GPUs idle</span><br><span class="line">    batch = collect(rollouts)          # both idle</span><br><span class="line">    loss = train(policy, batch)        # training GPUs work, inference GPUs idle</span><br></pre></td></tr></table></figure></div>
+
+<p>For a large reasoning model with long chains of thought — say, 8k–32k tokens per rollout — <strong>inference dominates the wall-clock</strong>. The training GPUs spend most of their time waiting for rollouts to finish. As the model gets bigger and the chain-of-thought gets longer, the idleness fraction gets worse.</p>
+<h3 id="b-The-agent-framework-impedance-mismatch"><a href="#b-The-agent-framework-impedance-mismatch" class="headerlink" title="(b) The agent-framework impedance mismatch"></a>(b) The agent-framework impedance mismatch</h3><p>You want to RL-finetune an agent that was built with OpenAI Agents SDK or CAMEL or LangChain. Those frameworks:</p>
+<ul>
+<li>Interact with LLMs through <strong>chat-completions APIs</strong> — no token IDs, no logprobs.</li>
+<li>Have <strong>no reward mechanism</strong> (they&#39;re designed for inference).</li>
+<li>Run <strong>sequentially</strong> (no parallel rollout collection out of the box).</li>
+</ul>
+<p>Naive approach: rewrite the agent in a training-friendly API. That&#39;s weeks of work per agent framework, and it diverges from what you&#39;ll actually deploy.</p>
+<h3 id="What-AReaL-proposes"><a href="#What-AReaL-proposes" class="headerlink" title="What AReaL proposes"></a>What AReaL proposes</h3><p>For (a): <strong>asynchronous RL</strong> — decouple rollout GPUs from training GPUs; allow staleness with principled control; use a decoupled PPO objective that&#39;s robust to off-policy data.</p>
+<p>For (b): <strong>a proxy model client that looks like OpenAI</strong> — your agent sends chat-completion requests to the proxy; the proxy routes them to SGLang or vLLM; every request&#x2F;response is logged with token-level telemetry; when the episode ends you assign a reward and the proxy hands the trajectory back for RL training.</p>
+<p>The result: you change your agent&#39;s <code>base_url</code> from <code>https://api.openai.com/v1</code> to the proxy URL, and the same code that runs inference now produces trainable trajectories.</p>
+<hr>
+<h2 id="3-Architecture-Tour"><a href="#3-Architecture-Tour" class="headerlink" title="3. Architecture Tour"></a>3. Architecture Tour</h2><p>AReaL&#39;s source tree (<code>areal/</code>) decomposes into the pieces you&#39;d expect from a serious RL system:</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">areal/</span><br><span class="line">├── api/          # config dataclasses, CLI args, public types</span><br><span class="line">├── dataset/      # dataset loaders for math / coding / etc.</span><br><span class="line">├── engine/       # training + inference engines</span><br><span class="line">│   ├── fsdp_engine.py       (~73 KB)   FSDP2 training</span><br><span class="line">│   ├── megatron_engine.py   (~77 KB)   Megatron-LM training (full parallelism)</span><br><span class="line">│   ├── sglang_remote.py     (~16 KB)   Remote inference via SGLang</span><br><span class="line">│   └── vllm_remote.py       (~17 KB)   Remote inference via vLLM</span><br><span class="line">├── experimental/ # Archon backend, new features</span><br><span class="line">├── infra/        # cluster, launchers, scheduling</span><br><span class="line">├── models/       # model loaders, checkpointing</span><br><span class="line">├── reward/       # reward functions (gsm8k, code, etc.)</span><br><span class="line">├── tools/        # utilities</span><br><span class="line">├── trainer/      # PPOTrainer, SFTTrainer, Distillation</span><br><span class="line">├── utils/</span><br><span class="line">└── workflow/     # rollout workflows</span><br><span class="line">    ├── rlvr.py           # RL-with-verifier rollout</span><br><span class="line">    ├── multi_turn.py     # multi-turn rollout</span><br><span class="line">    ├── vision_rlvr.py    # VLM rollout</span><br><span class="line">    ├── openai/           # OpenAI-compatible agent workflow</span><br><span class="line">    ├── openai_agent/     # OpenAI Agents SDK integration</span><br><span class="line">    ├── anthropic/        # Claude-compatible agent workflow</span><br><span class="line">    └── langchain/        # LangChain integration</span><br></pre></td></tr></table></figure></div>
+
+<p>The useful mental model is <strong>four horizontal layers</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>What it does</th>
+<th>Components</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Training</strong></td>
+<td>forward&#x2F;backward&#x2F;update</td>
+<td><code>engine/fsdp_engine.py</code>, <code>engine/megatron_engine.py</code>, <code>engine/experimental/archon/</code></td>
+</tr>
+<tr>
+<td><strong>Inference</strong></td>
+<td>generate rollouts</td>
+<td><code>engine/sglang_remote.py</code>, <code>engine/vllm_remote.py</code></td>
+</tr>
+<tr>
+<td><strong>Orchestration</strong></td>
+<td>gluing the two together</td>
+<td><code>trainer/</code>, <code>infra/</code> (Ray &#x2F; SLURM &#x2F; local schedulers)</td>
+</tr>
+<tr>
+<td><strong>Workflow</strong></td>
+<td>the rollout policy — including agent frameworks</td>
+<td><code>workflow/rlvr.py</code>, <code>workflow/multi_turn.py</code>, <code>workflow/openai/</code>, etc.</td>
+</tr>
+</tbody></table>
+<p>The separation of <strong>engine</strong> (how to train&#x2F;infer) from <strong>workflow</strong> (what the rollout actually does) is the right factoring for agent RL. A single workflow can be reused across many algorithms (GRPO, PPO, DAPO, RLOO, LitePPO, SAPO, M2PO — all 13+ algorithms share the workflow abstraction), and a single algorithm can run over many workflows (math verification, multi-turn tool use, vision-language, agent frameworks).</p>
+<h3 id="Training-backends"><a href="#Training-backends" class="headerlink" title="Training backends"></a>Training backends</h3><table>
+<thead>
+<tr>
+<th>Backend</th>
+<th>DP</th>
+<th>TP</th>
+<th>SP</th>
+<th>CP</th>
+<th>PP</th>
+<th>EP</th>
+<th>1D Packing</th>
+<th>LoRA</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Megatron</strong></td>
+<td>ZeRO-1</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅ (with vLLM)</td>
+</tr>
+<tr>
+<td><strong>PyTorch FSDP</strong></td>
+<td>FSDP2</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>PyTorch Archon</strong></td>
+<td>FSDP2</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+</tbody></table>
+<p>(DP &#x3D; data parallel, TP &#x3D; tensor parallel, SP &#x3D; sequence parallel, CP &#x3D; context parallel, PP &#x3D; pipeline parallel, EP &#x3D; expert parallel.)</p>
+<p>Megatron is the canonical &quot;all the parallelism&quot; choice; FSDP2 is the pragmatic default for most users; Archon is an experimental FSDP2-based backend that adds PP+EP without giving up LoRA incompatibility. The fact that all three are maintained side-by-side tells you something about the actual state of the distributed-training world — no single backend dominates for all model-size &#x2F; memory &#x2F; feature combinations.</p>
+<h3 id="Inference-backends"><a href="#Inference-backends" class="headerlink" title="Inference backends"></a>Inference backends</h3><table>
+<thead>
+<tr>
+<th>Backend</th>
+<th>TP</th>
+<th>CP</th>
+<th>PP</th>
+<th>DP Attention</th>
+<th>EP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>vLLM</strong></td>
+<td>✅</td>
+<td>?</td>
+<td>✅</td>
+<td>?</td>
+<td>?</td>
+</tr>
+<tr>
+<td><strong>SGLang</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<p>Both are supported because users want both. SGLang has better MoE &#x2F; expert-parallel support and is the default; vLLM has a larger user base and is the fallback.</p>
+<hr>
+<h2 id="4-The-Async-RL-Core-Idea"><a href="#4-The-Async-RL-Core-Idea" class="headerlink" title="4. The Async RL Core Idea"></a>4. The Async RL Core Idea</h2><p>Let&#39;s unpack what &quot;fully asynchronous&quot; actually means, because the term gets abused.</p>
+<h3 id="Synchronous-RL-what-AReaL-is-moving-away-from"><a href="#Synchronous-RL-what-AReaL-is-moving-away-from" class="headerlink" title="Synchronous RL (what AReaL is moving away from)"></a>Synchronous RL (what AReaL is moving away from)</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">step t:   [GENERATE rollouts with policy π_t] → [TRAIN on rollouts → π_&#123;t+1&#125;]</span><br><span class="line">step t+1: [GENERATE rollouts with policy π_&#123;t+1&#125;] → [TRAIN → π_&#123;t+2&#125;]</span><br><span class="line">...</span><br></pre></td></tr></table></figure></div>
+
+<p>Every rollout uses the current policy. No staleness, but lots of idle time.</p>
+<h3 id="Asynchronous-RL-AReaL-s-mode"><a href="#Asynchronous-RL-AReaL-s-mode" class="headerlink" title="Asynchronous RL (AReaL&#39;s mode)"></a>Asynchronous RL (AReaL&#39;s mode)</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">inference GPUs:   GENERATE (π_t) — GENERATE (π_&#123;t+1&#125;) — GENERATE (π_&#123;t+2&#125;) — ...</span><br><span class="line">training GPUs:              TRAIN (from π_&#123;t-k&#125;) — TRAIN (from π_&#123;t-k+1&#125;) — ...</span><br><span class="line">                                   ↑</span><br><span class="line">                        rollouts can be k versions stale</span><br></pre></td></tr></table></figure></div>
+
+<p>Inference and training are <strong>fully decoupled</strong>. The training GPU is always consuming rollouts; the inference GPU is always producing them. Weight updates are broadcast asynchronously to the inference workers.</p>
+<p>The price: <strong>off-policyness</strong>. A rollout generated by policy $\pi_{t-k}$ is used to train $\pi_t$. The further apart they are, the more the policy gradient estimator is biased.</p>
+<h3 id="Off-policyness-control"><a href="#Off-policyness-control" class="headerlink" title="Off-policyness control"></a>Off-policyness control</h3><p>AReaL exposes this directly as <code>max_head_offpolicyness</code>:</p>
+<div class="code-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">rollout:</span></span><br><span class="line">  <span class="attr">max_head_offpolicyness:</span> <span class="number">4</span>   <span class="comment"># allow up to 4 policy versions behind</span></span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li><code>0</code> → synchronous (useful for baseline comparisons, ~2× slower)</li>
+<li><code>2–8</code> → typical async range; bigger &#x3D; more throughput, less stability</li>
+<li>Very large → quality degrades</li>
+</ul>
+<p>What makes this a system-level design rather than an algorithm-level one: the <strong>partial rollouts</strong> idea. A single trajectory (especially a long reasoning chain) can span multiple policy versions — the first 4k tokens might come from $\pi_{t-2}$, the next 4k from $\pi_{t-1}$, etc. This is only possible because the inference side holds a KV cache that persists across weight updates.</p>
+<h3 id="The-decoupled-PPO-objective"><a href="#The-decoupled-PPO-objective" class="headerlink" title="The decoupled PPO objective"></a>The decoupled PPO objective</h3><p>Plain PPO assumes on-policy data. When the rollouts are off-policy, the ratio $r_t &#x3D; \frac{\pi_\theta(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)}$ can swing wildly. AReaL pairs async rollouts with two algorithmic knobs:</p>
+<div class="code-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">actor:</span></span><br><span class="line">  <span class="attr">use_decoupled_loss:</span> <span class="literal">true</span>     <span class="comment"># decoupled PPO</span></span><br><span class="line">  <span class="attr">recompute_logprobs:</span> <span class="literal">true</span>     <span class="comment"># recompute logprobs during training</span></span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li><strong><code>recompute_logprobs: true</code></strong> — don&#39;t trust the logprobs the inference engine returned; recompute them under the current training policy. This matters because inference backends (vLLM, SGLang) can use different numerics from training backends (Megatron, FSDP), and tiny differences compound.</li>
+<li><strong><code>use_decoupled_loss: true</code></strong> — use a variant of the PPO objective that separates the importance-sampling correction from the clipping, handling off-policyness more gracefully.</li>
+</ul>
+<p>These are knobs, not defaults for every case. The docs explicitly note that the decoupled loss &quot;may conflict with certain algorithm configurations (e.g., SAPO)&quot; and that effects on newer algorithms are &quot;largely understudied.&quot; That honesty is refreshing.</p>
+<hr>
+<h2 id="5-The-Proxy-—-Why-Just-Replace-base-url-Matters"><a href="#5-The-Proxy-—-Why-Just-Replace-base-url-Matters" class="headerlink" title="5. The Proxy — Why &quot;Just Replace base_url&quot; Matters"></a>5. The Proxy — Why &quot;Just Replace <code>base_url</code>&quot; Matters</h2><p>This is the single most interesting design choice in AReaL, and it&#39;s worth explaining because it&#39;s the kind of thing that&#39;s easy to under-appreciate from the README.</p>
+<h3 id="The-agent-RL-problem-precisely"><a href="#The-agent-RL-problem-precisely" class="headerlink" title="The agent RL problem, precisely"></a>The agent RL problem, precisely</h3><p>You have an agent loop that looks like this:</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Your existing agent code, unchanged</span></span><br><span class="line">client = AsyncOpenAI(base_url=OPENAI_URL, api_key=OPENAI_KEY)</span><br><span class="line"><span class="keyword">for</span> turn <span class="keyword">in</span> <span class="built_in">range</span>(max_turns):</span><br><span class="line">    response = <span class="keyword">await</span> client.chat.completions.create(</span><br><span class="line">        messages=conversation,</span><br><span class="line">        tools=tools,</span><br><span class="line">        <span class="comment"># ...</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment"># parse response, call tools, append to conversation, etc.</span></span><br></pre></td></tr></table></figure></div>
+
+<p>For RL you need:</p>
+<ol>
+<li>The <strong>token IDs</strong> Claude&#x2F;GPT&#x2F;whatever actually produced (not the decoded text).</li>
+<li>The <strong>logprobs</strong> under the generating policy.</li>
+<li>A <strong>reward signal</strong> for each trajectory.</li>
+<li>A way to collect <strong>many trajectories in parallel</strong> so you can compute advantages.</li>
+</ol>
+<p>Chat-completions APIs don&#39;t give you (1) or (2). They don&#39;t expect a (3). And parallelism in agent frameworks is often serial-by-default.</p>
+<h3 id="What-the-proxy-does"><a href="#What-the-proxy-does" class="headerlink" title="What the proxy does"></a>What the proxy does</h3><p>AReaL runs an HTTP server that <strong>speaks OpenAI chat-completions</strong> but is wired into its own inference engine (SGLang or vLLM). When the agent sends a request, the proxy:</p>
+<ul>
+<li>Routes it to the inference engine.</li>
+<li>Records the exact token IDs and logprobs.</li>
+<li>Tracks which trajectory this request belongs to (via session IDs).</li>
+<li>Returns an OpenAI-shaped response.</li>
+</ul>
+<p>At episode end, you call the reward function. The proxy stitches together the full trajectory — every turn, every tool call, every token — and hands it to the trainer as a single trainable rollout.</p>
+<p>So the user&#39;s code changes by exactly <strong>one line</strong>:</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Before</span></span><br><span class="line">client = AsyncOpenAI(base_url=<span class="string">&quot;https://api.openai.com/v1&quot;</span>, api_key=OPENAI_KEY)</span><br><span class="line"><span class="comment"># After</span></span><br><span class="line">client = AsyncOpenAI(base_url=<span class="string">&quot;http://areal-proxy:8000/v1&quot;</span>, api_key=AREAL_KEY)</span><br></pre></td></tr></table></figure></div>
+
+<p>That&#39;s it. The rest of the agent (tools, memory, prompts, retry logic) is unchanged.</p>
+<h3 id="Why-this-is-the-right-design"><a href="#Why-this-is-the-right-design" class="headerlink" title="Why this is the right design"></a>Why this is the right design</h3><p>Agent frameworks churn. LangChain in 2023 vs. 2026 is a different library. OpenAI Agents SDK didn&#39;t exist two years ago. CAMEL is on its third major version. A training system that required agent-framework-specific adapters would be permanently chasing.</p>
+<p>By targeting the <strong>protocol</strong> (OpenAI chat completions) rather than the <strong>framework</strong>, AReaL future-proofs itself: every new framework that wants to be popular ends up supporting chat completions, and they all work with AReaL for free.</p>
+<p>This is the same design principle as LSP (Language Server Protocol) for editors, or OCI for container runtimes: <strong>standardize the wire format, not the implementation</strong>.</p>
+<h3 id="The-tradeoff"><a href="#The-tradeoff" class="headerlink" title="The tradeoff"></a>The tradeoff</h3><p>You can only train what the protocol exposes. If your agent does something clever with logit biases, speculative decoding, or non-standard sampling parameters, the proxy may not support it. The proxy is a funnel — it works beautifully for 95% of agent code, and for the remaining 5% you need the workflow-level integration (which AReaL also provides — see <code>workflow/openai_agent/</code>, <code>workflow/langchain/</code>).</p>
+<hr>
+<h2 id="6-The-Algorithm-Menagerie"><a href="#6-The-Algorithm-Menagerie" class="headerlink" title="6. The Algorithm Menagerie"></a>6. The Algorithm Menagerie</h2><p>AReaL supports 13+ RL &#x2F; fine-tuning algorithms out of the box:</p>
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>What it&#39;s good at</th>
+<th>Paper</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>PPO</strong></td>
+<td>baseline classic</td>
+<td><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/pdf/2203.02155" >arXiv:2203.02155<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></td>
+</tr>
+<tr>
+<td><strong>GRPO</strong></td>
+<td>group-relative advantage, dominant on reasoning</td>
+<td><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/pdf/2402.03300" >arXiv:2402.03300<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></td>
+</tr>
+<tr>
+<td><strong>GSPO</strong></td>
+<td>GRPO variant</td>
+<td><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2507.18071" >arXiv:2507.18071<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></td>
+</tr>
+<tr>
+<td><strong>DAPO</strong></td>
+<td>dynamic batch size</td>
+<td><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2503.14476" >arXiv:2503.14476<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></td>
+</tr>
+<tr>
+<td><strong>LitePPO</strong></td>
+<td>lighter-weight PPO</td>
+<td><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2508.08221" >arXiv:2508.08221<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></td>
+</tr>
+<tr>
+<td><strong>Dr.GRPO</strong></td>
+<td>GRPO variant</td>
+<td><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2503.20783" >arXiv:2503.20783<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></td>
+</tr>
+<tr>
+<td><strong>REINFORCE++</strong></td>
+<td></td>
+<td><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/pdf/2501.03262" >arXiv:2501.03262<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></td>
+</tr>
+<tr>
+<td><strong>RLOO</strong></td>
+<td>leave-one-out advantage</td>
+<td><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/pdf/2402.14740v1" >arXiv:2402.14740<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></td>
+</tr>
+<tr>
+<td><strong>SAPO</strong></td>
+<td></td>
+<td><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2511.20347" >arXiv:2511.20347<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></td>
+</tr>
+<tr>
+<td><strong>M2PO</strong></td>
+<td></td>
+<td><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2510.01161" >arXiv:2510.01161<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></td>
+</tr>
+<tr>
+<td><strong>SFT</strong></td>
+<td>supervised fine-tuning</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>RLHF reward modeling</strong></td>
+<td></td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>Distillation</strong></td>
+<td></td>
+<td><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/pdf/2506.02208" >arXiv:2506.02208<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></td>
+</tr>
+</tbody></table>
+<p>This is a specific design choice: <strong>ship many algorithms, let the user pick</strong>. The alternative (ship one algorithm, optimize it hard) is what VeRL and OpenRLHF tend toward. AReaL&#39;s bet is that the RL-for-LLM field is moving fast enough that the &quot;best&quot; algorithm changes every six months, and a framework that supports many is more future-proof than one that hard-codes a single choice.</p>
+<p>In practice: most users run GRPO. The others are there for research &#x2F; niche cases.</p>
+<hr>
+<h2 id="7-Examples-—-What-s-Shipped"><a href="#7-Examples-—-What-s-Shipped" class="headerlink" title="7. Examples — What&#39;s Shipped"></a>7. Examples — What&#39;s Shipped</h2><p>The <code>examples/</code> directory is the real documentation:</p>
+<table>
+<thead>
+<tr>
+<th>Example</th>
+<th>What it demonstrates</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>math/gsm8k_rl.py</code></td>
+<td>baseline GRPO on GSM8K — the default starter</td>
+</tr>
+<tr>
+<td><code>multi_turn_math/</code></td>
+<td>multi-turn math with intermediate reasoning</td>
+</tr>
+<tr>
+<td><code>tir/</code></td>
+<td>tool-integrated reasoning (code execution in the loop)</td>
+</tr>
+<tr>
+<td><code>openclaw/</code></td>
+<td>agent RL via OpenClaw — the &quot;just replace base_url&quot; demo</td>
+</tr>
+<tr>
+<td><code>openai_agents/</code></td>
+<td>OpenAI Agents SDK integration</td>
+</tr>
+<tr>
+<td><code>camel/</code></td>
+<td>CAMEL multi-agent integration</td>
+</tr>
+<tr>
+<td><code>tau2/</code></td>
+<td>τ²-bench (customer service agents) — the AReaL-SEA example</td>
+</tr>
+<tr>
+<td><code>search_agent/</code></td>
+<td>ASearcher, a search agent that set SOTA</td>
+</tr>
+<tr>
+<td><code>countdown/</code></td>
+<td>countdown game (hard reasoning &#x2F; search)</td>
+</tr>
+<tr>
+<td><code>alignment/</code></td>
+<td>RLHF reward modeling</td>
+</tr>
+<tr>
+<td><code>distillation/</code></td>
+<td>distillation workflows</td>
+</tr>
+<tr>
+<td><code>vlm/</code>, <code>vlm_npu/</code></td>
+<td>vision-language models</td>
+</tr>
+<tr>
+<td><code>tau2/</code> (SEA)</td>
+<td>self-evolving data synthesis — the 235B MoE model that beat GPT-5 on τ²</td>
+</tr>
+</tbody></table>
+<p>Two of these are worth singling out:</p>
+<h3 id="openclaw-—-the-headline-demo"><a href="#openclaw-—-the-headline-demo" class="headerlink" title="openclaw/ — the headline demo"></a><code>openclaw/</code> — the headline demo</h3><p>OpenClaw is a terminal-focused agent runtime. The training recipe is:</p>
+<ol>
+<li>Start AReaL&#39;s RL service — it spins up a proxy at <code>http://x.x.x.x:port</code>.</li>
+<li>Point OpenClaw at that proxy via its existing <code>--base-url</code> flag.</li>
+<li>Run a workload (command-line tasks, shell sessions, etc.).</li>
+<li>Rewards come from task-completion signals.</li>
+<li>AReaL harvests trajectories and updates the policy.</li>
+</ol>
+<p>No OpenClaw code is modified. This is the &quot;bring your own agent&quot; promise, made concrete.</p>
+<h3 id="tau2-—-the-SEA-self-evolving-agent-example"><a href="#tau2-—-the-SEA-self-evolving-agent-example" class="headerlink" title="tau2/ — the SEA (self-evolving agent) example"></a><code>tau2/</code> — the SEA (self-evolving agent) example</h3><p>AReaL-SEA pairs RL training with <strong>self-evolving data synthesis</strong>. A 235B MoE model, trained this way, reportedly surpasses GPT-5 on $\tau^2$-bench (customer service). The interesting bit isn&#39;t the model itself but the recipe: the training data for RL is generated adversarially by the agent, not collected from humans. This is closer to AlphaZero-style self-play than to traditional RLHF.</p>
+<hr>
+<h2 id="8-AReaL-lite-—-The-Lightweight-Variant"><a href="#8-AReaL-lite-—-The-Lightweight-Variant" class="headerlink" title="8. AReaL-lite — The Lightweight Variant"></a>8. AReaL-lite — The Lightweight Variant</h2><p>As of 2025-07-31, AReaL also ships <strong>AReaL-lite</strong>:</p>
+<ul>
+<li>80% fewer lines of code than full AReaL</li>
+<li>90% of the performance and core functionality</li>
+<li>&quot;Algorithm-first&quot; API (easy to experiment, hard to deploy at huge scale)</li>
+<li>Natively supports fully asynchronous agentic RL</li>
+</ul>
+<p>This is an increasingly common pattern in ML infra: a &quot;production&quot; codebase for the organization that built the system, and a &quot;research&quot; codebase that&#39;s a cleaner subset for external researchers. vLLM vs. vllm-lite, DeepSpeed vs. simpler trainer wrappers, etc. The split acknowledges that the constraints of running at Ant Group&#39;s scale are different from the constraints of running a postdoc&#39;s experiments.</p>
+<p>For a researcher, the lite variant is usually the right entry point. For a production system, the full framework has things the lite version doesn&#39;t (full Megatron backend, every parallelism dimension, every scheduler).</p>
+<hr>
+<h2 id="9-Connection-to-the-Agent-Design-Philosophy"><a href="#9-Connection-to-the-Agent-Design-Philosophy" class="headerlink" title="9. Connection to the Agent Design Philosophy"></a>9. Connection to the Agent Design Philosophy</h2><p>Compared to the <a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">Claude Code</a> and <a href="/2026/04/22/QED-Multi-Agent-Math-Proof-Pipeline/">QED</a> perspectives we&#39;ve looked at, AReaL sits at a very different altitude:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Example</th>
+<th>Who it&#39;s for</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Application</strong></td>
+<td>a specific agent (e.g., OpenClaw, a math prover)</td>
+<td>end users</td>
+</tr>
+<tr>
+<td><strong>Orchestration</strong></td>
+<td>Claude Code (tool use), QED (multi-agent pipeline)</td>
+<td>agent builders</td>
+</tr>
+<tr>
+<td><strong>Training infra</strong></td>
+<td><strong>AReaL</strong></td>
+<td>model trainers</td>
+</tr>
+<tr>
+<td><strong>Serving infra</strong></td>
+<td>vLLM, SGLang</td>
+<td>platform ops</td>
+</tr>
+</tbody></table>
+<p>AReaL is <strong>below</strong> the orchestration layer — it&#39;s the substrate that produces the model that the orchestration layer then uses. But interestingly, the design principles still rhyme:</p>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>In Claude Code &#x2F; QED</th>
+<th>In AReaL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Tools shaped to model abilities</strong></td>
+<td>CLI subprocesses, one per vendor</td>
+<td>Separate backends (FSDP &#x2F; Megatron &#x2F; Archon) for different model scales</td>
+</tr>
+<tr>
+<td><strong>Progressive disclosure</strong></td>
+<td>Lazy-loaded skill bodies</td>
+<td>Lazy-loaded agent workflows via the proxy</td>
+</tr>
+<tr>
+<td><strong>Standardize the wire format, not the framework</strong></td>
+<td>OpenAI-style <code>tools[]</code> in the API</td>
+<td>OpenAI-style chat completions for the proxy</td>
+</tr>
+<tr>
+<td><strong>Off-loading cost to the right place</strong></td>
+<td>Prompt caching (amortize over session)</td>
+<td>Async GPU pools (amortize generation over training)</td>
+</tr>
+<tr>
+<td><strong>Give users the knobs explicitly</strong></td>
+<td>Prose imperatives in system prompt</td>
+<td><code>max_head_offpolicyness</code> exposed in YAML</td>
+</tr>
+</tbody></table>
+<p>The deepest parallel is point 3: AReaL&#39;s proxy and Claude Code&#39;s Skill system both work by <strong>standardizing a wire format that already exists and is ubiquitous</strong> (OpenAI chat completions, Anthropic tool use) rather than inventing a new one. Every agent framework already speaks chat completions; every LLM API already supports tool use. Building on those substrates is how you get composability for free.</p>
+<hr>
+<h2 id="10-What-I-Think-Is-Missing-or-Risky"><a href="#10-What-I-Think-Is-Missing-or-Risky" class="headerlink" title="10. What I Think Is Missing or Risky"></a>10. What I Think Is Missing or Risky</h2><p>A few places where I&#39;d want to dig in more:</p>
+<ul>
+<li><strong>Proxy compatibility is protocol-first, which means &quot;almost OpenAI&quot; agents may break.</strong> If your framework uses logit bias, response_format, streaming tool calls, or other non-mainstream fields, the proxy may need updates. The README is explicit that the proxy works with chat completions; anything outside that boundary needs the workflow-level integration.</li>
+<li><strong>Async quality claims are benchmark-specific.</strong> The 2.77× speedup is reported on their benchmark setup (GSM8K, mid-sized models). At larger scale (235B MoE on τ²), throughput wins compound differently — you need to benchmark your own case.</li>
+<li><strong>Off-policyness is a footgun.</strong> Crank <code>max_head_offpolicyness</code> up and throughput goes up; too high and training destabilizes silently. This is the kind of knob that needs guardrails (monitoring, automatic back-off) that the framework doesn&#39;t provide out of the box.</li>
+<li><strong>Scheduler compatibility.</strong> The docs note that agent workflows with the proxy approach are &quot;supported on <code>local</code> and <code>slurm</code> schedulers only&quot;; Ray is excluded because Ray&#39;s actor model doesn&#39;t play well with persistent HTTP connections. If your cluster is Ray-based, you can do synchronous RL but not the headline async-agent story.</li>
+<li><strong>Security.</strong> RL-finetuned agents can develop surprising behaviors; the README warns about this explicitly for OpenClaw. If you&#39;re training a tool-using agent, the proxy is by definition giving the model real tool-execution capability. Isolation matters.</li>
+</ul>
+<p>None of these are dealbreakers; they&#39;re the honest shape of the problem.</p>
+<hr>
+<h2 id="11-What-s-Worth-Stealing"><a href="#11-What-s-Worth-Stealing" class="headerlink" title="11. What&#39;s Worth Stealing"></a>11. What&#39;s Worth Stealing</h2><p>Even if you never run AReaL, four of its design moves are worth adopting:</p>
+<h3 id="a-Separate-your-engines-from-your-workflows"><a href="#a-Separate-your-engines-from-your-workflows" class="headerlink" title="(a) Separate your engines from your workflows"></a>(a) Separate your engines from your workflows</h3><p>The <code>engine/</code> vs. <code>workflow/</code> split is a clean API boundary. Engines know how to generate tokens and compute gradients; workflows know what the rollout <em>means</em> (a math problem, a customer service chat, a tool-using agent). Keep them decoupled and you can reuse either without rewriting the other.</p>
+<h3 id="b-Target-the-protocol-not-the-framework"><a href="#b-Target-the-protocol-not-the-framework" class="headerlink" title="(b) Target the protocol, not the framework"></a>(b) Target the protocol, not the framework</h3><p>If you&#39;re building something agent-adjacent (a logger, a monitoring tool, a training system, an evaluation harness), <strong>pick an existing protocol</strong> (OpenAI chat completions, Anthropic Messages, MCP) and speak it natively. Don&#39;t invent a new one. Your users will point their existing code at you and you&#39;ll get the network effect for free.</p>
+<h3 id="c-Expose-the-algorithmic-knobs-don-t-hide-them"><a href="#c-Expose-the-algorithmic-knobs-don-t-hide-them" class="headerlink" title="(c) Expose the algorithmic knobs, don&#39;t hide them"></a>(c) Expose the algorithmic knobs, don&#39;t hide them</h3><p><code>max_head_offpolicyness</code>, <code>use_decoupled_loss</code>, <code>recompute_logprobs</code> — these are the exact levers a researcher needs to tune. Hiding them behind &quot;stability&quot; defaults would make the system harder to use, not easier. Documentation + defaults that work for the common case + knobs that advanced users can pull is the right combination.</p>
+<h3 id="d-Ship-many-algorithms-commit-to-none"><a href="#d-Ship-many-algorithms-commit-to-none" class="headerlink" title="(d) Ship many algorithms, commit to none"></a>(d) Ship many algorithms, commit to none</h3><p>PyTorch&#39;s &quot;many losses, many optimizers, you pick&quot; philosophy applies to RL too. A framework that ships one algorithm is betting that algorithm will still be the right one in a year. AReaL&#39;s approach — 13 algorithms, shared workflow abstraction — amortizes the &quot;which algorithm is best&quot; question over whoever uses the framework next.</p>
+<hr>
+<h2 id="12-Final-Read"><a href="#12-Final-Read" class="headerlink" title="12. Final Read"></a>12. Final Read</h2><p>AReaL is the kind of infrastructure that doesn&#39;t get the marketing attention of a new model release, but is what makes new model releases possible. It&#39;s solving a system-level bottleneck (GPU idleness in synchronous RL) with a system-level answer (asynchronous training with principled off-policyness control), and then extending that substrate outward to agent frameworks via a protocol-level bridge (the OpenAI-compatible proxy).</p>
+<p>The &quot;just replace <code>base_url</code>&quot; promise is the most memorable part, but it&#39;s only one expression of a deeper commitment: <strong>meet the ecosystem where it lives</strong>. Agents speak chat completions. Training speaks Megatron &#x2F; FSDP &#x2F; Archon. Inference speaks vLLM &#x2F; SGLang. AReaL doesn&#39;t try to replace any of these — it provides the missing glue that turns them into a training loop.</p>
+<p>If you&#39;re doing serious RL work on LLMs, it&#39;s worth a weekend to stand up a GSM8K GRPO run and read through <code>workflow/rlvr.py</code>. If you&#39;re building agents and want to fine-tune them without rewriting, the <code>openclaw/</code> example is 90% of the story. And if you&#39;re just curious about how a 2026-era RL system is architected, reading <code>engine/fsdp_engine.py</code> next to <code>engine/megatron_engine.py</code> is the clearest picture of what &quot;pick your parallelism&quot; actually looks like in production code.</p>
+<p>The broader pattern — that RL for LLMs has now moved from <strong>&quot;which algorithm?&quot;</strong> to <strong>&quot;which system architecture?&quot;</strong> — is worth sitting with. Sample efficiency of PPO vs. GRPO matters less than whether your inference fleet is saturated, whether your off-policyness controller is stable, whether your proxy can handle agent traffic, whether your checkpoint interval matches your cluster&#39;s MTBF. That&#39;s the layer AReaL operates on, and it&#39;s where the field is going.</p>
+<hr>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><strong>Repo:</strong> <a target="_blank" rel="noopener" href="https://github.com/inclusionAI/AReaL"><code>inclusionAI/AReaL</code></a></li>
+<li><strong>Paper:</strong> <a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/pdf/2505.24298" >AReaL: A Large-Scale Asynchronous Reinforcement Learning System for Language Reasoning (arXiv 2505.24298)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><strong>Prior work:</strong> <a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2505.24298" >ReaLHF (MLSys 2025)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — the synchronous predecessor</li>
+<li><strong>Related projects built on AReaL:</strong><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/inclusionAI/ASearcher" >ASearcher<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — search agent, SOTA on search tasks</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://huggingface.co/inclusionAI/AReaL-SEA-235B-A22B" >AReaL-SEA<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — self-evolving 235B MoE model</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/camel-ai/seta" >CAMEL-SETA<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — terminal agent RL</li>
+</ul>
+</li>
+<li><strong>Related posts on this blog:</strong><ul>
+<li><a href="/2026/04/22/QED-Multi-Agent-Math-Proof-Pipeline/">QED — Multi-Agent Math Proof Pipeline</a> — a different kind of multi-model system</li>
+<li><a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">From Wire Format to Design Philosophy</a> — the &quot;target the protocol, not the framework&quot; idea, applied to extensibility</li>
+</ul>
+</li>
+</ul>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> AReaL — Asynchronous RL Infrastructure for LLM Agents</li>
+        <li><strong>Author:</strong> wy</li>
+        <li><strong>Created at
+                :</strong> 2026-04-22 18:00:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2026-04-22 15:32:22
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://yue-ruby-w.site/2026/04/22/AReaL-Asynchronous-RL-for-Agents/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/LLM/">#LLM</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Agent-Design/">#Agent Design</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Reinforcement-Learning/">#Reinforcement Learning</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Distributed-Systems/">#Distributed Systems</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/04/22/QED-Multi-Agent-Math-Proof-Pipeline/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">QED — A Multi-Agent Math Proof Pipeline Built on CLI Subprocesses</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">AReaL — Asynchronous RL Infrastructure for LLM Agents</div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#AReaL-%E2%80%94-Asynchronous-RL-Infrastructure-for-LLM-Agents"><span class="nav-text">AReaL — Asynchronous RL Infrastructure for LLM Agents</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-High-Level-Indication"><span class="nav-text">1. High-Level Indication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-The-Problem-AReaL-Is-Trying-to-Solve"><span class="nav-text">2. The Problem AReaL Is Trying to Solve</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-The-GPU-idleness-pain"><span class="nav-text">(a) The GPU-idleness pain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-The-agent-framework-impedance-mismatch"><span class="nav-text">(b) The agent-framework impedance mismatch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-AReaL-proposes"><span class="nav-text">What AReaL proposes</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Architecture-Tour"><span class="nav-text">3. Architecture Tour</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Training-backends"><span class="nav-text">Training backends</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inference-backends"><span class="nav-text">Inference backends</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-The-Async-RL-Core-Idea"><span class="nav-text">4. The Async RL Core Idea</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Synchronous-RL-what-AReaL-is-moving-away-from"><span class="nav-text">Synchronous RL (what AReaL is moving away from)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Asynchronous-RL-AReaL-s-mode"><span class="nav-text">Asynchronous RL (AReaL&#39;s mode)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Off-policyness-control"><span class="nav-text">Off-policyness control</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-decoupled-PPO-objective"><span class="nav-text">The decoupled PPO objective</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-The-Proxy-%E2%80%94-Why-Just-Replace-base-url-Matters"><span class="nav-text">5. The Proxy — Why &quot;Just Replace base_url&quot; Matters</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-agent-RL-problem-precisely"><span class="nav-text">The agent RL problem, precisely</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-the-proxy-does"><span class="nav-text">What the proxy does</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Why-this-is-the-right-design"><span class="nav-text">Why this is the right design</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-tradeoff"><span class="nav-text">The tradeoff</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-The-Algorithm-Menagerie"><span class="nav-text">6. The Algorithm Menagerie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Examples-%E2%80%94-What-s-Shipped"><span class="nav-text">7. Examples — What&#39;s Shipped</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#openclaw-%E2%80%94-the-headline-demo"><span class="nav-text">openclaw&#x2F; — the headline demo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tau2-%E2%80%94-the-SEA-self-evolving-agent-example"><span class="nav-text">tau2&#x2F; — the SEA (self-evolving agent) example</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-AReaL-lite-%E2%80%94-The-Lightweight-Variant"><span class="nav-text">8. AReaL-lite — The Lightweight Variant</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-Connection-to-the-Agent-Design-Philosophy"><span class="nav-text">9. Connection to the Agent Design Philosophy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-What-I-Think-Is-Missing-or-Risky"><span class="nav-text">10. What I Think Is Missing or Risky</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-What-s-Worth-Stealing"><span class="nav-text">11. What&#39;s Worth Stealing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-Separate-your-engines-from-your-workflows"><span class="nav-text">(a) Separate your engines from your workflows</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-Target-the-protocol-not-the-framework"><span class="nav-text">(b) Target the protocol, not the framework</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-Expose-the-algorithmic-knobs-don-t-hide-them"><span class="nav-text">(c) Expose the algorithmic knobs, don&#39;t hide them</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-Ship-many-algorithms-commit-to-none"><span class="nav-text">(d) Ship many algorithms, commit to none</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-Final-Read"><span class="nav-text">12. Final Read</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-text">References</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">wy</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        28 posts in total
+                    </span>
+                    
+                        <span>
+                            20k words in total
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.9.0</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+            
+                
+        
+                
+        
+                
+
+                    
+                        <script data-swup-reload-script>document.addEventListener('DOMContentLoaded',function(){if(document.querySelector('meta[name="notebook"]')){document.querySelector('.article-container')?.classList.add('notebook')}})</script>
+                    
+        
+                
+
+                    
+                        <script data-swup-reload-script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+                    
+        
+                
+
+                    
+                        <script data-swup-reload-script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});window.addEventListener('hexo-blog-decrypt',function(){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})})"></script>
+                    
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container" role="dialog" aria-modal="true" aria-label="Image viewer">
+	<button class="image-viewer-close" type="button" aria-label="Close">
+		<i class="fa-solid fa-xmark"></i>
+	</button>
+	<button class="image-viewer-prev" type="button" aria-label="Prev">
+		<i class="fa-solid fa-chevron-left"></i>
+	</button>
+	<div class="image-viewer-frame">
+		<img src="" alt="">
+	</div>
+	<div class="image-viewer-exif-panel hidden absolute left-1/2 bottom-20 -translate-x-1/2 w-[min(92vw,420px)] max-h-[60vh] overflow-hidden rounded-2xl bg-background-color-transparent-80 p-4 text-left shadow-redefine-flat backdrop-blur-md" role="dialog" aria-label="EXIF" aria-hidden="true">
+		<div class="flex items-center justify-between mb-3">
+			<span class="text-sm font-semibold text-first-text-color">EXIF</span>
+			<button class="image-viewer-exif-close flex h-8 w-8 items-center justify-center rounded-full bg-background-color-transparent-80 text-first-text-color transition hover:bg-background-color-transparent-40" type="button" aria-label="Close">
+				<i class="fa-solid fa-xmark text-[0.65rem]"></i>
+			</button>
+		</div>
+		<div class="image-viewer-exif-cards grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-1 scrollbar-hide"></div>
+		<template class="image-viewer-exif-card-template">
+			<div class="rounded-lg bg-background-color-transparent-40 px-3 py-2">
+				<div class="image-viewer-exif-card-header flex items-center gap-2 mb-1">
+					<i class="image-viewer-exif-card-icon fa-solid fa-circle-info text-xs text-third-text-color"></i>
+					<div class="image-viewer-exif-card-title text-xs font-semibold text-first-text-color"></div>
+				</div>
+				<div class="image-viewer-exif-card-items flex flex-col gap-1"></div>
+			</div>
+		</template>
+	</div>
+	<button class="image-viewer-exif-toggle flex items-center gap-2 hidden absolute left-1/2 bottom-6 -translate-x-1/2 rounded-full border border-border-color bg-background-color-transparent-80 px-4 py-2 text-first-text-color backdrop-blur-md transition hover:bg-background-color-transparent-40" type="button" aria-label="EXIF" aria-expanded="false">
+		<i class="fa-solid fa-circle-info text-xs"></i>
+		<span class="text-xs font-semibold uppercase tracking-wider">EXIF</span>
+	</button>
+	<button class="image-viewer-next" type="button" aria-label="Next">
+		<i class="fa-solid fa-chevron-right"></i>
+	</button>
+</div>
+
+
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    window.swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+
+    window.dispatchEvent(
+        new CustomEvent("redefine:swup:ready", {
+            detail: {
+                swup: window.swup,
+            },
+        }),
+    );
+</script>
+
+
+
+
+	
+<script src="/js/build/main.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+
+	
+</body>
+
+</html>
