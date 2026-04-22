@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    
+    <meta name="author" content="wy">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://yue-ruby-w.site/2026/04/22/qed-multi-agent-math-proof-pipeline/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+        
+        <meta name="description" content="Ruby&#39;s Blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QED — A Multi-Agent Math Proof Pipeline Built on CLI Subprocesses">
+<meta property="og:url" content="https://yue-ruby-w.site/2026/04/22/QED-Multi-Agent-Math-Proof-Pipeline/index.html">
+<meta property="og:site_name" content="hola">
+<meta property="og:description" content="Ruby&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-22T09:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-22T06:52:34.337Z">
+<meta property="article:author" content="wy">
+<meta property="article:tag" content="Agent Design">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="Math">
+<meta property="article:tag" content="Multi-Agent">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/favicon.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            QED — A Multi-Agent Math Proof Pipeline Built on CLI Subprocesses | hola
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+        
+            
+    
+            
+    
+            
+                
+                    <link rel="stylesheet" href="/css/notebook.css">
+                
+    
+            
+                
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+                
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+        <link href="/fonts/Geist/geist.css" rel="stylesheet">
+    
+    
+        <link href="/fonts/Chillax/chillax.css" rel="stylesheet">
+    
+    
+        
+<script src="/js/build/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"yue-ruby-w.site","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"Recommended","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":true,"family":"Geist","url":"/fonts/Geist/geist.css"},"title":{"enable":true,"family":"Chillax","url":"/fonts/Chillax/chillax.css"}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":true,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":null,"description":"Ruby's Blog"},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-8oxg61.jpg","dark":"/images/wallhaven-8oxg61.jpg"},"title":"Ruby's Blog","subtitle":{"text":["Hi!","你好～"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":[{"icon":"fa-brands fa-github","url":"https://github.com/yuuee-www"},{"icon":"fa-solid fa-at","url":"mailto:wy@yue-ruby-w.site"},{"icon":"fa-solid fa-at","url":"you@example.com"},{"icon":"fa-brands fa-telegram","url":null},{"icon":"/images/custom-icon.svg","url":null}],"qrs":[{"icon":"fa-brands fa-weixin","qr":null},{"icon":"/images/custom-icon.svg","qr":null}]}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1","theme":{"light":"default","dark":"dark"}}},"version":"2.9.0","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur","masonry":{"batch_size":12,"initial_batch_size":24}},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footer":{"runtime":true,"icon":"<i class=\"fa-solid fa-heart fa-beat\" style=\"--fa-animation-duration: 0.5s; color: #f54545\"></i>","start":"2023/06/13 00:00:00","statistics":true,"customize":null,"icp":{"enable":false,"number":null,"url":null}},"footerStart":"2023/06/13 00:00:00","mermaid":{"style":{"light":"default","dark":"dark"}}};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.i18n = {"search":"Search...","toc":"On this page","prev":"Prev","next":"Next","prev_posts":"Prev posts","next_posts":"Next posts","page":"Page %d","recent_posts":"Recent Posts","share":"Share","powered_by":"POWERED BY %s","theme":"THEME","rss_feed":"RSS Feed","category":"Category","categories":"Categories","tag":"Tag","tags":"Tags","post":"Post","posts":"Posts","tagcloud":"Tag Cloud","comment":"Comment","comments":"Comments","home":"Home","archive":"Archive","archives":"Archives","top":"TOP","sticky":"Sticky","go-back-home":"Go Back Home","masonry_loading":"Loading photos...","image_viewer":"Image viewer","close":"Close","exif":{"title":"EXIF","cards":{"camera":"Camera","lens":"Lens","exposure":"Exposure","other":"Other"},"fields":{"make":"Brand","model":"Model","date_taken":"Date taken","lens_model":"Lens","focal_length":"Focal length","focus_mode":"Focus mode","shutter":"Shutter","aperture":"Aperture","iso":"ISO","exposure_program":"Exposure program","exposure_compensation":"Exposure compensation","metering_mode":"Metering mode","flash":"Flash","white_balance":"White balance","latitude":"Latitude","longitude":"Longitude","altitude":"Altitude"},"status":{"loading":"Loading...","no_exif":"No EXIF available","library_missing":"EXIF library not loaded","image_source_missing":"Image source unavailable","unavailable":"EXIF unavailable (blocked by CORS or missing metadata)","flag_unavailable":"EXIF unavailable"}},"about":"About","changelog":"Changelog","links":"Links","link":"Link","friends":"Friends","friend":"Friend","timeline":"Timeline","shuoshuo":"Shuoshuo","bookmarks":"Bookmarks","site_uv":"VISITOR COUNT","site_pv":"TOTAL PAGE VIEWS","read_more":"Read more","wordcount":"Words","min2read":"Mins","status":"Status","runtime":"Blog up for","days":"days","hours":"hrs","minutes":"Min","seconds":"Sec","optimized_by":"and Optimized by Evan","rights":"All Rights Reserved","site_posts":"%s posts in total","site_wordcount":"%s words in total","copyright":{"author":"Author","title":"Title","link":"Link","create_time":"Created at","update_time":"Updated at","license_title":"License","license_content":"This work is licensed under %s.","all_rights_reserved":"All Rights Reserved &#169; %s","public_domain":"This work is in the public domain."},"ago":{"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"},"create_time":"Created","update_time":"Updated","expired":"This post is written %s days ago, and the content may not be up to date."};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        hola
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({ loop: true })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [20, 0],
+                translateZ: 0,
+                opacity: [0, 1],
+                filter: ['blur(5px)', 'blur(0px)'],
+                easing: "easeOutExpo",
+                duration: 1200,
+                delay: (el, i) => 300 + 20 * i,
+            })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [0, -20],
+                opacity: [1, 0],
+                filter: ['blur(0px)', 'blur(5px)'],
+                easing: "easeInExpo",
+                duration: 1000,
+                delay: (el, i) => 15 * i,
+                complete: function() {
+                    hidePreloader();
+                }
+            }, '-=700');
+
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                hola
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/categories"
+                        >
+                            <span>Categories</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">27</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">QED — A Multi-Agent Math Proof Pipeline Built on CLI Subprocesses</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/images/redefine-avatar.svg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">wy</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-04-22 17:00</span>
+        <span class="mobile">2026-04-22 17:00</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-04-22 14:52:34</span>
+            <span class="mobile">2026-04-22 14:52:34</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/Projects/">Projects</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/LLM/">LLM</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Agent-Design/">Agent Design</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Math/">Math</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Multi-Agent/">Multi-Agent</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3.7k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>23 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h1 id="QED-—-A-Multi-Agent-Math-Proof-Pipeline"><a href="#QED-—-A-Multi-Agent-Math-Proof-Pipeline" class="headerlink" title="QED — A Multi-Agent Math Proof Pipeline"></a>QED — A Multi-Agent Math Proof Pipeline</h1><p><strong>Repo:</strong> <a target="_blank" rel="noopener" href="https://github.com/proofQED/QED"><code>proofQED/QED</code></a> — Chenyang An, Qihao Ye, Minghao Pan.</p>
+<p>QED is a pipeline that takes a LaTeX math problem and produces a rigorous natural-language proof. What&#39;s unusual about it — and what makes it worth reading in detail — is that it <strong>has no agent framework</strong>. No LangGraph, no AutoGen, no LangChain, no custom runtime. It orchestrates Claude, Codex, and Gemini purely by spawning their CLIs (<code>claude -p</code>, <code>codex exec</code>, <code>gemini -p</code>) from Python <code>subprocess</code> calls and reading their stdout. The agentic behavior emerges from carefully structured prompts + a three-stage pipeline + N×M parallel verification — nothing more.</p>
+<p>The project has already produced a real research result: it found a valid Carleman weight function for a wave-operator inverse problem (verified by three domain experts). That alone is worth paying attention to, because Carleman weight construction is historically a paper-a-year hand-crafted art.</p>
+<p>This post is my high-level read of how QED works, what design ideas are worth stealing, and how the choices connect to the agent-design philosophy we <a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">discussed earlier</a>.</p>
+<hr>
+<h2 id="1-High-Level-Indication"><a href="#1-High-Level-Indication" class="headerlink" title="1. High-Level Indication"></a>1. High-Level Indication</h2><p>If you only remember three things:</p>
+<ol>
+<li><strong>Multi-model parallel search + multi-verifier cross-check.</strong> $N$ different models independently attempt the proof; $M$ different models independently verify each proof. A model that hallucinates a citation is very likely to be caught by a model that did not. QED builds a <strong>voting system at the verification layer</strong>, not at the generation layer.</li>
+<li><strong>Structured prose tags do the heavy lifting, not code.</strong> <code>&lt;cite&gt;...&lt;/cite&gt;</code> and <code>&lt;key-original-step&gt;...&lt;/key-original-step&gt;</code> turn two of the most common LLM math-proving failures — fake citations and hidden hand-waving — into machine-checkable artifacts. The verifier independently re-derives which steps it thinks are hard, then flags mismatches.</li>
+<li><strong>No framework, just CLI subprocesses.</strong> This is deliberate. By using each vendor&#39;s own CLI, QED gets free updates whenever the vendor ships a new model, avoids framework lock-in, and inherits each CLI&#39;s existing tool-use surface (bash, read, write, web search). The orchestration layer is the Unix pipe principle applied to agents.</li>
+</ol>
+<p>The bet: <strong>the CLI is the tool, the prompt is the algorithm, and the pipeline is just bookkeeping.</strong></p>
+<hr>
+<h2 id="2-What-QED-Is-Trying-to-Do"><a href="#2-What-QED-Is-Trying-to-Do" class="headerlink" title="2. What QED Is Trying to Do"></a>2. What QED Is Trying to Do</h2><p>The problem with LLMs and math is well known:</p>
+<ul>
+<li><strong>Hand-waving.</strong> &quot;It is easy to see that...&quot; &#x2F; &quot;clearly...&quot; &#x2F; &quot;by standard techniques...&quot; — the model slides past the hard step and calls it a proof.</li>
+<li><strong>Silent weakening.</strong> The model quietly replaces the stated problem with a weaker one that it can actually prove.</li>
+<li><strong>Hallucinated citations.</strong> Inventing theorems, mis-attributing results, giving URLs to papers that don&#39;t exist.</li>
+<li><strong>Repeated failure patterns.</strong> Without memory, the model tries the same dead-end approach round after round.</li>
+<li><strong>Single-shot brittleness.</strong> One model, one try, one answer.</li>
+</ul>
+<p>QED&#39;s design is basically a list of direct countermeasures to each of those failure modes:</p>
+<table>
+<thead>
+<tr>
+<th>Failure</th>
+<th>QED&#39;s countermeasure</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Hand-waving</td>
+<td><code>&lt;key-original-step&gt;</code> tagging + verifier-independent identification of hard steps + mismatch detection</td>
+</tr>
+<tr>
+<td>Silent weakening</td>
+<td>Phase 1 of verification &#x3D; word-by-word comparison of proof&#39;s goal against original problem</td>
+</tr>
+<tr>
+<td>Hallucinated citations</td>
+<td><code>&lt;cite&gt;</code> tagged citations + verifier fetches URLs and checks statements</td>
+</tr>
+<tr>
+<td>Repeated failures</td>
+<td>Previous round&#39;s status log is read at the start of every round; web search is targeted at what failed</td>
+</tr>
+<tr>
+<td>Single-shot brittleness</td>
+<td>Multi-model parallel search (up to 3 in parallel) + multi-verifier cross-check (up to 3×3 &#x3D; 9 verification passes per round)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-The-Pipeline-in-Three-Stages"><a href="#3-The-Pipeline-in-Three-Stages" class="headerlink" title="3. The Pipeline in Three Stages"></a>3. The Pipeline in Three Stages</h2><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">problem.tex</span><br><span class="line">   │</span><br><span class="line">   ▼</span><br><span class="line">[Stage 0]  Literature Survey Agent</span><br><span class="line">           ├─ classifies difficulty (Easy / Medium / Hard)</span><br><span class="line">           └─ surveys related work scaled to difficulty</span><br><span class="line">   │</span><br><span class="line">   ▼</span><br><span class="line">related_info/</span><br><span class="line">   │</span><br><span class="line">   ▼</span><br><span class="line">[Stage 1]  Proof Search Loop (up to max_proof_iterations rounds)</span><br><span class="line">           │</span><br><span class="line">           ├─ (optional) Brainstorm — multiple models propose strategies in parallel</span><br><span class="line">           ├─ Proof Search — N models write N proofs in parallel</span><br><span class="line">           ├─ Verification — each proof verified by M verifiers (N×M reports)</span><br><span class="line">           ├─ Selector Agent — picks the best of the N proofs</span><br><span class="line">           └─ Verdict Agent — DONE (all verifiers PASS) or CONTINUE</span><br><span class="line">   │</span><br><span class="line">   ▼  (when DONE or max rounds reached)</span><br><span class="line">[Stage 2]  Proof Effort Summary Agent</span><br><span class="line">   │</span><br><span class="line">   ▼</span><br><span class="line">proof_effort_summary.md</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="Stage-0-—-Literature-Survey-with-difficulty-scaling"><a href="#Stage-0-—-Literature-Survey-with-difficulty-scaling" class="headerlink" title="Stage 0 — Literature Survey (with difficulty scaling)"></a>Stage 0 — Literature Survey (with difficulty scaling)</h3><p>A single survey agent reads the problem and does two things:</p>
+<ol>
+<li><strong>Rates the difficulty</strong> — Easy &#x2F; Medium &#x2F; Hard.</li>
+<li><strong>Investigates the mathematical landscape</strong>, scaled to that difficulty. An easy problem gets a brief survey; a hard problem gets a full investigation that classifies the problem, identifies applicable theorems, and catalogs related results.</li>
+</ol>
+<p>Crucially, the survey agent <strong>does not propose proof strategies</strong> — that&#39;s the prover&#39;s job. This separation matters: it prevents the survey from anchoring the prover on a single approach before it has seen the problem.</p>
+<p>The difficulty label also drives the rest of the pipeline: Easy problems use a lighter 3-step verification, Medium&#x2F;Hard use the full 5-phase structural + detailed verification.</p>
+<h3 id="Stage-1-—-The-Proof-Loop"><a href="#Stage-1-—-The-Proof-Loop" class="headerlink" title="Stage 1 — The Proof Loop"></a>Stage 1 — The Proof Loop</h3><p>This is the heart of the system. Each round is either:</p>
+<ul>
+<li><strong>Single-model, single-verifier (3 steps):</strong> proof search → verify → verdict.</li>
+<li><strong>Multi-model, multi-verifier (4–5 steps):</strong> proof search ×N → verification ×N×M → selector → apply → verdict.</li>
+<li><strong>Easy-mode (3 steps):</strong> proof search → lightweight verify → verdict.</li>
+</ul>
+<p>The multi-model mode is where QED earns its keep. Let&#39;s unpack it.</p>
+<h4 id="Parallel-proof-search"><a href="#Parallel-proof-search" class="headerlink" title="Parallel proof search"></a>Parallel proof search</h4><p><code>multi_model.providers: [&quot;claude&quot;, &quot;codex&quot;, &quot;gemini&quot;]</code> means Claude, Codex, and Gemini each produce their own <code>proof.md</code> in isolated subdirectories. They don&#39;t see each other; they only see the problem + the survey + the previous round&#39;s feedback + optional human guidance.</p>
+<p>Why three? Different models make different mistakes. A proof Claude cannot finish might be natural for Codex&#39;s style, or vice versa. Running them in parallel is cheap (~3× cost, no latency cost) compared to running them serially and hoping the first one works.</p>
+<h4 id="Parallel-multi-verifier-verification"><a href="#Parallel-multi-verifier-verification" class="headerlink" title="Parallel multi-verifier verification"></a>Parallel multi-verifier verification</h4><p>For N proofs and M verifiers you get <strong>N×M verification reports</strong>. If N&#x3D;3 and M&#x3D;3, that&#39;s 9 independent verification passes per round.</p>
+<p>A proof is considered <strong>fully verified only if ALL verifiers PASS</strong>. One FAIL from any verifier → CONTINUE.</p>
+<p>This is the single biggest idea in the pipeline: <strong>cross-model verification as the primary defense against hallucination.</strong> Claude might accept its own fake citation. Gemini probably won&#39;t. Codex will catch Gemini&#39;s lazy step-skipping. The model that generated the error and the model that verifies it are decorrelated.</p>
+<h4 id="The-selector-agent"><a href="#The-selector-agent" class="headerlink" title="The selector agent"></a>The selector agent</h4><p>When multiple proofs exist, a selector agent reads <strong>all N×M verification reports</strong> and picks the single most promising proof based on:</p>
+<ul>
+<li>Unanimous verifier agreement</li>
+<li>Problem-statement integrity</li>
+<li>Overall verdict</li>
+<li>Fewest failures</li>
+<li>Quality of partial progress</li>
+<li>Structural completeness</li>
+</ul>
+<p>If only one model is configured, the selector is skipped entirely — the single proof is used directly. This is a nice touch: the dispatcher layer gracefully degrades to a no-op at $N&#x3D;1$.</p>
+<h3 id="Stage-2-—-Proof-Effort-Summary"><a href="#Stage-2-—-Proof-Effort-Summary" class="headerlink" title="Stage 2 — Proof Effort Summary"></a>Stage 2 — Proof Effort Summary</h3><p>After the loop terminates (DONE or max iterations), a summary agent reads every artifact and writes <code>proof_effort_summary.md</code>. This is both documentation and a post-mortem — useful for humans and for future rounds if the problem is re-attempted.</p>
+<hr>
+<h2 id="4-The-Two-Tags-That-Do-All-the-Work"><a href="#4-The-Two-Tags-That-Do-All-the-Work" class="headerlink" title="4. The Two Tags That Do All the Work"></a>4. The Two Tags That Do All the Work</h2><p>This is the part of QED that I think is the most portable idea for other agent systems.</p>
+<h3 id=""><a href="#" class="headerlink" title="&lt;cite&gt;...&lt;/cite&gt;"></a><code>&lt;cite&gt;...&lt;/cite&gt;</code></h3><p>Every external theorem, lemma, or result cited in the proof must be wrapped in a structured <code>&lt;cite&gt;</code> block containing:</p>
+<ul>
+<li><strong>Type</strong> (theorem &#x2F; lemma &#x2F; proposition &#x2F; definition &#x2F; ...)</li>
+<li><strong>Label</strong> (canonical name, e.g. &quot;Hölder&#39;s inequality&quot;)</li>
+<li><strong>Title</strong> (descriptive)</li>
+<li><strong>Authors</strong></li>
+<li><strong>Source URL</strong></li>
+<li><strong>Verifier locator</strong> (where in the source to find it)</li>
+<li><strong>Exact statement</strong> (the prover&#39;s transcription of the result)</li>
+<li><strong>Usage</strong> (how it&#39;s being applied in this proof)</li>
+</ul>
+<p>The verification agent independently <strong>fetches the URL, checks that the statement matches the source, and confirms the application is correct.</strong> Phase 2 of verification is literally &quot;citation verification&quot; — no model gets to invent a theorem and quietly use it.</p>
+<h3 id="-1"><a href="#-1" class="headerlink" title="&lt;key-original-step&gt;...&lt;/key-original-step&gt;"></a><code>&lt;key-original-step&gt;...&lt;/key-original-step&gt;</code></h3><p>Every <strong>nontrivial, original step</strong> in the proof (novel reductions, hard estimates, key constructions) must be wrapped in this tag. The content inside must be maximally detailed — no hand-waving, no &quot;clearly&quot;, no &quot;standard techniques&quot;.</p>
+<p>The verifier does something clever: it <strong>independently identifies</strong> which steps it considers nontrivial, without looking at the prover&#39;s tags, and then flags two kinds of mismatch:</p>
+<ul>
+<li><strong>Untagged hard steps</strong> — the prover glossed over something the verifier thinks is genuinely difficult. This is the &quot;hiding the hard part&quot; failure mode.</li>
+<li><strong>Inflated tags</strong> — the prover tagged something routine as a key step. This is the &quot;inflating the work&quot; failure mode.</li>
+</ul>
+<p>The brilliance is that the verifier doesn&#39;t trust the prover&#39;s classification. It re-derives it, and the mismatch between the two classifications becomes a signal of dishonesty or error. This is <strong>machine-checkable epistemics</strong>.</p>
+<p>If you&#39;re building anything that produces arguments rather than code, this pattern generalizes: have one agent produce structured claims, have another agent independently re-classify them, flag mismatches.</p>
+<hr>
+<h2 id="5-The-Verification-Pipeline-5-Phases"><a href="#5-The-Verification-Pipeline-5-Phases" class="headerlink" title="5. The Verification Pipeline (5 Phases)"></a>5. The Verification Pipeline (5 Phases)</h2><p>Verification is split across two prompt files — <code>proof_verify_structural.md</code> (Phases 1–4) and <code>proof_verify_detailed.md</code> (Phase 5). This split matters because different phases have different cost profiles, and Phase 5 is expensive.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>What it checks</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1. Problem-Statement Integrity</strong></td>
+<td>Word-by-word comparison of original problem vs. what the proof claims</td>
+<td>Catches silent weakening (&quot;prove $x \le 2$&quot; when the problem said &quot;prove $x \le 1$&quot;)</td>
+</tr>
+<tr>
+<td><strong>2. Citation Verification</strong></td>
+<td>Every <code>&lt;cite&gt;</code> block — URL resolves, statement matches, usage is correct</td>
+<td>Catches hallucinated theorems and fake attributions</td>
+</tr>
+<tr>
+<td><strong>3. Subgoal Tree Structure</strong></td>
+<td>Is the proof&#39;s decomposition well-formed and complete?</td>
+<td>Catches missing branches in the proof&#39;s logical tree</td>
+</tr>
+<tr>
+<td><strong>4. Additional Verification Rules</strong></td>
+<td>Human-provided per-round and global verification rules, treated as hard requirements</td>
+<td>Lets human experts inject domain-specific checks</td>
+</tr>
+<tr>
+<td><strong>5a. Logical Step Verification</strong></td>
+<td>Fine-grained step-by-step checking with computational tools</td>
+<td>Catches arithmetic and logical errors</td>
+</tr>
+<tr>
+<td><strong>5b. Subgoal Resolution</strong></td>
+<td>Every subgoal identified in Phase 3 is actually resolved</td>
+<td>Catches &quot;we claim X, let&#39;s return to it later&quot; that never returns</td>
+</tr>
+<tr>
+<td><strong>5c. Key Original Step Analysis</strong></td>
+<td><code>&lt;key-original-step&gt;</code> mismatch detection</td>
+<td>Catches hand-waving and inflation (see above)</td>
+</tr>
+<tr>
+<td><strong>5d. Coverage</strong></td>
+<td>Chain completeness and problem-proof alignment</td>
+<td>Catches proofs that drift off-topic</td>
+</tr>
+</tbody></table>
+<p>Phase 1 alone is worth pausing on. A word-by-word comparison of the stated problem and what the proof actually proves sounds trivial, but it&#39;s the single most effective catch against LLMs quietly substituting a weaker theorem. You don&#39;t need an LLM to do this comparison reliably — but you do need something in the pipeline to force it.</p>
+<hr>
+<h2 id="6-Human-Guidance-—-Two-Axes-Two-Levels"><a href="#6-Human-Guidance-—-Two-Axes-Two-Levels" class="headerlink" title="6. Human Guidance — Two Axes, Two Levels"></a>6. Human Guidance — Two Axes, Two Levels</h2><p>QED exposes a surprisingly thoughtful human-in-the-loop interface:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Prover guidance</strong> (read by prover)</th>
+<th><strong>Verification rules</strong> (read by structural verifier)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Global</strong></td>
+<td><code>human_help/additional_prove_human_help_global.md</code></td>
+<td><code>human_help/additional_verify_rule_global.md</code></td>
+</tr>
+<tr>
+<td><strong>Per-round</strong></td>
+<td><code>verification/round_N/human_help/additional_prove_human_help_per_round.md</code></td>
+<td><code>verification/round_N/human_help/additional_verify_rule_per_round.md</code></td>
+</tr>
+</tbody></table>
+<p>You can edit these files <strong>while the pipeline is running</strong>. Reviewing round 5&#39;s failure? Write targeted feedback into round 6&#39;s per-round prover help. Noticed the verifier isn&#39;t checking a domain-specific condition? Add a rule to the verifier&#39;s global file.</p>
+<p>This is the right factoring. It separates:</p>
+<ul>
+<li><strong>Who the guidance is for</strong> (prover vs. verifier)</li>
+<li><strong>Scope of applicability</strong> (all rounds vs. this round only)</li>
+</ul>
+<p>And it makes explicit that &quot;human feedback&quot; in an agentic system isn&#39;t a single channel — the prover needs different guidance than the verifier.</p>
+<p>The Carleman-weight research result reportedly used this channel exactly once: the human experts realized their constraints were too weak, strengthened them, and asked QED to continue from its previous candidate. No human intervention on the proof itself — just on the problem statement.</p>
+<hr>
+<h2 id="7-super-math-skill-md-—-The-Methodology-Guide"><a href="#7-super-math-skill-md-—-The-Methodology-Guide" class="headerlink" title="7. super_math_skill.md — The Methodology Guide"></a>7. <code>super_math_skill.md</code> — The Methodology Guide</h2><p>Every agent receives <code>skill/super_math_skill.md</code> as a system-level instruction. It&#39;s a ~13 KB guide to mathematical proof methodology — orientation, core strategies, stuck-recovery tactics, self-checking discipline.</p>
+<p>The prose is uncompromising. The opening section is titled <strong>&quot;The Cardinal Rule: Embrace Difficulty&quot;</strong> and contains:</p>
+<blockquote>
+<p>The hard part of the problem is the ENTIRE POINT. You must confront it directly.<br>When you feel the urge to write &quot;clearly&quot;, &quot;obviously&quot;, &quot;it is easy to see&quot;, or &quot;by standard arguments&quot; — that is your signal that you are about to dodge the hard part. Stop. Go back. Do the work.</p>
+</blockquote>
+<p>This is the same pattern we saw in Claude Code&#39;s system prompt — <a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">prose enforcement as engineering discipline</a>. Every one of these rules is almost certainly a patch against an observed failure. The proof-search prompt itself explicitly lists seven &quot;common avoidance patterns you MUST NOT do&quot;, each with the exact bad behavior named.</p>
+<p>Interestingly, the skill file is delivered in <strong>two</strong> places:</p>
+<ol>
+<li>As a system-level instruction to every agent (so it&#39;s always in scope).</li>
+<li>As an explicit file-path input <code>{skill_file}</code> to the proof search agent (so it can re-read specific strategies).</li>
+</ol>
+<p>This mirrors the <a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">progressive disclosure &#x2F; dispatcher pattern</a> — the skill content is &quot;advertised&quot; as part of the prompt, but the file is also accessible for deeper re-reading when needed.</p>
+<hr>
+<h2 id="8-Why-No-Agent-Framework"><a href="#8-Why-No-Agent-Framework" class="headerlink" title="8. Why No Agent Framework?"></a>8. Why No Agent Framework?</h2><p>QED&#39;s architecture choice — Python <code>subprocess</code> spawns of vendor CLIs — looks primitive until you think about what the alternatives buy you.</p>
+<p><strong>An agent framework gives you:</strong> streaming, tool-use protocol, state management, retries, observability primitives.</p>
+<p><strong>Each vendor CLI already provides:</strong> streaming (stdout), tool-use (bash, read, write, WebFetch, WebSearch), state management (the CLI maintains conversation), retries (CLI handles transient errors), observability (JSON output mode).</p>
+<p>So what&#39;s the framework for? Mostly cross-vendor abstraction. But QED <em>explicitly wants</em> to use different vendors with their different strengths — so a cross-vendor abstraction would be a liability, averaging away the differences it wants to exploit.</p>
+<p>The CLI-subprocess approach also has three underrated advantages:</p>
+<ol>
+<li><strong>Free model updates.</strong> Upgrade the CLI → you get the new model. No framework migration.</li>
+<li><strong>Each CLI inherits its vendor&#39;s tool surface.</strong> Claude Code&#39;s <code>Read</code>&#x2F;<code>Edit</code>&#x2F;<code>Bash</code> are wired correctly. Codex and Gemini have their own equivalents. QED doesn&#39;t have to re-implement tool use three times.</li>
+<li><strong>Debuggable.</strong> Every agent step is a spawnable shell command. You can copy the prompt, paste it into a terminal, and reproduce the exact behavior. No black-box framework state.</li>
+</ol>
+<p>The only cost is that QED has to handle its own bookkeeping — file paths, round directories, token accounting. But that bookkeeping is ~100 KB of Python (<code>pipeline.py</code>) and it&#39;s completely transparent.</p>
+<p>This is a pragmatic design: <strong>the pipeline is shell glue, the agents are processes.</strong> It&#39;s the Unix philosophy applied to LLMs.</p>
+<hr>
+<h2 id="9-Resume-Support-Quietly-Significant"><a href="#9-Resume-Support-Quietly-Significant" class="headerlink" title="9. Resume Support, Quietly Significant"></a>9. Resume Support, Quietly Significant</h2><p>If the pipeline is interrupted (crash, network blip, manual kill) and you re-run it with the same output directory, it:</p>
+<ul>
+<li>Skips the literature survey if it&#39;s already complete</li>
+<li>Detects which step within a round was last completed (including parallel steps)</li>
+<li>Cleans up incomplete state (partial verification files, orphaned <code>proof.md</code> backups)</li>
+<li>Restores <code>proof.md</code> from backup if needed</li>
+<li>Resumes from exactly where it left off</li>
+</ul>
+<p>Resume correctness is the quiet signature of a well-designed pipeline. A long-running agentic workflow (say, 9 rounds × 3 provers × 3 verifiers &#x3D; 81 model calls per problem) will crash. If every crash means starting over, the system is unusable. The fact that QED has a coherent resume story suggests the file-layout is doing real work — each round&#39;s artifacts (<code>proof.md</code>, <code>verification_result_*.md</code>, <code>selection.md</code>, human-help files) are in predictable, inspectable locations.</p>
+<p>This is also the feature that makes the per-round human-guidance story practical. You can crash the pipeline on purpose after round 5, write human feedback into <code>round_6/human_help/</code>, and resume.</p>
+<hr>
+<h2 id="10-Connecting-to-the-Agent-Design-Philosophy"><a href="#10-Connecting-to-the-Agent-Design-Philosophy" class="headerlink" title="10. Connecting to the Agent-Design Philosophy"></a>10. Connecting to the Agent-Design Philosophy</h2><p>QED is an interesting case study because it independently rediscovers a lot of the design principles from <a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">Thariq&#39;s &quot;Seeing like an Agent&quot;</a>:</p>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>QED&#39;s instantiation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tools shaped to model abilities</td>
+<td>Each vendor CLI used via its own CLI — no abstraction layer averages the differences away</td>
+</tr>
+<tr>
+<td>Bar for adding a tool is high</td>
+<td>Agents have few tools: file IO, bash, web search. Everything else is prose.</td>
+</tr>
+<tr>
+<td>Progressive disclosure</td>
+<td><code>super_math_skill.md</code> advertised via system prompt; full content accessible via file path; related work stashed in <code>related_info/</code></td>
+</tr>
+<tr>
+<td>Prose enforcement as engineering</td>
+<td>Explicit &quot;Cardinal Rule&quot; and &quot;Do NOT shy away&quot; sections with enumerated failure patterns</td>
+</tr>
+<tr>
+<td>Iterative refinement of tools</td>
+<td>Two-file verification split (structural vs. detailed), selector that skips at N&#x3D;1</td>
+</tr>
+<tr>
+<td>Tool-use as the unit of action</td>
+<td>The pipeline orchestrates tool-use-capable CLIs; no custom tool protocol</td>
+</tr>
+</tbody></table>
+<p>The extra thing QED brings that Claude Code&#39;s design does not emphasize as much is <strong>cross-model adversarial verification</strong>. Claude Code has one Claude verifying another Claude (or itself). QED has Claude, Codex, and Gemini all verifying each other. If you&#39;re building something where correctness matters more than latency, that trade is the right one to make.</p>
+<hr>
+<h2 id="11-What-I-Think-Is-Missing-or-Risky"><a href="#11-What-I-Think-Is-Missing-or-Risky" class="headerlink" title="11. What I Think Is Missing or Risky"></a>11. What I Think Is Missing or Risky</h2><p>A few open questions I&#39;d want to understand better:</p>
+<ul>
+<li><strong>Cost scaling.</strong> 3 provers × 3 verifiers × 9 rounds &#x3D; 81 model calls per problem, each potentially doing nontrivial tool use. For a hard math problem that&#39;s real money. The config does allow single-model modes for cheaper runs, but the motivating case (Carleman weight functions) presumably cost meaningful USD.</li>
+<li><strong>Selector objectivity.</strong> The selector is a single model reading N×M reports. If that one model has a systematic bias, it can misrank proofs. A simple improvement: run the selector with each of the N providers and take a majority vote, similar to how verification is cross-checked.</li>
+<li><strong>Skill file scope.</strong> <code>super_math_skill.md</code> is general mathematical methodology. For specific subdomains (PDEs, combinatorics, number theory), you&#39;d ideally load a subdomain-specific skill too. The pipeline seems to support this in spirit but not explicitly in the current repo.</li>
+<li><strong>Citation verification depth.</strong> Phase 2 fetches URLs and checks statements, but it relies on the verifier&#39;s ability to do a web read-and-match. For paywalled or non-indexed sources, this degrades.</li>
+<li><strong>Security posture.</strong> The pipeline runs Claude &#x2F; Codex &#x2F; Gemini CLIs with sandbox bypassed (<code>--dangerously-skip-permissions</code> etc.). The README is explicit about this. Worth running in a container&#x2F;VM.</li>
+</ul>
+<p>None of these are deal-breakers. They&#39;re the kind of questions you&#39;d ask of any v1 research pipeline.</p>
+<hr>
+<h2 id="12-What-s-Worth-Stealing"><a href="#12-What-s-Worth-Stealing" class="headerlink" title="12. What&#39;s Worth Stealing"></a>12. What&#39;s Worth Stealing</h2><p>If you&#39;re building agents that produce any kind of structured output (not just math), these four ideas transfer immediately:</p>
+<h3 id="a-Cross-model-adversarial-verification"><a href="#a-Cross-model-adversarial-verification" class="headerlink" title="(a) Cross-model adversarial verification"></a>(a) Cross-model adversarial verification</h3><p>Don&#39;t trust any single model&#39;s self-verification. Run the verifier with a <strong>different</strong> model from the generator whenever the cost allows it. The error modes of Claude-3.5 and Gemini-Pro are decorrelated in ways that make this genuinely effective.</p>
+<h3 id="b-Structured-claim-tagging-with-independent-re-classification"><a href="#b-Structured-claim-tagging-with-independent-re-classification" class="headerlink" title="(b) Structured claim tagging with independent re-classification"></a>(b) Structured claim tagging with independent re-classification</h3><p><code>&lt;cite&gt;</code> and <code>&lt;key-original-step&gt;</code> are instances of a general pattern:</p>
+<ol>
+<li>Force the generator to wrap claims of a particular type in a structured tag.</li>
+<li>Force the verifier to <strong>independently</strong> identify which tokens deserve that tag.</li>
+<li>Compare the two sets. Mismatches are signals.</li>
+</ol>
+<p>This generalizes. Want to catch hallucinated API calls? Tag them, verify independently. Want to catch unjustified assumptions? Tag them, verify independently.</p>
+<h3 id="c-Two-axis-human-feedback"><a href="#c-Two-axis-human-feedback" class="headerlink" title="(c) Two-axis human feedback"></a>(c) Two-axis human feedback</h3><p>Prover vs. verifier × global vs. per-round is a clean factoring of &quot;human-in-the-loop&quot;. Most agentic systems collapse these into a single &quot;user feedback&quot; channel and pay for it in ambiguity.</p>
+<h3 id="d-Difficulty-scaling-with-lightweight-paths-for-easy-cases"><a href="#d-Difficulty-scaling-with-lightweight-paths-for-easy-cases" class="headerlink" title="(d) Difficulty scaling with lightweight paths for easy cases"></a>(d) Difficulty scaling with lightweight paths for easy cases</h3><p>Stage 0&#39;s difficulty classification is cheap (one model call) and controls the heaviness of every subsequent stage. Simple problems get a 3-step easy-mode loop; hard problems get the full 5-phase structural + detailed verification. This is how you keep a high-assurance system from overpaying on easy inputs.</p>
+<hr>
+<h2 id="13-Final-Read"><a href="#13-Final-Read" class="headerlink" title="13. Final Read"></a>13. Final Read</h2><p>QED is a pipeline that solves a research-grade math problem by doing three things at once:</p>
+<ol>
+<li><strong>Running multiple top-tier models in parallel</strong>, relying on their error decorrelation.</li>
+<li><strong>Forcing structure onto the output</strong> (cited theorems, tagged key steps) so that verification can be machine-checkable.</li>
+<li><strong>Enforcing epistemic discipline in prose</strong> (&quot;don&#39;t hand-wave&quot;; &quot;prove exactly what was asked&quot;) — because at this generation of models, prose <em>is</em> the API for behavior.</li>
+</ol>
+<p>The absence of an agent framework is not a limitation; it&#39;s a philosophical choice. QED is the Unix-philosophy version of agent orchestration — <strong>small, composable subprocess calls; filesystems as state; prompts as programs.</strong> It trades the polish of a framework for the legibility of a shell pipeline, and for a pipeline that runs 81 model calls per problem with resume support and per-round human guidance, that legibility is worth a lot.</p>
+<p>The Carleman weight result suggests the approach is already pushing into territory that pre-LLM automation could not touch. I expect the real contribution of projects like QED is less about any single proof and more about <strong>showing that LLM reliability in math can be engineered, not just prayed for</strong> — by redundancy, structure, and ruthless verification.</p>
+<hr>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><strong>GitHub:</strong> <a target="_blank" rel="noopener" href="https://github.com/proofQED/QED"><code>proofQED/QED</code></a></li>
+<li><strong>Authors:</strong> Chenyang An (<code>cya.portfolio@gmail.com</code>), Qihao Ye (<code>q8ye@ucsd.edu</code>), Minghao Pan (<code>mpan2@caltech.edu</code>)</li>
+<li><strong>Carleman-weight result domain experts:</strong> Qiao Zhuang (UMKC), Qihao Ye (UCSD), Zhongqiang Zhang (WPI)</li>
+<li><strong>Related posts on this blog:</strong><ul>
+<li><a href="/2026/04/20/Claude-Code-Skill-Mechanism/">How Claude Code Skills Work Under the Hood</a> — wire-level reverse-engineering</li>
+<li><a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">From Wire Format to Design Philosophy</a> — the agent-design principles QED independently rediscovers</li>
+</ul>
+</li>
+</ul>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> QED — A Multi-Agent Math Proof Pipeline Built on CLI Subprocesses</li>
+        <li><strong>Author:</strong> wy</li>
+        <li><strong>Created at
+                :</strong> 2026-04-22 17:00:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2026-04-22 14:52:34
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://yue-ruby-w.site/2026/04/22/QED-Multi-Agent-Math-Proof-Pipeline/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/LLM/">#LLM</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Agent-Design/">#Agent Design</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Math/">#Math</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Multi-Agent/">#Multi-Agent</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">From Wire Format to Design Philosophy — Why Claude Code Skills Look The Way They Do</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">QED — A Multi-Agent Math Proof Pipeline Built on CLI Subprocesses</div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#QED-%E2%80%94-A-Multi-Agent-Math-Proof-Pipeline"><span class="nav-text">QED — A Multi-Agent Math Proof Pipeline</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-High-Level-Indication"><span class="nav-text">1. High-Level Indication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-What-QED-Is-Trying-to-Do"><span class="nav-text">2. What QED Is Trying to Do</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-The-Pipeline-in-Three-Stages"><span class="nav-text">3. The Pipeline in Three Stages</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Stage-0-%E2%80%94-Literature-Survey-with-difficulty-scaling"><span class="nav-text">Stage 0 — Literature Survey (with difficulty scaling)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stage-1-%E2%80%94-The-Proof-Loop"><span class="nav-text">Stage 1 — The Proof Loop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stage-2-%E2%80%94-Proof-Effort-Summary"><span class="nav-text">Stage 2 — Proof Effort Summary</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-The-Two-Tags-That-Do-All-the-Work"><span class="nav-text">4. The Two Tags That Do All the Work</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">&lt;cite&gt;...&lt;&#x2F;cite&gt;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#-1"><span class="nav-text">&lt;key-original-step&gt;...&lt;&#x2F;key-original-step&gt;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-The-Verification-Pipeline-5-Phases"><span class="nav-text">5. The Verification Pipeline (5 Phases)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Human-Guidance-%E2%80%94-Two-Axes-Two-Levels"><span class="nav-text">6. Human Guidance — Two Axes, Two Levels</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-super-math-skill-md-%E2%80%94-The-Methodology-Guide"><span class="nav-text">7. super_math_skill.md — The Methodology Guide</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-Why-No-Agent-Framework"><span class="nav-text">8. Why No Agent Framework?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-Resume-Support-Quietly-Significant"><span class="nav-text">9. Resume Support, Quietly Significant</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-Connecting-to-the-Agent-Design-Philosophy"><span class="nav-text">10. Connecting to the Agent-Design Philosophy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-What-I-Think-Is-Missing-or-Risky"><span class="nav-text">11. What I Think Is Missing or Risky</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-What-s-Worth-Stealing"><span class="nav-text">12. What&#39;s Worth Stealing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-Cross-model-adversarial-verification"><span class="nav-text">(a) Cross-model adversarial verification</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-Structured-claim-tagging-with-independent-re-classification"><span class="nav-text">(b) Structured claim tagging with independent re-classification</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-Two-axis-human-feedback"><span class="nav-text">(c) Two-axis human feedback</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-Difficulty-scaling-with-lightweight-paths-for-easy-cases"><span class="nav-text">(d) Difficulty scaling with lightweight paths for easy cases</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-Final-Read"><span class="nav-text">13. Final Read</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-text">References</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">wy</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        27 posts in total
+                    </span>
+                    
+                        <span>
+                            16.2k words in total
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.9.0</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+            
+                
+        
+                
+        
+                
+
+                    
+                        <script data-swup-reload-script>document.addEventListener('DOMContentLoaded',function(){if(document.querySelector('meta[name="notebook"]')){document.querySelector('.article-container')?.classList.add('notebook')}})</script>
+                    
+        
+                
+
+                    
+                        <script data-swup-reload-script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+                    
+        
+                
+
+                    
+                        <script data-swup-reload-script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});window.addEventListener('hexo-blog-decrypt',function(){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})})"></script>
+                    
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container" role="dialog" aria-modal="true" aria-label="Image viewer">
+	<button class="image-viewer-close" type="button" aria-label="Close">
+		<i class="fa-solid fa-xmark"></i>
+	</button>
+	<button class="image-viewer-prev" type="button" aria-label="Prev">
+		<i class="fa-solid fa-chevron-left"></i>
+	</button>
+	<div class="image-viewer-frame">
+		<img src="" alt="">
+	</div>
+	<div class="image-viewer-exif-panel hidden absolute left-1/2 bottom-20 -translate-x-1/2 w-[min(92vw,420px)] max-h-[60vh] overflow-hidden rounded-2xl bg-background-color-transparent-80 p-4 text-left shadow-redefine-flat backdrop-blur-md" role="dialog" aria-label="EXIF" aria-hidden="true">
+		<div class="flex items-center justify-between mb-3">
+			<span class="text-sm font-semibold text-first-text-color">EXIF</span>
+			<button class="image-viewer-exif-close flex h-8 w-8 items-center justify-center rounded-full bg-background-color-transparent-80 text-first-text-color transition hover:bg-background-color-transparent-40" type="button" aria-label="Close">
+				<i class="fa-solid fa-xmark text-[0.65rem]"></i>
+			</button>
+		</div>
+		<div class="image-viewer-exif-cards grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-1 scrollbar-hide"></div>
+		<template class="image-viewer-exif-card-template">
+			<div class="rounded-lg bg-background-color-transparent-40 px-3 py-2">
+				<div class="image-viewer-exif-card-header flex items-center gap-2 mb-1">
+					<i class="image-viewer-exif-card-icon fa-solid fa-circle-info text-xs text-third-text-color"></i>
+					<div class="image-viewer-exif-card-title text-xs font-semibold text-first-text-color"></div>
+				</div>
+				<div class="image-viewer-exif-card-items flex flex-col gap-1"></div>
+			</div>
+		</template>
+	</div>
+	<button class="image-viewer-exif-toggle flex items-center gap-2 hidden absolute left-1/2 bottom-6 -translate-x-1/2 rounded-full border border-border-color bg-background-color-transparent-80 px-4 py-2 text-first-text-color backdrop-blur-md transition hover:bg-background-color-transparent-40" type="button" aria-label="EXIF" aria-expanded="false">
+		<i class="fa-solid fa-circle-info text-xs"></i>
+		<span class="text-xs font-semibold uppercase tracking-wider">EXIF</span>
+	</button>
+	<button class="image-viewer-next" type="button" aria-label="Next">
+		<i class="fa-solid fa-chevron-right"></i>
+	</button>
+</div>
+
+
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    window.swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+
+    window.dispatchEvent(
+        new CustomEvent("redefine:swup:ready", {
+            detail: {
+                swup: window.swup,
+            },
+        }),
+    );
+</script>
+
+
+
+
+	
+<script src="/js/build/main.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+
+	
+</body>
+
+</html>
