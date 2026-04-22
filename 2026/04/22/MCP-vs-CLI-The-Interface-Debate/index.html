@@ -93,7 +93,7 @@
 <meta property="og:description" content="Ruby&#39;s Blog">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-04-22T11:30:00.000Z">
-<meta property="article:modified_time" content="2026-04-22T07:47:26.128Z">
+<meta property="article:modified_time" content="2026-04-22T07:57:58.007Z">
 <meta property="article:author" content="wy">
 <meta property="article:tag" content="Agent Design">
 <meta property="article:tag" content="CLI">
@@ -559,8 +559,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-22 15:47:26</span>
-            <span class="mobile">2026-04-22 15:47:26</span>
+            <span class="desktop">2026-04-22 15:57:58</span>
+            <span class="mobile">2026-04-22 15:57:58</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -614,12 +614,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3k Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>5.2k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>18 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>31 Mins</span>
         </span>
     
     
@@ -638,9 +638,20 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h1 id="MCP-还没做完，又要-CLI-了"><a href="#MCP-还没做完，又要-CLI-了" class="headerlink" title="MCP 还没做完，又要 CLI 了"></a>MCP 还没做完，又要 CLI 了</h1><p><strong>Inspired by</strong> a Xiaohongshu post from <strong>爱吉尼亚羊</strong> with that exact title (<em>&quot;MCP isn&#39;t finished yet, and now it&#39;s CLI&quot;</em>). The post captures a sentiment that&#39;s been building across the Chinese AI engineering community throughout 2026: the industry&#39;s protocol-of-the-month cycle is producing real fatigue. Every month a new framework asks for a new integration effort. Teams that bet on MCP in late 2025 are now watching Vercel&#39;s CEO say <strong>&quot;CLIs are the de-facto MCPs for agents&quot;</strong>, Perplexity&#39;s CTO announce they&#39;re abandoning MCP in favor of API + CLI, and OpenClaw (the fastest-growing agent runtime, whose founder just joined OpenAI) ship <strong>Skills + CLI without MCP support at all</strong>.</p>
-<p>Is MCP dead? Was it ever alive in the sense the protocol spec implied? This post walks through the debate, tries to put real numbers on the trade-offs, and ties it back to the <a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">three</a>-<a href="/2026/04/22/QED-Multi-Agent-Math-Proof-Pipeline/">post</a> <a href="/2026/04/22/AReaL-Asynchronous-RL-for-Agents/">trilogy</a> we&#39;ve been building about agent architecture.</p>
-<p><strong>Note on sourcing.</strong> I wasn&#39;t able to read the original Xiaohongshu post&#39;s body directly — the platform gates content behind authentication — so I&#39;ve reconstructed the conversation from Chinese tech blogs (Zhihu, CSDN, cnblogs) and the Tencent News piece <em>&quot;&#39;MCP已死&#39;是AI圈最大的技术谎言？&quot;</em> that cover the same debate. If the original post had specific technical details I&#39;m missing, consider this my best-effort synthesis rather than a verbatim transcription.</p>
+			<h1 id="MCP-还没做完，又要-CLI-了"><a href="#MCP-还没做完，又要-CLI-了" class="headerlink" title="MCP 还没做完，又要 CLI 了"></a>MCP 还没做完，又要 CLI 了</h1><p><strong>Based on a Xiaohongshu post from 爱吉尼亚羊</strong> titled <em>&quot;MCP 还没做完，又要 CLI 了&quot;</em> — <em>&quot;MCP isn&#39;t finished yet, and now it&#39;s CLI.&quot;</em> The author opens with a line that sets the tone:</p>
+<blockquote>
+<p><strong>不做猜测理论分享，全部来自于一线实战。</strong><br><em>(&quot;Not speculation, not theory — everything here comes from first-line practice.&quot;)</em></p>
+</blockquote>
+<p>Their setup: they had just finished building out an MCP integration at their company, and now their team is ripping out the old <strong>Console</strong> they were about to ship and replacing it with a <strong>CLI</strong>. The author paused their own project to figure out whether to continue. The rest of the post is their three questions and three answers, written as an engineer-to-engineer field report rather than a trend piece.</p>
+<p>This post walks through the author&#39;s three questions, adds the real numbers behind them, integrates the useful comments the post attracted, and ties the whole thing back to the <a href="/2026/04/20/Claude-Code-Skill-Mechanism/">four</a>-<a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">post</a> <a href="/2026/04/22/QED-Multi-Agent-Math-Proof-Pipeline/">arc</a> <a href="/2026/04/22/AReaL-Asynchronous-RL-for-Agents/">on</a> agent architecture.</p>
+<hr>
+<h2 id="0-The-Author-s-Three-Questions"><a href="#0-The-Author-s-Three-Questions" class="headerlink" title="0. The Author&#39;s Three Questions"></a>0. The Author&#39;s Three Questions</h2><p>爱吉尼亚羊 frames the whole post around three questions they want to answer from first-hand experience:</p>
+<ol>
+<li><strong>为什么突然都在做这个事情？</strong> — Why is everyone suddenly doing this (moving from Console&#x2F;MCP to CLI)?</li>
+<li><strong>这个 CLI 与 MCP 有什么关系，有 MCP 为什么还要 CLI？</strong> — What is CLI&#39;s relationship to MCP; if we have MCP, why do we still need CLI?</li>
+<li><strong>对前端&#x2F;客户端工程师有什么影响？</strong> — What is the impact on front-end &#x2F; client engineers?</li>
+</ol>
+<p>I&#39;ll walk through each with the author&#39;s own answer first, then add my take.</p>
 <hr>
 <h2 id="1-The-Meme-MCP-Is-Dead-Long-Live-CLI"><a href="#1-The-Meme-MCP-Is-Dead-Long-Live-CLI" class="headerlink" title="1. The Meme: &quot;MCP Is Dead, Long Live CLI&quot;"></a>1. The Meme: &quot;MCP Is Dead, Long Live CLI&quot;</h2><p>The phrase propagated in 2026 Q1 after three things happened almost simultaneously:</p>
 <ol>
@@ -699,6 +710,71 @@
 </ul>
 <h3 id="The-98-7-savings-claim-demystified"><a href="#The-98-7-savings-claim-demystified" class="headerlink" title="The &quot;98.7% savings&quot; claim, demystified"></a>The &quot;98.7% savings&quot; claim, demystified</h3><p>Anthropic&#39;s own internal benchmark (loosely paraphrased from their team posts): a task that took 78 KB of MCP-mediated tool schemas + turns could be accomplished by <strong>writing a single bash script that calls the GitHub REST API via <code>curl</code></strong>, consuming ~1 KB for the whole task. The model already knows <code>curl</code>; it already knows the GitHub API; it doesn&#39;t need a schema to be told about either.</p>
 <p>The 98.7% number is cherry-picked for the specific case where the task is well-served by a CLI. It doesn&#39;t generalize. But it illustrates the direction: <strong>for tasks inside the model&#39;s pre-training distribution, the schema is redundant overhead.</strong></p>
+<hr>
+<h2 id="2b-思考-1-—-Why-Is-Everyone-Suddenly-Doing-This"><a href="#2b-思考-1-—-Why-Is-Everyone-Suddenly-Doing-This" class="headerlink" title="2b. 思考 1 — Why Is Everyone Suddenly Doing This?"></a>2b. 思考 1 — Why Is Everyone Suddenly Doing This?</h2><p>Here is 爱吉尼亚羊&#39;s own answer to their first question, paraphrased:</p>
+<blockquote>
+<p>&quot;This thing is like a wind that just blew in. Even DingTalk&#39;s CEO said at their recent keynote: <strong>break DingTalk apart, rewrite the underlying code, CLI-ify dozens of product lines across the business, and rebuild with AI.</strong> Let me share my personal understanding:</p>
+<p><strong>* The main reason is OpenClaw (龙虾 &#x2F; &quot;Lobster&quot;).</strong> OpenClaw gave everyone a glimpse of what AGI might look like — agents can be deployed locally, can use various CLI tools the way a human does. If this is the future trend, then <strong>every SaaS &#x2F; ToB &#x2F; ToC product has to ship its own CLI</strong>. Future SaaS is not only human-facing but also agent-facing. No popup buttons needed. CLI + Skill is enough to cover the need.</p>
+<p><strong>* At the same time, CLI&#39;s progressive disclosure aligns with the current mainstream direction</strong> — it saves context and tokens.&quot;</p>
+</blockquote>
+<p>This is a strong claim and worth sitting with: <strong>SaaS is going to have to ship CLIs because its users will increasingly be agents, not humans</strong>. The UI (buttons, forms, popup dialogs) has zero surface area for an agent; the CLI has 100%. If that prediction holds, a huge slice of existing SaaS product surface becomes dead weight, and a CLI story becomes a product requirement rather than a developer convenience.</p>
+<p>The DingTalk example the author cites is concrete: an enterprise communications platform publicly committing to CLI-ify its entire product line because &quot;AI agents should be able to drive it.&quot; If that becomes a pattern — Salesforce, Feishu, Notion, Airtable, Lark all shipping <code>product-cli</code> binaries — the question stops being <em>&quot;MCP or CLI?&quot;</em> and becomes <em>&quot;does your product have a CLI at all?&quot;</em></p>
+<p>The OpenClaw reference is the same one we saw in the <a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">Claude Code design philosophy post</a>: Kaili Gu&#39;s agent runtime showed that a locally-deployed agent with CLI access + Skills could do real work without an MCP server in sight. The author is watching the same demonstration and drawing the same conclusion.</p>
+<hr>
+<h2 id="2c-思考-2-—-What-Is-CLI-s-Relationship-to-MCP"><a href="#2c-思考-2-—-What-Is-CLI-s-Relationship-to-MCP" class="headerlink" title="2c. 思考 2 — What Is CLI&#39;s Relationship to MCP?"></a>2c. 思考 2 — What Is CLI&#39;s Relationship to MCP?</h2><p>The author&#39;s own answer (paraphrased):</p>
+<blockquote>
+<p>&quot;Both CLI and MCP can provide capabilities. <strong>MCP&#39;s advantages are standardization and better security. CLI&#39;s advantages are simplicity and progressive disclosure.</strong> Currently we see Google and other large enterprises ship <em>both</em> CLI and MCP. From what I&#39;m observing: <strong>if the agent is deployed on the client side, it uses CLI; on the server side, it uses MCP.</strong> For now, the two standards coexist — it&#39;s not a replacement story.&quot;</p>
+</blockquote>
+<p>This is the most useful sentence in the entire Xiaohongshu post, and it&#39;s the sentence I wish more of the &quot;MCP is dead&quot; discourse led with:</p>
+<blockquote>
+<p><strong>Client-side agents → CLI. Server-side agents → MCP. The two coexist.</strong></p>
+</blockquote>
+<p>The logic is clean:</p>
+<ul>
+<li>A <strong>client-side agent</strong> runs on the user&#39;s machine. It has access to a shell, an OS, installed binaries, environment variables, a filesystem. Every CLI the user has installed is effectively free capability. <strong>MCP overhead is pure waste here</strong> — you&#39;re paying token tax for schemas that re-encode capability the shell already has.</li>
+<li>A <strong>server-side agent</strong> runs in a datacenter, usually stateless, usually multi-tenant. It needs a standardized, auth-aware, auditable way to access tools. There&#39;s no &quot;shell&quot; in a meaningful sense; there&#39;s a Kubernetes cluster and a bunch of RPC endpoints. <strong>MCP&#39;s formality earns its overhead here</strong> — it gives you the governance&#x2F;auth&#x2F;observability story you need for production.</li>
+</ul>
+<p>So the correct framing isn&#39;t &quot;MCP vs. CLI&quot; — it&#39;s <strong>&quot;where does the agent live?&quot;</strong> That determines which interface is appropriate.</p>
+<p>This also explains why Anthropic (with Claude Code running on your laptop) leans CLI-heavy, while enterprise platforms building server-side agents are still investing in MCP. They&#39;re not disagreeing; they&#39;re optimizing for different deployment topologies.</p>
+<hr>
+<h2 id="2d-思考-3-—-What-Is-the-Impact-on-Front-End-Client-Engineers"><a href="#2d-思考-3-—-What-Is-the-Impact-on-Front-End-Client-Engineers" class="headerlink" title="2d. 思考 3 — What Is the Impact on Front-End &#x2F; Client Engineers?"></a>2d. 思考 3 — What Is the Impact on Front-End &#x2F; Client Engineers?</h2><p>The author&#39;s own answer (paraphrased):</p>
+<blockquote>
+<p>&quot;This impact is significant. At least from my own experience — since I started using Cursor, I haven&#39;t needed to ask the front-end team to do anything. The future trend is definitely not going to need a lot of pages, client-side interactions, etc. You can&#39;t purely do front-end anymore. <strong>In the face of AI, technology doesn&#39;t have a moat anymore.</strong> (在AI面前技术已经没有护城河.)</p>
+<p>Finally: although technology and products iterate every day, the big direction is clearly toward AGI.</p>
+<p>Previously, my company had an internal agent-build platform — probably other companies had them too. Whatever the requirement, you&#39;d build an agent. After a while there were hundreds of agents, hard to maintain, scattered everywhere. At the time I thought this form had problems. Looking back now, those built agents were essentially Skills. Combined with OpenClaw&#39;s form, it actually solves the earlier problem. <strong>I just need a general-purpose agent + Skills.</strong></p>
+<p>Recently I&#39;ve been thinking: AI is developing toward AGI, technology&#39;s moat is shrinking — <strong>where is our opportunity?</strong> (AI往AGI方向发展，技术的护城河降低了，我们的机会在哪？)&quot;</p>
+</blockquote>
+<p>That last question is the one that gives the post its urgency. This isn&#39;t a neutral analysis of protocols — it&#39;s an engineer looking at their own career and trying to figure out what still matters.</p>
+<p>The implicit argument, reading between the lines:</p>
+<ol>
+<li><strong>&quot;Agent build platforms&quot; are dead</strong> — they were an attempt to encode capabilities as bespoke agents. In hindsight, those were all Skills, and Skills are 100× lighter to author and maintain.</li>
+<li><strong>Front-end as a pure career is endangered</strong> — Cursor (and its successors) compress the iteration cost of UI work enough that an engineer who can also write prompts does front-end + back-end + ops without needing a specialist.</li>
+<li><strong>The &quot;moat&quot; question is real</strong> — if your skill was <em>&quot;I know React really well,&quot;</em> AI compresses that into a prompt. If your skill was <em>&quot;I know how to design a clean CLI for an agent to drive,&quot;</em> that&#39;s the new specialty.</li>
+</ol>
+<p>The future, per this analysis, belongs to people who can <strong>design the interface between products and agents</strong> — the CLI shape, the Skill content, the tool boundaries. That&#39;s a different job from classical application engineering.</p>
+<hr>
+<h2 id="2e-What-the-Comments-Added"><a href="#2e-What-the-Comments-Added" class="headerlink" title="2e. What the Comments Added"></a>2e. What the Comments Added</h2><p>The comment thread surfaced several useful points beyond the post body:</p>
+<p><strong>Comment from &quot;C&quot; (03-19, Beijing, 65 likes):</strong></p>
+<blockquote>
+<p>&quot;CLI 比 MCP 稳太多了，调试成本低不少 🥲&quot;<br><em>(&quot;CLI is way more stable than MCP, debugging cost is much lower.&quot;)</em></p>
+</blockquote>
+<p>This is the unglamorous truth nobody writes blog posts about: MCP servers crash, hang, version-drift, have flaky auth, and are hard to introspect. A CLI that fails tells you in stderr. An MCP server that fails returns a JSON-RPC error code you have to look up.</p>
+<p><strong>Reply from &quot;时间漫游&quot; (Time Drifter, 03-20, 13 likes):</strong></p>
+<blockquote>
+<p>&quot;这俩没本质区别吧，cli 后边也不得 http 调用吗？&quot;<br><em>(&quot;Aren&#39;t these two essentially the same? Doesn&#39;t CLI also have to make HTTP calls under the hood?&quot;)</em></p>
+</blockquote>
+<p>This is the correct skeptic&#39;s response, and it deserves a direct answer: <strong>yes, both CLI and MCP eventually make HTTP calls — but the cost distribution is totally different.</strong> CLI hides the HTTP call behind a compiled binary with its own auth state; the model never sees the HTTP schema. MCP exposes the HTTP-ish surface as JSON-RPC tool schemas in the system prompt, and the model pays token cost for all of it every turn.</p>
+<p>Same destination; very different bill.</p>
+<p><strong>Author&#39;s self-reply to C (03-19, Anhui):</strong></p>
+<blockquote>
+<p>&quot;没错，缺点也有就是 cli 多了后维护也麻烦，我现在装了一堆。&quot;<br><em>(&quot;True, but the downside is that once you have lots of CLIs installed, maintenance gets messy. I have a whole pile installed now.&quot;)</em></p>
+</blockquote>
+<p>This is the honest cost of the CLI-first approach: it pushes complexity from <em>protocol</em> to <em>installation</em>. Every tool you want an agent to use has to be installed, versioned, updated, and configured on every machine the agent runs on. The author admits they&#39;ve already accumulated &quot;a whole pile&quot; of CLIs — which means they&#39;ve partially re-created the dependency-management problem that protocols were supposed to solve.</p>
+<p><strong>Reply from &quot;gin&quot; (03-21, Sichuan):</strong></p>
+<blockquote>
+<p>&quot;替换的动力是 mcp 太消耗 context window，极大消耗 token.&quot;<br><em>(&quot;The motivation for replacing [MCP] is that MCP consumes too much context window and enormous amounts of tokens.&quot;)</em></p>
+</blockquote>
+<p>gin gets to the bottom line in one sentence. The entire debate — stripped of the &quot;AGI&quot;, &quot;moat&quot;, and &quot;protocol war&quot; framing — is about <strong>who pays the token tax</strong>. MCP puts it on the model every turn. CLI puts it on installation once.</p>
 <hr>
 <h2 id="3-Why-CLI-Wins-for-the-Common-Case"><a href="#3-Why-CLI-Wins-for-the-Common-Case" class="headerlink" title="3. Why CLI Wins for the Common Case"></a>3. Why CLI Wins for the Common Case</h2><p>Four structural advantages:</p>
 <h3 id="a-Pre-training-distribution"><a href="#a-Pre-training-distribution" class="headerlink" title="(a) Pre-training distribution"></a>(a) Pre-training distribution</h3><p>Claude has seen approximately all of GitHub, all of Stack Overflow, all of man pages, all of <code>--help</code> output ever written. When you tell it &quot;use <code>git log</code> to find the commit where this bug appeared,&quot; it just does it. No schema required. The model has the schema <strong>in its weights</strong>.</p>
@@ -949,13 +1025,40 @@
 </ol>
 <p>MCP isn&#39;t dead. But it&#39;s not the center of gravity anymore, and it probably shouldn&#39;t have been sold as such. The Xiaohongshu title captures the mood: we finished building the thing we were told was essential, and now we&#39;re being told it&#39;s optional. The right response isn&#39;t to feel tricked — it&#39;s to notice the pattern, and for the next wave, <strong>wait to see what survives</strong>.</p>
 <hr>
+<h2 id="9-Back-to-the-Author-s-Closing-Question"><a href="#9-Back-to-the-Author-s-Closing-Question" class="headerlink" title="9. Back to the Author&#39;s Closing Question"></a>9. Back to the Author&#39;s Closing Question</h2><p>爱吉尼亚羊&#39;s post ends with a question, not an answer:</p>
+<blockquote>
+<p><strong>AI 往 AGI 方向发展，技术的护城河降低了，我们的机会在哪？</strong><br><em>(&quot;AI is developing toward AGI, technology&#39;s moat is shrinking — where is our opportunity?&quot;)</em></p>
+</blockquote>
+<p>That question isn&#39;t rhetorical. It&#39;s genuinely open, and it&#39;s the one the whole Chinese engineering community is sitting with.</p>
+<p>My honest attempt at an answer, consistent with everything we&#39;ve seen across the <a href="/2026/04/20/Claude-Code-Skill-Mechanism/">five-post arc</a>:</p>
+<p><strong>The moat has moved.</strong> It used to be &quot;I know framework X really well.&quot; That&#39;s compressible by AI. It&#39;s no longer a moat.</p>
+<p>The new moats, as far as I can see them:</p>
+<ol>
+<li><strong>Interface design</strong>. The person who can specify a CLI, a Skill catalog, a tool boundary, a schema — the person who understands what surface agents should see and at what cost — is genuinely rare and genuinely valuable. This is part product, part systems, part prompt engineering, and it doesn&#39;t have an established job title yet.</li>
+<li><strong>Evaluation taste</strong>. Telling whether an agent&#39;s output is right, fast. Watching logs, catching hallucinated citations, noticing when the model silently weakened the problem (as the <a href="/2026/04/22/QED-Multi-Agent-Math-Proof-Pipeline/">QED post</a> elaborated). This is a craft skill that&#39;s hard to automate because it requires strong priors about what correct looks like.</li>
+<li><strong>Deployment &amp; ops at the agent boundary</strong>. Running agent workloads reliably — token accounting, prompt-cache management, rate-limit handling, multi-model failover, resume-ability, audit trails. This is CS fundamentals applied to a new problem domain, and the demand is only going up.</li>
+<li><strong>Domain expertise that agents still need to be told about</strong>. The narrower and more proprietary the domain, the more valuable the person who can write the Skill body. A general agent doesn&#39;t know your firm&#39;s compliance rules. A good Skill author does.</li>
+<li><strong>Taste for what to build at all</strong>. Agents make building 10× faster, so the question &quot;<em>what is worth building?</em>&quot; gets exponentially more leverage. The person who picks well spends their speed advantage on meaningful work; everyone else just ships more garbage faster.</li>
+</ol>
+<p>If you&#39;re a front-end engineer reading the author&#39;s post in panic: you weren&#39;t paid for JSX, you were paid for &quot;making the human–product interface work.&quot; That skill has a direct translation: <strong>make the agent–product interface work.</strong> The artifacts change (CLI instead of React, Skill body instead of UI copy, audit-trail UX instead of user-facing UX), but the core competency — taste about what a user needs and how to give it to them — is the same. The user just went from carbon to silicon.</p>
+<hr>
 <h2 id="References-and-Further-Reading"><a href="#References-and-Further-Reading" class="headerlink" title="References and Further Reading"></a>References and Further Reading</h2><ul>
-<li><a class="link"   target="_blank" rel="noopener" href="https://www.xiaohongshu.com/explore/69ba7d87000000001a02044e" >原帖 · 爱吉尼亚羊, &quot;MCP 还没做完，又要 CLI 了&quot; (小红书)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — the Xiaohongshu post that inspired this piece (post body is login-gated)</li>
+<li><strong><a class="link"   target="_blank" rel="noopener" href="https://www.xiaohongshu.com/explore/69ba7d87000000001a02044e" >原帖 · 爱吉尼亚羊, &quot;MCP 还没做完，又要 CLI 了&quot; (小红书)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></strong> — the Xiaohongshu post this piece integrates, with its three 思考 sections and comment thread.</li>
+<li>Useful comments on the post:<ul>
+<li><strong>C</strong>: <em>&quot;CLI 比 MCP 稳太多了，调试成本低不少&quot;</em> — stability and debuggability argument</li>
+<li><strong>时间漫游</strong>: <em>&quot;这俩没本质区别吧，cli 后边也不得 http 调用吗？&quot;</em> — the skeptic&#39;s response about the underlying HTTP</li>
+<li><strong>爱吉尼亚羊 (author)</strong>: <em>&quot;cli 多了后维护也麻烦，我现在装了一堆&quot;</em> — the honest cost of CLI: installation sprawl</li>
+<li><strong>gin</strong>: <em>&quot;替换的动力是 mcp 太消耗 context window，极大消耗 token&quot;</em> — the one-line bottom line</li>
+</ul>
+</li>
+<li>Related Chinese tech coverage:<ul>
 <li><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/2017741231225085959" >&quot;MCP 已死？一个设备运维场景跑完 CLI、MCP、Skills 三种方式后的真实结论&quot;<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — the device-operations benchmark referenced in §6</li>
-<li><a class="link"   target="_blank" rel="noopener" href="https://news.qq.com/rain/a/20260315A03H1A00" >&quot;MCP已死&quot;是AI圈最大的技术谎言？<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — the Tencent News rebuttal arguing MCP still matters for enterprise</li>
-<li><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/informatics/p/19717591" >warm3snow, &quot;从 MCP 到 CLI：AI Agent 的&#39;接口之争&#39;，终端才是终局&quot;<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — the cnblogs piece that ran the full pivot argument</li>
-<li><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42698421/article/details/159278097" >Zender Han, &quot;MCP、CLI 与 Skills：概念解析、差异对比与应用场景&quot;<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — the three-way comparison with the cleanest conceptual framing</li>
-<li><strong>Prior posts in this trilogy:</strong><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://news.qq.com/rain/a/20260315A03H1A00" >&quot;MCP已死&quot;是AI圈最大的技术谎言？<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — Tencent News rebuttal</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/informatics/p/19717591" >warm3snow, &quot;从 MCP 到 CLI：AI Agent 的&#39;接口之争&#39;，终端才是终局&quot;<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42698421/article/details/159278097" >Zender Han, &quot;MCP、CLI 与 Skills：概念解析、差异对比与应用场景&quot;<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+</ul>
+</li>
+<li><strong>Prior posts in this arc:</strong><ul>
 <li><a href="/2026/04/20/Claude-Code-Skill-Mechanism/">How Claude Code Skills Work Under the Hood</a></li>
 <li><a href="/2026/04/22/Claude-Code-Skills-Design-Philosophy/">From Wire Format to Design Philosophy</a></li>
 <li><a href="/2026/04/22/QED-Multi-Agent-Math-Proof-Pipeline/">QED — Multi-Agent Math Proof Pipeline</a></li>
@@ -977,7 +1080,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2026-04-22 15:47:26
+                    :</strong> 2026-04-22 15:57:58
             </li>
         
         <li>
@@ -1056,7 +1159,7 @@
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
 		<div class="page-title">MCP 还没做完，又要 CLI 了 — The Token-Budget Debate Behind AI Agent Interfaces</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MCP-%E8%BF%98%E6%B2%A1%E5%81%9A%E5%AE%8C%EF%BC%8C%E5%8F%88%E8%A6%81-CLI-%E4%BA%86"><span class="nav-text">MCP 还没做完，又要 CLI 了</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-The-Meme-MCP-Is-Dead-Long-Live-CLI"><span class="nav-text">1. The Meme: &quot;MCP Is Dead, Long Live CLI&quot;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-What-MCP-Actually-Costs"><span class="nav-text">2. What MCP Actually Costs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Token-consumption-at-a-glance"><span class="nav-text">Token consumption at a glance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-98-7-savings-claim-demystified"><span class="nav-text">The &quot;98.7% savings&quot; claim, demystified</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Why-CLI-Wins-for-the-Common-Case"><span class="nav-text">3. Why CLI Wins for the Common Case</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-Pre-training-distribution"><span class="nav-text">(a) Pre-training distribution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-Composability-Unix-pipes"><span class="nav-text">(b) Composability (Unix pipes)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-Transparency-and-debuggability"><span class="nav-text">(c) Transparency and debuggability</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-Mature-authentication"><span class="nav-text">(d) Mature authentication</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Why-MCP-Is-Not-Actually-Dead"><span class="nav-text">4. Why MCP Is Not Actually Dead</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-team-scale-threshold"><span class="nav-text">The team scale threshold</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Enterprise-middleware-is-where-MCP-probably-settles"><span class="nav-text">Enterprise middleware is where MCP probably settles</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-The-Three-Way-Comparison-MCP-vs-CLI-vs-Skills"><span class="nav-text">5. The Three-Way Comparison: MCP vs CLI vs Skills</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-key-insight-they-re-solving-different-problems"><span class="nav-text">The key insight: they&#39;re solving different problems</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-A-Real-Benchmark-Device-Operations-Scenario"><span class="nav-text">6. A Real Benchmark: Device Operations Scenario</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Results"><span class="nav-text">Results</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Connecting-to-the-Trilogy"><span class="nav-text">7. Connecting to the Trilogy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Where-MCP-still-fits"><span class="nav-text">Where MCP still fits</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-My-Take"><span class="nav-text">8. My Take</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-meta-lesson"><span class="nav-text">The meta-lesson</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References-and-Further-Reading"><span class="nav-text">References and Further Reading</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MCP-%E8%BF%98%E6%B2%A1%E5%81%9A%E5%AE%8C%EF%BC%8C%E5%8F%88%E8%A6%81-CLI-%E4%BA%86"><span class="nav-text">MCP 还没做完，又要 CLI 了</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-The-Author-s-Three-Questions"><span class="nav-text">0. The Author&#39;s Three Questions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-The-Meme-MCP-Is-Dead-Long-Live-CLI"><span class="nav-text">1. The Meme: &quot;MCP Is Dead, Long Live CLI&quot;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-What-MCP-Actually-Costs"><span class="nav-text">2. What MCP Actually Costs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Token-consumption-at-a-glance"><span class="nav-text">Token consumption at a glance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-98-7-savings-claim-demystified"><span class="nav-text">The &quot;98.7% savings&quot; claim, demystified</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2b-%E6%80%9D%E8%80%83-1-%E2%80%94-Why-Is-Everyone-Suddenly-Doing-This"><span class="nav-text">2b. 思考 1 — Why Is Everyone Suddenly Doing This?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2c-%E6%80%9D%E8%80%83-2-%E2%80%94-What-Is-CLI-s-Relationship-to-MCP"><span class="nav-text">2c. 思考 2 — What Is CLI&#39;s Relationship to MCP?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2d-%E6%80%9D%E8%80%83-3-%E2%80%94-What-Is-the-Impact-on-Front-End-Client-Engineers"><span class="nav-text">2d. 思考 3 — What Is the Impact on Front-End &#x2F; Client Engineers?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2e-What-the-Comments-Added"><span class="nav-text">2e. What the Comments Added</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Why-CLI-Wins-for-the-Common-Case"><span class="nav-text">3. Why CLI Wins for the Common Case</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-Pre-training-distribution"><span class="nav-text">(a) Pre-training distribution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-Composability-Unix-pipes"><span class="nav-text">(b) Composability (Unix pipes)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-Transparency-and-debuggability"><span class="nav-text">(c) Transparency and debuggability</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-Mature-authentication"><span class="nav-text">(d) Mature authentication</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Why-MCP-Is-Not-Actually-Dead"><span class="nav-text">4. Why MCP Is Not Actually Dead</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-team-scale-threshold"><span class="nav-text">The team scale threshold</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Enterprise-middleware-is-where-MCP-probably-settles"><span class="nav-text">Enterprise middleware is where MCP probably settles</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-The-Three-Way-Comparison-MCP-vs-CLI-vs-Skills"><span class="nav-text">5. The Three-Way Comparison: MCP vs CLI vs Skills</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-key-insight-they-re-solving-different-problems"><span class="nav-text">The key insight: they&#39;re solving different problems</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-A-Real-Benchmark-Device-Operations-Scenario"><span class="nav-text">6. A Real Benchmark: Device Operations Scenario</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Results"><span class="nav-text">Results</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Connecting-to-the-Trilogy"><span class="nav-text">7. Connecting to the Trilogy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Where-MCP-still-fits"><span class="nav-text">Where MCP still fits</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-My-Take"><span class="nav-text">8. My Take</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-meta-lesson"><span class="nav-text">The meta-lesson</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-Back-to-the-Author-s-Closing-Question"><span class="nav-text">9. Back to the Author&#39;s Closing Question</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References-and-Further-Reading"><span class="nav-text">References and Further Reading</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1088,7 +1191,7 @@
                     </span>
                     
                         <span>
-                            23k words in total
+                            25.3k words in total
                         </span>
                     
                 </p>
