@@ -93,7 +93,7 @@
 <meta property="og:description" content="Ruby&#39;s Blog">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-04-22T11:30:00.000Z">
-<meta property="article:modified_time" content="2026-04-22T07:57:58.007Z">
+<meta property="article:modified_time" content="2026-04-22T08:05:03.483Z">
 <meta property="article:author" content="wy">
 <meta property="article:tag" content="Agent Design">
 <meta property="article:tag" content="CLI">
@@ -559,8 +559,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-22 15:57:58</span>
-            <span class="mobile">2026-04-22 15:57:58</span>
+            <span class="desktop">2026-04-22 16:05:03</span>
+            <span class="mobile">2026-04-22 16:05:03</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -588,15 +588,15 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/Claude-Code/">Claude Code</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/LLM/">LLM</a>&nbsp;
+                        <a href="/tags/LLM/">LLM</a>&nbsp;
                     </li>
                 
                     <li>
                         | <a href="/tags/Agent-Design/">Agent Design</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Claude-Code/">Claude Code</a>&nbsp;
                     </li>
                 
                     <li>
@@ -614,12 +614,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>5.2k Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>8.3k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>31 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>48 Mins</span>
         </span>
     
     
@@ -775,6 +775,169 @@
 <p>&quot;替换的动力是 mcp 太消耗 context window，极大消耗 token.&quot;<br><em>(&quot;The motivation for replacing [MCP] is that MCP consumes too much context window and enormous amounts of tokens.&quot;)</em></p>
 </blockquote>
 <p>gin gets to the bottom line in one sentence. The entire debate — stripped of the &quot;AGI&quot;, &quot;moat&quot;, and &quot;protocol war&quot; framing — is about <strong>who pays the token tax</strong>. MCP puts it on the model every turn. CLI puts it on installation once.</p>
+<hr>
+<h2 id="2f-Deeper-into-the-Comment-Threads-—-The-Skeptic-Camp"><a href="#2f-Deeper-into-the-Comment-Threads-—-The-Skeptic-Camp" class="headerlink" title="2f. Deeper into the Comment Threads — The Skeptic Camp"></a>2f. Deeper into the Comment Threads — The Skeptic Camp</h2><p>The post&#39;s 91-comment thread kept going. Beyond the first four, several replies push back on the &quot;CLI wins&quot; narrative much harder, and those pushbacks deserve a direct answer. This section walks through the substantive ones.</p>
+<h3 id="The-pipe-composition-point-—-Joe-Black-03-21-山东-4-likes"><a href="#The-pipe-composition-point-—-Joe-Black-03-21-山东-4-likes" class="headerlink" title="The pipe-composition point — Joe Black (03-21, 山东, 4 likes)"></a>The pipe-composition point — Joe Black (03-21, 山东, 4 likes)</h3><p>After 锦鲤而已 asks the obvious skeptical question <em>&quot;为啥 cli 不耗 token 呢?&quot;</em> (<em>&quot;Why doesn&#39;t CLI consume tokens?&quot;</em>), Joe Black answers with the single most technically important comment in the thread:</p>
+<blockquote>
+<p>&quot;cli 可以管道组合调用，结果不用传回来占用上下文空间&quot;<br><em>(&quot;CLI can be composed via pipes; the intermediate results don&#39;t have to be returned to occupy context space.&quot;)</em></p>
+</blockquote>
+<p>This is the part most English-language &quot;CLI vs MCP&quot; takes miss. The structural token difference isn&#39;t just &quot;CLI has no schema, MCP has schema.&quot; It&#39;s also this:</p>
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>MCP</th>
+<th>CLI</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&quot;Filter logs, count errors, find the worst file&quot;</td>
+<td>3 tool calls, each result returned to the model, each result inflates context</td>
+<td><code>grep ERROR *.log | sort | uniq -c | sort -rn | head -1</code> — one call, <strong>only the final line returns</strong></td>
+</tr>
+</tbody></table>
+<p>With MCP, every intermediate result is a round-trip through the model. The model has to see the whole output, reason about it, decide what to call next, pass parameters. The context balloons with every step.</p>
+<p>With a shell pipeline, <strong>intermediate results stay inside the shell</strong>. The 10,000-line grep output never enters context; only the final top-1 count does. For any multi-step pipeline, this compounds: 5 pipe stages &#x3D; 5× less context pressure.</p>
+<h3 id="时间漫游-s-counter-—-MCP-could-do-that-too"><a href="#时间漫游-s-counter-—-MCP-could-do-that-too" class="headerlink" title="时间漫游&#39;s counter — &quot;MCP could do that too&quot;"></a>时间漫游&#39;s counter — &quot;MCP could do that too&quot;</h3><p>Same user replies:</p>
+<blockquote>
+<p>&quot;本质是内部函数互调吧，mcp 也可以抽象一个执行 pipeline 函数出来，只需要一次调用就可以&quot;<br><em>(&quot;Essentially this is internal function-calling, right? MCP could also abstract an execute-pipeline function — only one call needed.&quot;)</em></p>
+</blockquote>
+<p><strong>Technically correct, practically rare.</strong> Yes, you could write an MCP server that exposes a single <code>exec_pipeline(stages: List[...])</code> meta-tool. But:</p>
+<ol>
+<li>Nobody ships MCP servers this way. In practice MCP catalogs are flat lists of single-purpose tools, because that&#39;s the design pattern the spec encourages and the tutorials demonstrate.</li>
+<li>Even if you did, you&#39;ve essentially re-invented <code>bash</code> inside JSON-RPC — with worse debuggability, worse streaming, and none of the ecosystem of existing Unix tools.</li>
+</ol>
+<p>The &quot;MCP could do X&quot; line is a recurring pattern in this thread. It&#39;s always technically true and almost always practically irrelevant, because <strong>the question isn&#39;t what MCP is capable of, it&#39;s what the MCP ecosystem has actually converged on shipping.</strong></p>
+<h3 id="胖虎-s-question-03-20-北京-—-How-does-CLI-do-progressive-disclosure"><a href="#胖虎-s-question-03-20-北京-—-How-does-CLI-do-progressive-disclosure" class="headerlink" title="胖虎&#39;s question (03-20, 北京) — &quot;How does CLI do progressive disclosure?&quot;"></a>胖虎&#39;s question (03-20, 北京) — <em>&quot;How does CLI do progressive disclosure?&quot;</em></h3><p>This is the sharpest question in the thread, because &quot;progressive disclosure&quot; was the author&#39;s second main argument for CLI.</p>
+<p>The replies unpack it well:</p>
+<p><strong>无名无字 (03-20, 上海, 20 likes):</strong></p>
+<blockquote>
+<p>&quot;披露的是触发 cli 的提示词而不是 cli 本身&quot;<br><em>(&quot;What&#39;s disclosed is the prompt that triggers the CLI, not the CLI itself.&quot;)</em></p>
+</blockquote>
+<p><strong>一颗奇异豆 (03-21, 上海):</strong></p>
+<blockquote>
+<p>&quot;llm 早已内置了无数的 cli 技能，所以不用详细描述&quot;<br><em>(&quot;LLMs already have countless CLI skills built in, so you don&#39;t need to describe them in detail.&quot;)</em></p>
+</blockquote>
+<p><strong>锦鲤而已 (03-21, 美国, 3 likes):</strong></p>
+<blockquote>
+<p>&quot;都能渐进的话，cli 为啥比 mcp 好?&quot;<br><em>(&quot;If both can do progressive disclosure, why is CLI better than MCP?&quot;)</em></p>
+</blockquote>
+<p>This is a genuinely important clarification. <strong>Progressive disclosure doesn&#39;t happen at the CLI level — it happens at the Skill level.</strong> The Skill catalog advertises a short description (&quot;use this for git operations&quot;); the Skill body, loaded on demand, says &quot;run <code>git log --oneline | grep ...</code>.&quot; The CLI itself is never &quot;disclosed&quot; because it doesn&#39;t need to be — the model already knows it from pre-training.</p>
+<p>So the correct answer to 锦鲤而已&#39;s challenge is: <strong>CLI is better than MCP for progressive disclosure not because CLI discloses progressively, but because CLI requires no disclosure at all.</strong> Pre-training makes the schema free.</p>
+<p>For custom tools that the model <em>doesn&#39;t</em> know — your company&#39;s internal <code>deployer</code> or <code>loganalyzer</code> CLI — progressive disclosure has to come from somewhere. In the Claude Code model, that &quot;somewhere&quot; is the Skill body. In the MCP model, it&#39;s the JSON Schema shipped every turn. Same information, different billing.</p>
+<h3 id="卡佩推-s-enterprise-architecture-sketch-03-21-上海"><a href="#卡佩推-s-enterprise-architecture-sketch-03-21-上海" class="headerlink" title="卡佩推&#39;s enterprise architecture sketch (03-21, 上海)"></a>卡佩推&#39;s enterprise architecture sketch (03-21, 上海)</h3><p>This comment is worth reading carefully because it describes a real implementation pattern:</p>
+<blockquote>
+<p>&quot;在企业内部上传到统一的 npm 仓库，skill 中自动维护版本，在 ai agent 所在的机器上直接用命令行调用，不需要 http，能省去每次交互时 mcp 的冗余，理论上是一种比 mcp 更优的设计吧（仅限企业内部，更通用的环境不了解，不评价）&quot;</p>
+<p><em>(&quot;Inside the company, upload [CLIs] to a unified npm repository. Versions are auto-maintained in the Skill. On the machine where the AI agent runs, invoke directly via command line — no HTTP needed. This saves MCP&#39;s per-interaction overhead. Theoretically, it&#39;s a better design than MCP (for enterprise-internal only; general-purpose environments, I&#39;m not commenting).&quot;)</em></p>
+</blockquote>
+<p>This is a concrete, shippable architecture:</p>
+<ol>
+<li><strong>npm (or equivalent) as the distribution layer</strong> — solves the &quot;pile of CLIs&quot; problem the author admitted to. Versions pinned, updates automatic.</li>
+<li><strong>Skill pins the CLI version</strong> — the Skill body references <code>my-corp-deployer@^3.2</code>; when the Skill is loaded, the agent uses the right binary.</li>
+<li><strong>Direct CLI invocation</strong> — no HTTP, no JSON-RPC, no auth middleware on the critical path.</li>
+<li><strong>Honest scope qualification</strong> — explicitly says &quot;enterprise internal; I don&#39;t know about general environments.&quot;</li>
+</ol>
+<p>That last point is important and often missing from both sides of this debate. A design that works for 10 internal teams at one company is not necessarily a design that works for 1,000 third-party tool authors in a public marketplace. The author of 卡佩推&#39;s comment is careful about this. Most of the &quot;MCP is dead&quot; crowd isn&#39;t.</p>
+<h3 id="小红薯-s-reality-check-03-21-四川"><a href="#小红薯-s-reality-check-03-21-四川" class="headerlink" title="小红薯&#39;s reality check (03-21, 四川)"></a>小红薯&#39;s reality check (03-21, 四川)</h3><p>Replying to Joe Black:</p>
+<blockquote>
+<p>&quot;cli 模型没有专门训练过，成功率存疑，而且 programing tool call 也可以编排 tool 调用。最大的疑问题是，一说就是这样节约 token，可是实际有没有 case 能作证这样效果确实好呢 🥲&quot;</p>
+<p><em>(&quot;CLI models haven&#39;t been specifically trained [for this use case], so success rate is questionable. And programmatic tool-calling can also orchestrate tool invocations. The biggest question: everyone says CLI saves tokens, but is there actually a published case proving it genuinely works better? 🥲&quot;)</em></p>
+</blockquote>
+<p><strong>This is the most important skeptic comment in the entire thread.</strong> The entire CLI-over-MCP narrative rests on two empirical claims:</p>
+<ol>
+<li>CLI consumes fewer tokens.</li>
+<li>CLI achieves equivalent or better task performance.</li>
+</ol>
+<p>Claim (1) is easy to verify — count the schema bytes. Claim (2) is much harder. Anthropic&#39;s &quot;98.7% token savings&quot; number is from their own internal benchmark, not peer-reviewed. The Zhihu device-operations post I cited in §6 claims &quot;equivalent outcomes,&quot; but their methodology isn&#39;t rigorous.</p>
+<p>The honest answer is: <strong>most &quot;CLI wins&quot; evidence is anecdotal or from people with a stake in the narrative.</strong> 小红薯 is right to push on this. The field needs proper benchmarks — paired task sets, multiple models, measured token cost and accuracy — before anyone can claim CLI beats MCP on the merits rather than on aesthetics.</p>
+<p>My own prior: for tasks the model was pre-trained on (git, curl, sqlite3, docker), CLI probably wins on both axes. For tasks with novel tools (your company&#39;s proprietary inventory API), the picture is less clear — the model doesn&#39;t know your CLI either, so it has to be told <em>somehow</em>, and Skill-body vs. MCP-schema becomes a much closer call.</p>
+<h3 id="The-old-wine-in-new-bottles-camp"><a href="#The-old-wine-in-new-bottles-camp" class="headerlink" title="The &quot;old wine in new bottles&quot; camp"></a>The &quot;old wine in new bottles&quot; camp</h3><p>Three comments run the strongest skepticism:</p>
+<p><strong>maksim0930 (03-22, 浙江):</strong></p>
+<blockquote>
+<p>&quot;Skill 也能做到串一堆 mcp，如果觉得 mcp 占 context window，完全可以用 scripts 代替，scripts 想怎么写怎么写，然后将最终的结果给到 agent 即可。那是不是可以理解这个 scripts 就是 cli？如果是，那这俩有什么区别？只不过就是大厂又没事了，硬凹出来一个新名词。🥲&quot;</p>
+<p><em>(&quot;Skill can chain a bunch of MCPs too. If you think MCP eats context, just replace it with scripts — write whatever you want, hand the final result to the agent. So isn&#39;t &#39;scripts&#39; just CLI? If yes, what&#39;s the actual difference between these two? This is just big tech having nothing better to do and manufacturing a new term. 🥲&quot;)</em></p>
+</blockquote>
+<p><strong>maksim0930 (again, replying to 卡佩推):</strong></p>
+<blockquote>
+<p>&quot;和 http 没关系。mcp 也能做到只用本地命令。个人观点，就是新提个概念，旧酒装新瓶?&quot;<br><em>(&quot;Has nothing to do with HTTP. MCP can also work with purely local commands. Personal view: it&#39;s just a new concept, old wine in new bottles.&quot;)</em></p>
+</blockquote>
+<p><strong>离我沙发远点 (6天前, 北京):</strong></p>
+<blockquote>
+<p>&quot;本质说是省 token，规范设计的 mcp 其实也能省，所以说到底是生态之争&quot;<br><em>(&quot;At its core, this is about saving tokens. A well-designed MCP can also save tokens. So ultimately it&#39;s an ecosystem war.&quot;)</em></p>
+</blockquote>
+<p><strong>包青蛙 (03-21, 重庆):</strong></p>
+<blockquote>
+<p>&quot;那一大堆 cli 和一大堆 mcp 有啥区别，都是只披露描述，可能 cli 功能聚合一些?&quot;<br><em>(&quot;What&#39;s the actual difference between a pile of CLIs and a pile of MCPs? Both just disclose descriptions. Maybe CLIs aggregate functionality a bit more?&quot;)</em></p>
+</blockquote>
+<p>This camp deserves to be taken seriously, because they&#39;re not wrong. Let me steelman their argument:</p>
+<ol>
+<li><strong>Yes, you can build a Skill that just shells out to scripts.</strong> At that point &quot;CLI&quot; vs &quot;ad-hoc script&quot; is purely a naming convention.</li>
+<li><strong>Yes, MCP servers can also run on stdio (local IO mode), no HTTP required.</strong> Emyoya&#39;s comment elsewhere in the thread makes this point directly: <em>&quot;mcp 本身就提供了本地 io 调用模式&quot;</em> (<em>&quot;MCP itself already provides a local-IO invocation mode&quot;</em>).</li>
+<li><strong>Yes, a carefully designed MCP server could be as token-efficient as a CLI.</strong> If you ship one meta-tool instead of 90 tool schemas, your context cost collapses.</li>
+<li><strong>Yes, the real contest is ecosystem control</strong>, not raw technical capability. Whoever controls the &quot;right&quot; agent interface captures the distribution layer for tool authors.</li>
+</ol>
+<p>So where does the substantive difference actually live? In my read:</p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>MCP</th>
+<th>CLI</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Authoring cost</strong></td>
+<td>Write a server (Python&#x2F;TypeScript), run it, handle versioning</td>
+<td>Write a script, put it in <code>$PATH</code></td>
+</tr>
+<tr>
+<td><strong>Model familiarity</strong></td>
+<td>Zero (has to be told)</td>
+<td>High (pre-training)</td>
+</tr>
+<tr>
+<td><strong>Default packaging</strong></td>
+<td>JSON-RPC over stdio or HTTP</td>
+<td>Binary in <code>$PATH</code></td>
+</tr>
+<tr>
+<td><strong>Ecosystem culture</strong></td>
+<td>Catalog of tools, formal schemas</td>
+<td>Unix toolbox, <code>--help</code>, man pages</td>
+</tr>
+<tr>
+<td><strong>Capability ceiling</strong></td>
+<td>Equal in theory</td>
+<td>Equal in theory</td>
+</tr>
+</tbody></table>
+<p>The last row is where the skeptics are right: <em>in theory</em>, these are isomorphic. In practice, they represent different cultures and different economic structures. MCP invites you to write formal schemas, run servers, think about auth layers. CLI invites you to write scripts, expose them, move on.</p>
+<p><strong>离我沙发远点&#39;s &quot;ecosystem war&quot; framing is probably the most accurate single-sentence diagnosis of the whole debate.</strong> It&#39;s not about which protocol is better; it&#39;s about whether the agent ecosystem will consolidate around something that looks more like the npm&#x2F;pypi model (protocol-mediated, central registry) or the bash&#x2F;GNU coreutils model (distributed, OS-native, convention-over-standard).</p>
+<h3 id="MCP-s-irreplaceable-scenarios"><a href="#MCP-s-irreplaceable-scenarios" class="headerlink" title="MCP&#39;s irreplaceable scenarios"></a>MCP&#39;s irreplaceable scenarios</h3><p>A separate mini-thread argues the other direction:</p>
+<p><strong>Leisniy (03-23, 上海):</strong></p>
+<blockquote>
+<p>&quot;看具体场景，有些时候必须 MCP&quot;<br><em>(&quot;Depends on the scenario. Sometimes MCP is mandatory.&quot;)</em></p>
+</blockquote>
+<p><strong>C (03-24, 北京):</strong></p>
+<blockquote>
+<p>&quot;对 MCP 确实有不可替代的场景，比如需要实时读取外部数据源或者跨系统调度的时候。不过对大部分老板来说，先把简单的规则型流程自动化跑通再考虑 MCP，ROI 更高&quot;</p>
+<p><em>(&quot;Yes, MCP does have irreplaceable scenarios — for instance, when you need real-time reading of external data sources or cross-system orchestration. But for most bosses, automating the simple rule-based processes first and then considering MCP gives higher ROI.&quot;)</em></p>
+</blockquote>
+<p>These are the right scenarios to reach for MCP:</p>
+<ul>
+<li><strong>Real-time data sources</strong> where you need a long-running stateful connection (database cursors, streaming APIs, subscription-based data feeds). A one-shot CLI call doesn&#39;t fit.</li>
+<li><strong>Cross-system orchestration</strong> with shared auth context across many backends. The governance layer needs to live somewhere, and a central MCP broker is a natural place.</li>
+<li><strong>Multi-tenant &#x2F; user-facing agent platforms</strong> where you can&#39;t assume the agent runs on a machine you control.</li>
+</ul>
+<p>C&#39;s &quot;ROI&quot; comment is also worth internalizing: even in companies where MCP would eventually be the right answer, it&#39;s rarely the right <em>first</em> answer. Automate the rule-based flows with Skills + CLI, then reach for MCP when you actually hit the wall that MCP solves.</p>
+<hr>
+<h2 id="2g-What-This-All-Adds-Up-To"><a href="#2g-What-This-All-Adds-Up-To" class="headerlink" title="2g. What This All Adds Up To"></a>2g. What This All Adds Up To</h2><p>If I synthesize the 91-comment thread into three claims:</p>
+<ol>
+<li><strong>The pipe-composition advantage is real and structural.</strong> (Joe Black) This isn&#39;t just aesthetic — the token difference is non-trivial for multi-step workflows and compounds with pipeline length.</li>
+<li><strong>Progressive disclosure happens at the Skill layer, not the CLI layer.</strong> (无名无字, 一颗奇异豆) The CLI is never disclosed because pre-training makes it free; Skills disclose the procedural wrapper that tells the model when to reach for which CLI.</li>
+<li><strong>The real battle is ecosystem, not protocol.</strong> (离我沙发远点, maksim0930) MCP and CLI have equal theoretical expressive power. What differs is the culture of tool authorship and the economics of distribution. Whoever captures the authoring pipeline captures the market.</li>
+</ol>
+<p>And one honest question from 小红薯 that the field should answer before the meme cycle moves on: <strong>where are the benchmarks?</strong> Token-count comparisons are easy; end-to-end task performance is hard; and the aesthetic arguments on both sides have outrun the evidence.</p>
 <hr>
 <h2 id="3-Why-CLI-Wins-for-the-Common-Case"><a href="#3-Why-CLI-Wins-for-the-Common-Case" class="headerlink" title="3. Why CLI Wins for the Common Case"></a>3. Why CLI Wins for the Common Case</h2><p>Four structural advantages:</p>
 <h3 id="a-Pre-training-distribution"><a href="#a-Pre-training-distribution" class="headerlink" title="(a) Pre-training distribution"></a>(a) Pre-training distribution</h3><p>Claude has seen approximately all of GitHub, all of Stack Overflow, all of man pages, all of <code>--help</code> output ever written. When you tell it &quot;use <code>git log</code> to find the commit where this bug appeared,&quot; it just does it. No schema required. The model has the schema <strong>in its weights</strong>.</p>
@@ -1046,9 +1209,19 @@
 <li><strong><a class="link"   target="_blank" rel="noopener" href="https://www.xiaohongshu.com/explore/69ba7d87000000001a02044e" >原帖 · 爱吉尼亚羊, &quot;MCP 还没做完，又要 CLI 了&quot; (小红书)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></strong> — the Xiaohongshu post this piece integrates, with its three 思考 sections and comment thread.</li>
 <li>Useful comments on the post:<ul>
 <li><strong>C</strong>: <em>&quot;CLI 比 MCP 稳太多了，调试成本低不少&quot;</em> — stability and debuggability argument</li>
-<li><strong>时间漫游</strong>: <em>&quot;这俩没本质区别吧，cli 后边也不得 http 调用吗？&quot;</em> — the skeptic&#39;s response about the underlying HTTP</li>
+<li><strong>时间漫游</strong>: <em>&quot;这俩没本质区别吧，cli 后边也不得 http 调用吗？&quot;</em> &#x2F; <em>&quot;本质是内部函数互调吧，mcp 也可以抽象一个执行 pipeline 函数出来&quot;</em> — the skeptic&#39;s response about the underlying HTTP and MCP&#39;s theoretical capability</li>
 <li><strong>爱吉尼亚羊 (author)</strong>: <em>&quot;cli 多了后维护也麻烦，我现在装了一堆&quot;</em> — the honest cost of CLI: installation sprawl</li>
 <li><strong>gin</strong>: <em>&quot;替换的动力是 mcp 太消耗 context window，极大消耗 token&quot;</em> — the one-line bottom line</li>
+<li><strong>Joe Black</strong>: <em>&quot;cli 可以管道组合调用，结果不用传回来占用上下文空间&quot;</em> — the pipe-composition structural argument</li>
+<li><strong>胖虎</strong>: <em>&quot;CLI 如何渐进式披露？&quot;</em> — the question that forced the best clarification in the thread</li>
+<li><strong>无名无字</strong>: <em>&quot;披露的是触发 cli 的提示词而不是 cli 本身&quot;</em> — the cleanest framing: disclosure happens at the Skill layer, not the CLI</li>
+<li><strong>一颗奇异豆</strong>: <em>&quot;llm 早已内置了无数的 cli 技能，所以不用详细描述&quot;</em> — pre-training makes the schema free</li>
+<li><strong>卡佩推</strong>: the enterprise-npm + skill-versioning architecture sketch</li>
+<li><strong>小红薯6366AC9G</strong>: <em>&quot;一说就是这样节约 token，可是实际有没有 case 能作证这样效果确实好呢&quot;</em> — the missing-benchmark question</li>
+<li><strong>maksim0930</strong>: <em>&quot;就是新提个概念，旧酒装新瓶?&quot;</em> — the &quot;new wine in old bottles&quot; skepticism</li>
+<li><strong>离我沙发远点</strong>: <em>&quot;本质说是省 token，规范设计的 mcp 其实也能省，所以说到底是生态之争&quot;</em> — the &quot;it&#39;s an ecosystem war&quot; diagnosis</li>
+<li><strong>Leisniy &#x2F; C</strong>: MCP&#39;s irreplaceable scenarios (real-time data sources, cross-system orchestration)</li>
+<li><strong>Emyoya</strong>: <em>&quot;mcp 本身就提供了本地 io 调用模式&quot;</em> — MCP already supports local-IO mode without HTTP</li>
 </ul>
 </li>
 <li>Related Chinese tech coverage:<ul>
@@ -1080,7 +1253,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2026-04-22 15:57:58
+                    :</strong> 2026-04-22 16:05:03
             </li>
         
         <li>
@@ -1106,15 +1279,15 @@
 		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/Claude-Code/">#Claude Code</a>&nbsp;
-			</li>
-			
-			<li class="tag-item mx-0.5">
 				<a href="/tags/LLM/">#LLM</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
 				<a href="/tags/Agent-Design/">#Agent Design</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Claude-Code/">#Claude Code</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
@@ -1159,7 +1332,7 @@
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
 		<div class="page-title">MCP 还没做完，又要 CLI 了 — The Token-Budget Debate Behind AI Agent Interfaces</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MCP-%E8%BF%98%E6%B2%A1%E5%81%9A%E5%AE%8C%EF%BC%8C%E5%8F%88%E8%A6%81-CLI-%E4%BA%86"><span class="nav-text">MCP 还没做完，又要 CLI 了</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-The-Author-s-Three-Questions"><span class="nav-text">0. The Author&#39;s Three Questions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-The-Meme-MCP-Is-Dead-Long-Live-CLI"><span class="nav-text">1. The Meme: &quot;MCP Is Dead, Long Live CLI&quot;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-What-MCP-Actually-Costs"><span class="nav-text">2. What MCP Actually Costs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Token-consumption-at-a-glance"><span class="nav-text">Token consumption at a glance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-98-7-savings-claim-demystified"><span class="nav-text">The &quot;98.7% savings&quot; claim, demystified</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2b-%E6%80%9D%E8%80%83-1-%E2%80%94-Why-Is-Everyone-Suddenly-Doing-This"><span class="nav-text">2b. 思考 1 — Why Is Everyone Suddenly Doing This?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2c-%E6%80%9D%E8%80%83-2-%E2%80%94-What-Is-CLI-s-Relationship-to-MCP"><span class="nav-text">2c. 思考 2 — What Is CLI&#39;s Relationship to MCP?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2d-%E6%80%9D%E8%80%83-3-%E2%80%94-What-Is-the-Impact-on-Front-End-Client-Engineers"><span class="nav-text">2d. 思考 3 — What Is the Impact on Front-End &#x2F; Client Engineers?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2e-What-the-Comments-Added"><span class="nav-text">2e. What the Comments Added</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Why-CLI-Wins-for-the-Common-Case"><span class="nav-text">3. Why CLI Wins for the Common Case</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-Pre-training-distribution"><span class="nav-text">(a) Pre-training distribution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-Composability-Unix-pipes"><span class="nav-text">(b) Composability (Unix pipes)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-Transparency-and-debuggability"><span class="nav-text">(c) Transparency and debuggability</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-Mature-authentication"><span class="nav-text">(d) Mature authentication</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Why-MCP-Is-Not-Actually-Dead"><span class="nav-text">4. Why MCP Is Not Actually Dead</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-team-scale-threshold"><span class="nav-text">The team scale threshold</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Enterprise-middleware-is-where-MCP-probably-settles"><span class="nav-text">Enterprise middleware is where MCP probably settles</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-The-Three-Way-Comparison-MCP-vs-CLI-vs-Skills"><span class="nav-text">5. The Three-Way Comparison: MCP vs CLI vs Skills</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-key-insight-they-re-solving-different-problems"><span class="nav-text">The key insight: they&#39;re solving different problems</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-A-Real-Benchmark-Device-Operations-Scenario"><span class="nav-text">6. A Real Benchmark: Device Operations Scenario</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Results"><span class="nav-text">Results</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Connecting-to-the-Trilogy"><span class="nav-text">7. Connecting to the Trilogy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Where-MCP-still-fits"><span class="nav-text">Where MCP still fits</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-My-Take"><span class="nav-text">8. My Take</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-meta-lesson"><span class="nav-text">The meta-lesson</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-Back-to-the-Author-s-Closing-Question"><span class="nav-text">9. Back to the Author&#39;s Closing Question</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References-and-Further-Reading"><span class="nav-text">References and Further Reading</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MCP-%E8%BF%98%E6%B2%A1%E5%81%9A%E5%AE%8C%EF%BC%8C%E5%8F%88%E8%A6%81-CLI-%E4%BA%86"><span class="nav-text">MCP 还没做完，又要 CLI 了</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-The-Author-s-Three-Questions"><span class="nav-text">0. The Author&#39;s Three Questions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-The-Meme-MCP-Is-Dead-Long-Live-CLI"><span class="nav-text">1. The Meme: &quot;MCP Is Dead, Long Live CLI&quot;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-What-MCP-Actually-Costs"><span class="nav-text">2. What MCP Actually Costs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Token-consumption-at-a-glance"><span class="nav-text">Token consumption at a glance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-98-7-savings-claim-demystified"><span class="nav-text">The &quot;98.7% savings&quot; claim, demystified</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2b-%E6%80%9D%E8%80%83-1-%E2%80%94-Why-Is-Everyone-Suddenly-Doing-This"><span class="nav-text">2b. 思考 1 — Why Is Everyone Suddenly Doing This?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2c-%E6%80%9D%E8%80%83-2-%E2%80%94-What-Is-CLI-s-Relationship-to-MCP"><span class="nav-text">2c. 思考 2 — What Is CLI&#39;s Relationship to MCP?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2d-%E6%80%9D%E8%80%83-3-%E2%80%94-What-Is-the-Impact-on-Front-End-Client-Engineers"><span class="nav-text">2d. 思考 3 — What Is the Impact on Front-End &#x2F; Client Engineers?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2e-What-the-Comments-Added"><span class="nav-text">2e. What the Comments Added</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2f-Deeper-into-the-Comment-Threads-%E2%80%94-The-Skeptic-Camp"><span class="nav-text">2f. Deeper into the Comment Threads — The Skeptic Camp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-pipe-composition-point-%E2%80%94-Joe-Black-03-21-%E5%B1%B1%E4%B8%9C-4-likes"><span class="nav-text">The pipe-composition point — Joe Black (03-21, 山东, 4 likes)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E6%BC%AB%E6%B8%B8-s-counter-%E2%80%94-MCP-could-do-that-too"><span class="nav-text">时间漫游&#39;s counter — &quot;MCP could do that too&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%96%E8%99%8E-s-question-03-20-%E5%8C%97%E4%BA%AC-%E2%80%94-How-does-CLI-do-progressive-disclosure"><span class="nav-text">胖虎&#39;s question (03-20, 北京) — &quot;How does CLI do progressive disclosure?&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%A1%E4%BD%A9%E6%8E%A8-s-enterprise-architecture-sketch-03-21-%E4%B8%8A%E6%B5%B7"><span class="nav-text">卡佩推&#39;s enterprise architecture sketch (03-21, 上海)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BA%A2%E8%96%AF-s-reality-check-03-21-%E5%9B%9B%E5%B7%9D"><span class="nav-text">小红薯&#39;s reality check (03-21, 四川)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-old-wine-in-new-bottles-camp"><span class="nav-text">The &quot;old wine in new bottles&quot; camp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MCP-s-irreplaceable-scenarios"><span class="nav-text">MCP&#39;s irreplaceable scenarios</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2g-What-This-All-Adds-Up-To"><span class="nav-text">2g. What This All Adds Up To</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Why-CLI-Wins-for-the-Common-Case"><span class="nav-text">3. Why CLI Wins for the Common Case</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-Pre-training-distribution"><span class="nav-text">(a) Pre-training distribution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-Composability-Unix-pipes"><span class="nav-text">(b) Composability (Unix pipes)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-Transparency-and-debuggability"><span class="nav-text">(c) Transparency and debuggability</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-Mature-authentication"><span class="nav-text">(d) Mature authentication</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Why-MCP-Is-Not-Actually-Dead"><span class="nav-text">4. Why MCP Is Not Actually Dead</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-team-scale-threshold"><span class="nav-text">The team scale threshold</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Enterprise-middleware-is-where-MCP-probably-settles"><span class="nav-text">Enterprise middleware is where MCP probably settles</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-The-Three-Way-Comparison-MCP-vs-CLI-vs-Skills"><span class="nav-text">5. The Three-Way Comparison: MCP vs CLI vs Skills</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-key-insight-they-re-solving-different-problems"><span class="nav-text">The key insight: they&#39;re solving different problems</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-A-Real-Benchmark-Device-Operations-Scenario"><span class="nav-text">6. A Real Benchmark: Device Operations Scenario</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Results"><span class="nav-text">Results</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Connecting-to-the-Trilogy"><span class="nav-text">7. Connecting to the Trilogy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Where-MCP-still-fits"><span class="nav-text">Where MCP still fits</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-My-Take"><span class="nav-text">8. My Take</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-meta-lesson"><span class="nav-text">The meta-lesson</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-Back-to-the-Author-s-Closing-Question"><span class="nav-text">9. Back to the Author&#39;s Closing Question</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References-and-Further-Reading"><span class="nav-text">References and Further Reading</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1191,7 +1364,7 @@
                     </span>
                     
                         <span>
-                            25.3k words in total
+                            28.3k words in total
                         </span>
                     
                 </p>
