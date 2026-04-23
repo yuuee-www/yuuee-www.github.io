@@ -1,6 +1,11 @@
 (function () {
-  const container = document.querySelector('.article-container') || document.querySelector('article');
+  const container = document.querySelector('.article-content') || document.querySelector('.article-container') || document.querySelector('article');
   if (!container) return;
+
+  // remove any previous toolbar from SPA navigation
+  const oldBar = document.getElementById('yuuee-hl-toolbar');
+  if (oldBar) oldBar.remove();
+  document.body.classList.remove('yuuee-hl-mode');
 
   const STORAGE_KEY = 'yuuee-highlights:' + location.pathname;
   const HL_CLASS = 'yuuee-hl';
