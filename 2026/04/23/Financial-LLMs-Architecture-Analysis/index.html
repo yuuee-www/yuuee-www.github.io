@@ -93,7 +93,7 @@
 <meta property="og:description" content="Ruby&#39;s Blog">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-04-23T02:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-23T10:10:03.422Z">
+<meta property="article:modified_time" content="2026-04-23T10:14:07.205Z">
 <meta property="article:author" content="wy">
 <meta property="article:tag" content="Finance">
 <meta property="article:tag" content="LLM">
@@ -558,8 +558,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-23 18:10:03</span>
-            <span class="mobile">2026-04-23 18:10:03</span>
+            <span class="desktop">2026-04-23 18:14:07</span>
+            <span class="mobile">2026-04-23 18:14:07</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -609,12 +609,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>11.1k Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>11.4k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>69 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>71 Mins</span>
         </span>
     
     
@@ -633,7 +633,14 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h1 id="The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance"><a href="#The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance" class="headerlink" title="The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance"></a>The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</h1><hr>
+			<h1 id="The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance"><a href="#The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance" class="headerlink" title="The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance"></a>The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</h1><div class="fin-page-toggle">
+  <a id="fin-btn-main" class="fin-toggle-btn active" onclick="finShowPage('main')" title="Main article">📄 Article</a>
+  <a id="fin-btn-blank" class="fin-toggle-btn" onclick="finShowPage('blank')" title="Open new page">✨ New Page</a>
+</div>
+
+<div id="fin-page-main">
+
+<hr>
 <h2 id="1-Introduction-The-Structural-Paradigm-Shift-in-Quantitative-and-Fundamental-Finance"><a href="#1-Introduction-The-Structural-Paradigm-Shift-in-Quantitative-and-Fundamental-Finance" class="headerlink" title="1. Introduction: The Structural Paradigm Shift in Quantitative and Fundamental Finance"></a>1. Introduction: The Structural Paradigm Shift in Quantitative and Fundamental Finance</h2><p>The integration of Large Language Models (LLMs) into the financial sector represents a structural paradigm shift, fundamentally transforming the mechanisms through which unstructured financial intelligence is processed, synthesized, and executed. Historically, quantitative finance and algorithmic trading have relied predominantly on structured data schemas, encompassing price-volume time series, tick data, macroeconomic indicators, and standardized accounting metrics. However, an estimated eighty percent of actionable market intelligence resides in highly unstructured text: regulatory filings, earnings call transcripts, analyst reports, geopolitical news streams, and real-time social media sentiment.</p>
 <p>General-domain foundation models, while exhibiting remarkable natural language understanding and generative capabilities, frequently falter when applied to the specialized, highly technical, and strictly regulated domain of finance. These generalized systems struggle with domain-specific jargon, complex numerical reasoning over tabular data, and strict adherence to regulatory taxonomies, such as the eXtensive Business Reporting Language (XBRL) mandated in United States Securities and Exchange Commission (SEC) filings, which can contain thousands of highly specific accounting labels.</p>
 <p>To bridge this operational deficit, the distinct discipline of Financial Large Language Models (FinLLMs) has emerged over the past several years. FinLLMs are specifically pre-trained, continuously adapted, or instruction-tuned on massive, highly curated corpora of financial literature, equipping them with the latent knowledge necessary to perform specialized tasks at an expert level. The development of these domain-specific models is not merely an exercise in scaling parameters or expanding context windows; it requires meticulous data curation pipelines, financial-specific instruction tuning paradigms, and the deployment of rigorous benchmarking frameworks designed to detect subtle hallucinations, prevent temporal leakage, and ensure logical consistency across multi-step reasoning tasks. The current landscape is categorized by a dichotomy between massive, proprietary models built by heavily capitalized institutions and lightweight, open-source models designed for democratized access, rapid iteration, and localized, secure deployment.</p>
@@ -1514,6 +1521,85 @@
 <li><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/html/2506.21591v3" >FinEval-KR: A Financial Domain Evaluation Framework for LLMs&#39; Knowledge and Reasoning<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — arXiv 2506.21591</li>
 <li><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/html/2502.04484v2" >An Empirical Analysis of Machine Learning Model and Dataset Documentation, Supply Chain, and Licensing Challenges on Hugging Face<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — arXiv 2502.04484</li>
 </ol>
+</div>
+
+<div id="fin-page-blank" style="display:none; min-height: 400px;">
+
+<!-- New blank page — content to be added later -->
+
+</div>
+
+<style>
+.fin-page-toggle {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0 28px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed #d0d0d0;
+  flex-wrap: wrap;
+}
+.fin-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: #f4f1ea;
+  color: #5a5040 !important;
+  font-size: 0.88rem;
+  font-family: 'Georgia', serif;
+  text-decoration: none !important;
+  cursor: pointer;
+  border: 1px solid #d8d0bc;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+.fin-toggle-btn:hover {
+  background: #ede6d5;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+.fin-toggle-btn.active {
+  background: #A31F34;
+  color: #fffef5 !important;
+  border-color: #A31F34;
+  box-shadow: 0 2px 8px rgba(163,31,52,0.25);
+}
+[data-theme="dark"] .fin-toggle-btn {
+  background: #2a2520;
+  color: #c9b99a !important;
+  border-color: #4a4035;
+}
+[data-theme="dark"] .fin-toggle-btn:hover {
+  background: #332e28;
+}
+[data-theme="dark"] .fin-toggle-btn.active {
+  background: #e8a0a0;
+  color: #2a2520 !important;
+  border-color: #e8a0a0;
+}
+</style>
+
+<script>
+function finShowPage(which) {
+  var main = document.getElementById('fin-page-main');
+  var blank = document.getElementById('fin-page-blank');
+  var btnMain = document.getElementById('fin-btn-main');
+  var btnBlank = document.getElementById('fin-btn-blank');
+  if (which === 'blank') {
+    main.style.display = 'none';
+    blank.style.display = 'block';
+    btnMain.classList.remove('active');
+    btnBlank.classList.add('active');
+  } else {
+    main.style.display = 'block';
+    blank.style.display = 'none';
+    btnMain.classList.add('active');
+    btnBlank.classList.remove('active');
+  }
+  document.querySelector('.fin-page-toggle').scrollIntoView({behavior:'smooth', block:'start'});
+}
+</script>
 
 		</div>
 
@@ -1528,7 +1614,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2026-04-23 18:10:03
+                    :</strong> 2026-04-23 18:14:07
             </li>
         
         <li>
@@ -1635,7 +1721,7 @@
                     </span>
                     
                         <span>
-                            39.5k words in total
+                            39.7k words in total
                         </span>
                     
                 </p>
