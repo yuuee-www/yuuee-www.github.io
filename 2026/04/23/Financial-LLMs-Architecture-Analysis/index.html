@@ -93,7 +93,7 @@
 <meta property="og:description" content="Ruby&#39;s Blog">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-04-23T02:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-23T11:59:43.897Z">
+<meta property="article:modified_time" content="2026-04-23T12:25:36.980Z">
 <meta property="article:author" content="wy">
 <meta property="article:tag" content="Finance">
 <meta property="article:tag" content="LLM">
@@ -558,8 +558,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-23 19:59:43</span>
-            <span class="mobile">2026-04-23 19:59:43</span>
+            <span class="desktop">2026-04-23 20:25:36</span>
+            <span class="mobile">2026-04-23 20:25:36</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -1534,40 +1534,45 @@
 <h2 id="Theoretical-Framework-Taxonomy-of-Financial-Fabrications"><a href="#Theoretical-Framework-Taxonomy-of-Financial-Fabrications" class="headerlink" title="Theoretical Framework: Taxonomy of Financial Fabrications"></a>Theoretical Framework: Taxonomy of Financial Fabrications</h2><p>Before a synthetic dataset can be constructed to suppress hallucinations, the phenomenon must be mathematically defined, categorized, and quantified within the specific context of financial reasoning. Hallucinations are not uniform errors; they manifest through various distinct mechanisms during the token generation process, requiring targeted data structures for effective alignment.</p>
 <h3 id="Quantifying-Hallucinations-via-Entropy-and-Evidence-Capacity"><a href="#Quantifying-Hallucinations-via-Entropy-and-Evidence-Capacity" class="headerlink" title="Quantifying Hallucinations via Entropy and Evidence Capacity"></a>Quantifying Hallucinations via Entropy and Evidence Capacity</h3><p>A rigorous approach to hallucination suppression requires treating fabrications not merely as incorrect text, but as a quantifiable mismatch between the model&#39;s internal semantic entropy and the external evidence capacity. The <strong>ECLIPSE framework</strong> provides a robust theoretical foundation for this approach, defining hallucinations as instances where a model utilizes retrieved evidence poorly or generates tokens with uncalibrated uncertainty.</p>
 <p>By estimating semantic entropy through multi-sample clustering and employing perplexity decomposition, researchers can measure exactly how a model interacts with financial data. In controlled financial question-answering datasets containing synthetic hallucinations, the ECLIPSE methodology has demonstrated a Receiver Operating Characteristic Area Under the Curve (ROC AUC) of <strong>0.89</strong>, substantially outperforming traditional semantic entropy baselines (AUC 0.50). This indicates that effective alignment data must focus heavily on <strong>&quot;evidence utilization&quot;</strong>—teaching the model to accurately calibrate its token-level log probabilities against the provided financial context, penalizing high-confidence assertions in high-entropy (uncertain) spaces.</p>
-<h3 id="Table-1-Fine-Grained-Taxonomy-of-Financial-LLM-Fabrications"><a href="#Table-1-Fine-Grained-Taxonomy-of-Financial-LLM-Fabrications" class="headerlink" title="Table 1: Fine-Grained Taxonomy of Financial LLM Fabrications"></a>Table 1: Fine-Grained Taxonomy of Financial LLM Fabrications</h3><table>
+<h3 id="Table-1-Fine-Grained-Taxonomy-of-Financial-LLM-Fabrications"><a href="#Table-1-Fine-Grained-Taxonomy-of-Financial-LLM-Fabrications" class="headerlink" title="Table 1: Fine-Grained Taxonomy of Financial LLM Fabrications"></a>Table 1: Fine-Grained Taxonomy of Financial LLM Fabrications</h3><div style="overflow-x:auto;margin:20px 0;">
+<table style="width:100%;border-collapse:collapse;font-size:0.9rem;line-height:1.5;">
 <thead>
 <tr>
-<th>Fabrication Category</th>
-<th>Mechanism of Parametric Failure</th>
-<th>Domain-Specific Manifestation</th>
-<th>Targeted Alignment Strategy</th>
+<th style="background:#dce8f7;color:#1f1f1f;font-weight:700;border:1px solid #b0bec5;padding:10px 14px;text-align:left;min-width:130px;">Fabrication Category</th>
+<th style="background:#dce8f7;color:#1f1f1f;font-weight:700;border:1px solid #b0bec5;padding:10px 14px;text-align:left;">Mechanism of Parametric Failure</th>
+<th style="background:#dce8f7;color:#1f1f1f;font-weight:700;border:1px solid #b0bec5;padding:10px 14px;text-align:left;">Domain-Specific Manifestation</th>
+<th style="background:#dce8f7;color:#1f1f1f;font-weight:700;border:1px solid #b0bec5;padding:10px 14px;text-align:left;">Targeted Alignment Strategy</th>
 </tr>
 </thead>
-<tbody><tr>
-<td><strong>Factual &#x2F; Knowledge Hallucination</strong></td>
-<td>Conflict between outdated parametric memory and current reality; reliance on ungrounded priors</td>
-<td>Asserting a specific company was acquired in 2024 when the merger was blocked by regulators</td>
-<td>Factuality-Aware Direct Preference Optimization (F-DPO)</td>
+<tbody>
+<tr style="background:#f8fafd;">
+<td style="border:1px solid #b0bec5;padding:10px 14px;font-weight:600;">Factual / Knowledge Hallucination</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Conflict between outdated parametric memory and current reality; reliance on ungrounded priors.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Asserting a specific company was acquired in 2024 when the merger was blocked by regulators.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Factuality-Aware Direct Preference Optimization (F-DPO).</td>
 </tr>
-<tr>
-<td><strong>Contextual Misalignment</strong></td>
-<td>The model fails to anchor its generation to the provided RAG context, suffering from attention decay</td>
-<td>A retrieved document states Q3 EPS is $1.20, but the model outputs a previously memorized Q2 EPS of $1.05</td>
-<td>Atomic Knowledge Unit Decomposition and Verification (RLFKV)</td>
+<tr style="background:#ffffff;">
+<td style="border:1px solid #b0bec5;padding:10px 14px;font-weight:600;">Contextual Misalignment</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">The model fails to anchor its generation to the provided RAG context, suffering from attention decay.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">A retrieved document states Q3 EPS is $1.20, but the model outputs a previously memorized Q2 EPS of $1.05.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Atomic Knowledge Unit Decomposition and Verification (RLFKV).</td>
 </tr>
-<tr>
-<td><strong>Sequential Reasoning Failure</strong></td>
-<td>Flaws in multi-step deductive paths, mathematical logic, or algorithmic execution</td>
-<td>Correctly identifying total revenue and total expenses, but failing to accurately compute the EBITDA margin</td>
-<td>Group Relative Policy Optimization (GRPO) with deterministic execution</td>
+<tr style="background:#f8fafd;">
+<td style="border:1px solid #b0bec5;padding:10px 14px;font-weight:600;">Sequential Reasoning Failure</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Flaws in multi-step deductive paths, mathematical logic, or algorithmic execution.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Correctly identifying total revenue and total expenses, but failing to accurately compute the EBITDA margin.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Group Relative Policy Optimization (GRPO) with deterministic execution.</td>
 </tr>
-<tr>
-<td><strong>Format and Constraint Violation</strong></td>
-<td>Inability to adhere to strict schema requirements or instructional boundaries</td>
-<td>Outputting a conversational summary when the system prompt explicitly required a strictly formatted JSON object</td>
-<td>Format-specific rule-based rewards in Reinforcement Learning</td>
+<tr style="background:#ffffff;">
+<td style="border:1px solid #b0bec5;padding:10px 14px;font-weight:600;">Format and Constraint Violation</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Inability to adhere to strict schema requirements or instructional boundaries.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Outputting a conversational summary when the system prompt explicitly required a strictly formatted JSON object.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Format-specific rule-based rewards in Reinforcement Learning.</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
+
 <p>This taxonomy forms the blueprint for the data generation engine. The objective of the synthesis pipeline is to programmatically generate data pairs where the <strong>&quot;chosen&quot; response</strong> perfectly navigates these failure modes, while the <strong>&quot;rejected&quot; response</strong> explicitly demonstrates a targeted categorical failure, thereby shaping the model&#39;s loss landscape during alignment.</p>
 <hr>
 <h2 id="Phase-1-Foundational-Seed-Generation-via-Frontier-Model-Distillation"><a href="#Phase-1-Foundational-Seed-Generation-via-Frontier-Model-Distillation" class="headerlink" title="Phase 1: Foundational Seed Generation via Frontier Model Distillation"></a>Phase 1: Foundational Seed Generation via Frontier Model Distillation</h2><p>The initiation of the alignment pipeline requires the construction of high-quality <strong>&quot;seed&quot; data</strong>, consisting of complex financial queries paired with accurate, step-by-step deductive reasoning traces. The strategy leverages the paradigm of <strong>model distillation</strong>, utilizing massive, highly capable frontier models to generate the training corpora for smaller, more efficient, domain-specific models (e.g., 7B to 32B parameter architectures).</p>
@@ -1580,52 +1585,57 @@
 </ul>
 <h3 id="Sourcing-the-Financial-Corpus-The-Fin-R1-Data-Architecture"><a href="#Sourcing-the-Financial-Corpus-The-Fin-R1-Data-Architecture" class="headerlink" title="Sourcing the Financial Corpus: The Fin-R1 Data Architecture"></a>Sourcing the Financial Corpus: The Fin-R1 Data Architecture</h3><p>To prevent the model from learning to hallucinate in &quot;data voids,&quot; the queries and contexts used to prompt the generator models must be derived from authentic, high-density financial text. Synthetic generation that relies purely on the LLM&#39;s imagination often results in datasets that lack the nuance of real-world markets.</p>
 <p>The methodology draws upon the architectural principles of the <strong>Fin-R1-Data framework</strong>, a highly specialized dataset comprising <strong>60,091 distinct chain-of-thought samples</strong> designed specifically for financial reasoning. The construction of such a dataset requires aggregating diverse open-source and proprietary financial benchmarks into a unified format. A robust financial alignment dataset must encompass a diverse distribution of tasks to ensure comprehensive domain mastery. By distilling existing benchmarks through DeepSeek-R1, the resulting dataset spans multiple cognitive requirements, from simple information extraction to complex arithmetic reasoning over tabular data.</p>
-<h3 id="Table-2-Representative-Distribution-of-a-Distilled-Financial-Reasoning-Dataset-Fin-R1-Data-Framework"><a href="#Table-2-Representative-Distribution-of-a-Distilled-Financial-Reasoning-Dataset-Fin-R1-Data-Framework" class="headerlink" title="Table 2: Representative Distribution of a Distilled Financial Reasoning Dataset (Fin-R1-Data Framework)"></a>Table 2: Representative Distribution of a Distilled Financial Reasoning Dataset (Fin-R1-Data Framework)</h3><table>
+<h3 id="Table-2-Representative-Distribution-of-a-Distilled-Financial-Reasoning-Dataset-Fin-R1-Data-Framework"><a href="#Table-2-Representative-Distribution-of-a-Distilled-Financial-Reasoning-Dataset-Fin-R1-Data-Framework" class="headerlink" title="Table 2: Representative Distribution of a Distilled Financial Reasoning Dataset (Fin-R1-Data Framework)"></a>Table 2: Representative Distribution of a Distilled Financial Reasoning Dataset (Fin-R1-Data Framework)</h3><div style="overflow-x:auto;margin:20px 0;">
+<table style="width:100%;border-collapse:collapse;font-size:0.9rem;line-height:1.5;">
 <thead>
 <tr>
-<th>Source Benchmark &#x2F; Module</th>
-<th>Financial Task Focus</th>
-<th>Estimated Sample Volume</th>
-<th>Contribution to Alignment</th>
+<th style="background:#dce8f7;color:#1f1f1f;font-weight:700;border:1px solid #b0bec5;padding:10px 14px;text-align:left;min-width:160px;">Source Benchmark / Module</th>
+<th style="background:#dce8f7;color:#1f1f1f;font-weight:700;border:1px solid #b0bec5;padding:10px 14px;text-align:left;">Financial Task Focus</th>
+<th style="background:#dce8f7;color:#1f1f1f;font-weight:700;border:1px solid #b0bec5;padding:10px 14px;text-align:center;white-space:nowrap;">Estimated Sample Volume</th>
+<th style="background:#dce8f7;color:#1f1f1f;font-weight:700;border:1px solid #b0bec5;padding:10px 14px;text-align:left;">Contribution to Alignment</th>
 </tr>
 </thead>
-<tbody><tr>
-<td><strong>FinCorpus &#x2F; Proprietary</strong></td>
-<td>General Financial Business Knowledge &amp; Theory</td>
-<td>~29,200</td>
-<td>Establishes foundational domain mastery and regulatory understanding</td>
+<tbody>
+<tr style="background:#f8fafd;">
+<td style="border:1px solid #b0bec5;padding:10px 14px;font-weight:600;">FinCorpus / Proprietary</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">General Financial Business Knowledge &amp; Theory</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;text-align:center;font-weight:600;">~29,200</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Establishes foundational domain mastery and regulatory understanding.</td>
 </tr>
-<tr>
-<td><strong>Finance-Instruct-500K</strong></td>
-<td>Diverse Financial Instruction Following</td>
-<td>~11,300</td>
-<td>Enhances the model&#39;s ability to adhere to complex constraints</td>
+<tr style="background:#ffffff;">
+<td style="border:1px solid #b0bec5;padding:10px 14px;font-weight:600;">Finance-Instruct-500K</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Diverse Financial Instruction Following</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;text-align:center;font-weight:600;">~11,300</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Enhances the model's ability to adhere to complex constraints.</td>
 </tr>
-<tr>
-<td><strong>ConvFinQA</strong></td>
-<td>Conversational QA over Earnings Reports</td>
-<td>~7,600</td>
-<td>Trains the model in multi-turn reasoning and tabular data extraction</td>
+<tr style="background:#f8fafd;">
+<td style="border:1px solid #b0bec5;padding:10px 14px;font-weight:600;">ConvFinQA</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Conversational QA over Earnings Reports</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;text-align:center;font-weight:600;">~7,600</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Trains the model in multi-turn reasoning and tabular data extraction.</td>
 </tr>
-<tr>
-<td><strong>FinQA</strong></td>
-<td>Deep Numerical Reasoning &amp; Arithmetic</td>
-<td>~2,900</td>
-<td>Suppresses sequential logic hallucinations in mathematical operations</td>
+<tr style="background:#ffffff;">
+<td style="border:1px solid #b0bec5;padding:10px 14px;font-weight:600;">FinQA</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Deep Numerical Reasoning &amp; Arithmetic</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;text-align:center;font-weight:600;">~2,900</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Suppresses sequential logic hallucinations in mathematical operations.</td>
 </tr>
-<tr>
-<td><strong>FinanceIQ</strong></td>
-<td>Professional Financial Certification QA</td>
-<td>~2,500</td>
-<td>Validates high-level professional knowledge and exam-level logic</td>
+<tr style="background:#f8fafd;">
+<td style="border:1px solid #b0bec5;padding:10px 14px;font-weight:600;">FinanceIQ</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Professional Financial Certification QA</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;text-align:center;font-weight:600;">~2,500</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Validates high-level professional knowledge and exam-level logic.</td>
 </tr>
-<tr>
-<td><strong>TFNS</strong></td>
-<td>Financial Sentiment Analysis &amp; NLP</td>
-<td>~2,400</td>
-<td>Aligns the model to detect nuanced market sentiment without exaggeration</td>
+<tr style="background:#ffffff;">
+<td style="border:1px solid #b0bec5;padding:10px 14px;font-weight:600;">TFNS</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Financial Sentiment Analysis &amp; NLP</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;text-align:center;font-weight:600;">~2,400</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Aligns the model to detect nuanced market sentiment without exaggeration.</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
+
 <h3 id="Eliciting-and-Formatting-Chain-of-Thought-CoT-Traces"><a href="#Eliciting-and-Formatting-Chain-of-Thought-CoT-Traces" class="headerlink" title="Eliciting and Formatting Chain-of-Thought (CoT) Traces"></a>Eliciting and Formatting Chain-of-Thought (CoT) Traces</h3><p>When querying DeepSeek-R1, prompt engineering is critical to enforcing a strict structural schema. The model is instructed via system prompts to encapsulate its entire internal deductive process within specific XML tags (e.g., <code>&lt;think&gt;...&lt;/think&gt;</code>), and to place its final, definitive conclusion within separate tags (e.g., <code>&lt;answer&gt;...&lt;/answer&gt;</code>).</p>
 <p>This structural separation serves a dual purpose. First, it renders the reasoning process <strong>transparent and auditable</strong>, solving the &quot;black box&quot; problem inherent in standard autoregressive generation. Second, it allows downstream loss functions during the reinforcement learning phase to <strong>apply different mathematical weights</strong> to the logical derivation versus the final factual conclusion, ensuring the model is rewarded not just for guessing the correct answer, but for utilizing a valid methodology.</p>
 <h3 id="Rejection-Sampling-for-Quality-Assurance"><a href="#Rejection-Sampling-for-Quality-Assurance" class="headerlink" title="Rejection Sampling for Quality Assurance"></a>Rejection Sampling for Quality Assurance</h3><p>To guarantee the fidelity of the seed data, the generation phase relies heavily on <strong>rejection sampling</strong>. For each query in the financial corpus, the DeepSeek-R1 generator is prompted to produce multiple candidate responses using a moderate temperature setting (e.g., $T &#x3D; 0.6$) to encourage diverse reasoning paths.</p>
@@ -1655,40 +1665,45 @@
 <li><p><strong>External API Cross-Referencing</strong> — For queries regarding historical market data or dynamic financial metrics, the verification pipeline makes automated calls to external data providers (e.g., yfinance, Alpha Vantage, or RapidAPI) to cross-reference the generated figures against actual market realities. If the model claims a specific closing price for a specified date, the API call acts as the final arbiter of fact. If the model&#39;s output deviates beyond a predefined tolerance threshold, the sample is either discarded or relegated to the &quot;rejected&quot; pool.</p>
 </li>
 </ul>
-<h3 id="Table-3-Programmatic-Verification-Architecture"><a href="#Table-3-Programmatic-Verification-Architecture" class="headerlink" title="Table 3: Programmatic Verification Architecture"></a>Table 3: Programmatic Verification Architecture</h3><table>
+<h3 id="Table-3-Programmatic-Verification-Architecture"><a href="#Table-3-Programmatic-Verification-Architecture" class="headerlink" title="Table 3: Programmatic Verification Architecture"></a>Table 3: Programmatic Verification Architecture</h3><div style="overflow-x:auto;margin:20px 0;">
+<table style="width:100%;border-collapse:collapse;font-size:0.9rem;line-height:1.5;">
 <thead>
 <tr>
-<th>Verification Modality</th>
-<th>Mechanism of Action</th>
-<th>Target Financial Application</th>
-<th>Output Signal Type</th>
+<th style="background:#dce8f7;color:#1f1f1f;font-weight:700;border:1px solid #b0bec5;padding:10px 14px;text-align:left;min-width:150px;">Verification Modality</th>
+<th style="background:#dce8f7;color:#1f1f1f;font-weight:700;border:1px solid #b0bec5;padding:10px 14px;text-align:left;">Mechanism of Action</th>
+<th style="background:#dce8f7;color:#1f1f1f;font-weight:700;border:1px solid #b0bec5;padding:10px 14px;text-align:left;">Target Financial Application</th>
+<th style="background:#dce8f7;color:#1f1f1f;font-weight:700;border:1px solid #b0bec5;padding:10px 14px;text-align:left;">Output Signal Type</th>
 </tr>
 </thead>
-<tbody><tr>
-<td><strong>Atomic Decomposition (RLFKV)</strong></td>
-<td>Splitting text into discrete factual claims and evaluating against source documents via NLI</td>
-<td>Summarization, regulatory analysis, SEC filing extraction</td>
-<td>Semantic Entailment &#x2F; Faithfulness Score</td>
+<tbody>
+<tr style="background:#f8fafd;">
+<td style="border:1px solid #b0bec5;padding:10px 14px;font-weight:600;">Atomic Decomposition (RLFKV)</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Splitting text into discrete factual claims and evaluating against source documents via NLI.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Summarization, regulatory analysis, SEC filing extraction.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Semantic Entailment / Faithfulness Score.</td>
 </tr>
-<tr>
-<td><strong>Deterministic Execution</strong></td>
-<td>Python AST parsing and isolated sandbox runtime execution</td>
-<td>Actuarial calculations, algorithmic trading code, DCF modeling</td>
-<td>Binary (Pass&#x2F;Fail) objective truth</td>
+<tr style="background:#ffffff;">
+<td style="border:1px solid #b0bec5;padding:10px 14px;font-weight:600;">Deterministic Execution</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Python AST parsing and isolated sandbox runtime execution.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Actuarial calculations, algorithmic trading code, DCF modeling.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Binary (Pass/Fail) objective truth.</td>
 </tr>
-<tr>
-<td><strong>External API Grounding</strong></td>
-<td>Programmatic querying of live&#x2F;historical financial databases</td>
-<td>Market data extraction, historical pricing, corporate actions</td>
-<td>Numerical Delta against real-world data</td>
+<tr style="background:#f8fafd;">
+<td style="border:1px solid #b0bec5;padding:10px 14px;font-weight:600;">External API Grounding</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Programmatic querying of live/historical financial databases.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Market data extraction, historical pricing, corporate actions.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Numerical Delta against real-world data.</td>
 </tr>
-<tr>
-<td><strong>LLM-as-a-Judge</strong></td>
-<td>Multi-dimensional scoring via detailed prompt rubrics using frontier models (GPT-4o)</td>
-<td>Tone, formatting constraints, readability, and logic flow</td>
-<td>Composite Likert or Preference Score</td>
+<tr style="background:#ffffff;">
+<td style="border:1px solid #b0bec5;padding:10px 14px;font-weight:600;">LLM-as-a-Judge</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Multi-dimensional scoring via detailed prompt rubrics using frontier models (GPT-4o).</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Tone, formatting constraints, readability, and logic flow.</td>
+<td style="border:1px solid #b0bec5;padding:10px 14px;">Composite Likert or Preference Score.</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
+
 <hr>
 <h2 id="Phase-4-Factuality-Aware-Preference-Optimization-F-DPO"><a href="#Phase-4-Factuality-Aware-Preference-Optimization-F-DPO" class="headerlink" title="Phase 4: Factuality-Aware Preference Optimization (F-DPO)"></a>Phase 4: Factuality-Aware Preference Optimization (F-DPO)</h2><p>Once the massive dataset of verified preference pairs $\mathcal{D} &#x3D; {(x^{(i)}, y_w^{(i)}, y_l^{(i)})}_{i&#x3D;1}^{N}$ is constructed, the pipeline proceeds to update the parametric weights of the target financial model. Standard DPO is highly efficient, as it aligns the model by directly maximizing the margin between the probability of the chosen and rejected samples, eliminating the need to train a separate reward model. However, empirical studies demonstrate that standard DPO often struggles to suppress fabrications in domains requiring high epistemic rigor. Standard DPO optimizes for general human preference, which frequently favors responses that are highly confident, verbose, and stylistically pleasing, even if those responses contain subtle factual errors.</p>
 <p>To counteract this phenomenon, the framework implements a <strong>Factuality-Aware Direct Preference Optimization (F-DPO)</strong> protocol.</p>
@@ -1882,7 +1897,7 @@ function finShowPage(which) {
         
             <li>
                 <strong>Updated at
-                    :</strong> 2026-04-23 19:59:43
+                    :</strong> 2026-04-23 20:25:36
             </li>
         
         <li>
