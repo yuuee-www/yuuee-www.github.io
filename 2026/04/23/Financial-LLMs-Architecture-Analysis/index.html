@@ -93,7 +93,7 @@
 <meta property="og:description" content="Ruby&#39;s Blog">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-04-23T02:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-23T09:04:40.408Z">
+<meta property="article:modified_time" content="2026-04-23T09:17:35.015Z">
 <meta property="article:author" content="wy">
 <meta property="article:tag" content="Finance">
 <meta property="article:tag" content="LLM">
@@ -558,8 +558,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-23 17:04:40</span>
-            <span class="mobile">2026-04-23 17:04:40</span>
+            <span class="desktop">2026-04-23 17:17:35</span>
+            <span class="mobile">2026-04-23 17:17:35</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -609,12 +609,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>7.3k Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>8.1k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>45 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>50 Mins</span>
         </span>
     
     
@@ -1079,6 +1079,107 @@
 <p>Furthermore, the integration of diverse datasets during the Supervised Fine-Tuning phase introduces severe Intellectual Property (IP) contamination risks. When a permissively licensed open-source model (e.g., governed by Apache 2.0 or MIT, which allow commercial use) is fine-tuned using a dataset governed by a restrictive license (such as Creative Commons CC BY-NC 4.0, which strictly prohibits commercial use), the resulting neural network artifact exists in a highly contested legal gray area.</p>
 <p>Research analyzing repository metadata highlights the severity of this issue. Across <strong>43,455 model-dataset pairings</strong> analyzed on platforms like HuggingFace, there are <strong>623 distinct model&#x2F;dataset license combinations</strong>. Crucially, the license of the resulting model explicitly matches the license of at least one of its training datasets in only 41 of those 623 combinations. The most common structural conflict involves a model licensed under permissive terms (like Apache-2.0) trained on a dataset governed by a custom, &quot;Other,&quot; or CC-BY-NC license, accounting for <strong>11,731 conflicting pairs (roughly 27% of instances)</strong>. Additionally, the widespread practice of multi-licensing — where a single model or dataset is released under overlapping open-source and Machine Learning specific licenses (like MIT and OpenRAIL) — creates novel legal complexities.</p>
 <p>This disjointed licensing landscape forces compliance officers and risk managers at financial institutions to expend massive resources auditing the provenance of every data point utilized in the SFT pipeline. Utilizing models like FinBen, which explicitly shares all non-personal data under the MIT license, or tools governed strictly by CC-BY-SA 4.0, requires institutional tracking to ensure derivative works and quantitative strategies do not violate overarching intellectual property rights.</p>
+<h3 id="7-2-License-Taxonomy-What-You-Can-and-Cannot-Do"><a href="#7-2-License-Taxonomy-What-You-Can-and-Cannot-Do" class="headerlink" title="7.2 License Taxonomy: What You Can and Cannot Do"></a>7.2 License Taxonomy: What You Can and Cannot Do</h3><p>When constructing a training dataset for a FinLLM, understanding the precise legal implications of each license type is the difference between a deployable asset and a compliance liability.</p>
+<h4 id="Safest-Choices-Public-Domain-and-Permissive-Licenses"><a href="#Safest-Choices-Public-Domain-and-Permissive-Licenses" class="headerlink" title="Safest Choices: Public Domain and Permissive Licenses"></a>Safest Choices: Public Domain and Permissive Licenses</h4><p>For maximum freedom to use, modify, and commercialize a model, datasets governed by the following licenses impose the fewest restrictions:</p>
+<ul>
+<li><strong>Public Domain (CC0 &#x2F; PDDL):</strong> The creator has waived all rights. The Open Data Commons Public Domain Dedication and License (PDDL) and Creative Commons Zero (CC0) permit use without any restrictions whatsoever — no attribution required, no derivative-work conditions.</li>
+<li><strong>MIT:</strong> Highly permissive and currently the most popular license for datasets on HuggingFace. Requires only attribution in software distributions, imposes no restrictions on commercial deployment of derived models.</li>
+<li><strong>Apache 2.0:</strong> Equally permissive as MIT, with the additional advantage of an <strong>explicit patent non-aggression clause</strong> — important in finance, where patent litigation risk around proprietary trading algorithms is real.</li>
+<li><strong>CDLA-Permissive-2.0</strong> (Community Data License Agreement): Designed specifically for data sharing rather than software. Critically, it explicitly does <em>not</em> impose restrictions on the analytical results derived from the data (i.e., trained model weights), making it the cleanest license available for building commercially deployable FinLLMs.</li>
+<li><strong>CC-BY 4.0:</strong> The standard for scientific and informational content. Allows commercial use and adaptation; requires attribution to the original creator. Widely used for academic financial datasets.</li>
+</ul>
+<h4 id="Licenses-to-Use-with-Caution-Restrictive-and-Copyleft"><a href="#Licenses-to-Use-with-Caution-Restrictive-and-Copyleft" class="headerlink" title="Licenses to Use with Caution: Restrictive and Copyleft"></a>Licenses to Use with Caution: Restrictive and Copyleft</h4><p>Including data with these licenses can contractually dictate how the resulting model may be used or distributed:</p>
+<ul>
+<li><strong>Non-Commercial (CC BY-NC, CC BY-NC-SA):</strong> Explicitly prohibits use in any context where the LLM generates revenue or is deployed as part of a commercial enterprise. Five of the ten datasets in the Section 4.4 summary table carry this restriction. Fine-tuning a commercial model on CC BY-NC data is a direct license violation.</li>
+<li><strong>ShareAlike &#x2F; Copyleft (CC BY-SA, GPL, AGPL):</strong> These licenses require that any &quot;derivative work&quot; be distributed under the exact same license terms. There is active legal debate about whether an LLM constitutes a derivative work of its training data. If a court rules that it does, incorporating GPL or CC BY-SA data would legally <em>require</em> open-sourcing proprietary model weights — a commercially catastrophic outcome for institutional FinLLM deployments.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>License</th>
+<th>Commercial Use</th>
+<th>Modification</th>
+<th>Share-Alike Required</th>
+<th>Patent Protection</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CC0 &#x2F; PDDL</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>MIT</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Apache 2.0</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td>CDLA-Permissive-2.0</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CC-BY 4.0</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CC BY-SA 4.0</td>
+<td>Yes</td>
+<td>Yes</td>
+<td><strong>Yes</strong></td>
+<td>No</td>
+</tr>
+<tr>
+<td>CC BY-NC 4.0</td>
+<td><strong>No</strong></td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CC BY-NC-SA 4.0</td>
+<td><strong>No</strong></td>
+<td>Yes</td>
+<td><strong>Yes</strong></td>
+<td>No</td>
+</tr>
+<tr>
+<td>GPL &#x2F; AGPL</td>
+<td>Yes</td>
+<td>Yes</td>
+<td><strong>Yes</strong></td>
+<td>No</td>
+</tr>
+</tbody></table>
+<h3 id="7-3-The-Raw-Facts-Exemption-in-Financial-Data"><a href="#7-3-The-Raw-Facts-Exemption-in-Financial-Data" class="headerlink" title="7.3 The &quot;Raw Facts&quot; Exemption in Financial Data"></a>7.3 The &quot;Raw Facts&quot; Exemption in Financial Data</h3><p>Raw financial data occupies a distinctive legal position that practitioners frequently misunderstand. In jurisdictions like the United States, <strong>raw facts and single data points are not copyrightable</strong> — a historical stock price, a closing volume figure, or a macroeconomic indicator reading cannot be owned. This creates a significant surface area of freely usable data for FinLLM pre-training.</p>
+<p>However, several adjacent protections remain:</p>
+<ul>
+<li><strong>Database Rights and Terms of Service:</strong> While a single stock price is unprotected, the <em>arranged database</em> of a stock exchange may be protected under EU Database Directives as a structured collection. More practically, platforms distributing financial data (Bloomberg, Refinitiv, Seeking Alpha) use contractual Terms of Service to prohibit automated scraping and commercial redistribution, regardless of whether the underlying data is copyrightable. Violating ToS creates contract liability even where no copyright claim exists.</li>
+<li><strong>Fair Use vs. EU Text and Data Mining (TDM) Exceptions:</strong> Relying on unlicensed copyrighted text (analyst reports, earnings call transcripts, news articles) for LLM training is legally contested. In the United States, developers typically argue such training constitutes &quot;Fair Use&quot; — a defense currently under intense judicial scrutiny, particularly when the resulting AI competes commercially with the original content creators. In the European Union, specific TDM exceptions permit training under certain conditions, but <strong>rights-holders may legally opt-out</strong> by machine-readable rights reservation, creating a shifting compliance surface.</li>
+</ul>
+<h3 id="7-4-Practical-Recommendations-for-Dataset-Construction"><a href="#7-4-Practical-Recommendations-for-Dataset-Construction" class="headerlink" title="7.4 Practical Recommendations for Dataset Construction"></a>7.4 Practical Recommendations for Dataset Construction</h3><p>Industry best practices for building a legally defensible financial training corpus:</p>
+<ol>
+<li><strong>Filter strictly for MIT, Apache 2.0, CC0, CDLA-Permissive-2.0, and CC-BY 4.0</strong> for any dataset that will feed a model with commercial application. Reject CC BY-NC and copyleft licenses at the ingestion stage.</li>
+<li><strong>Maintain meticulous provenance metadata.</strong> For every document ingested, record the source URL, retrieval timestamp, and exact SPDX license identifier (e.g., <code>Apache-2.0</code>, <code>CC-BY-4.0</code>). This audit trail allows targeted data removal if a license dispute arises post-training.</li>
+<li><strong>Treat ToS violations as equivalent to license violations.</strong> A model trained on Bloomberg Terminal data scraped in violation of Bloomberg&#39;s ToS carries contractual liability regardless of copyright status.</li>
+<li><strong>Monitor the EU AI Act and emerging TDM opt-out registries.</strong> The legal surface for training data is actively shifting; what was permissible in 2023 may require remediation by 2026 as case law and regulation crystallize.</li>
+</ol>
 <hr>
 <h2 id="8-Conclusion"><a href="#8-Conclusion" class="headerlink" title="8. Conclusion"></a>8. Conclusion</h2><p>The integration of Large Language Models into quantitative and fundamental finance is rapidly moving past the phase of theoretical research and entering the realm of hard operational deployment. The trajectory of this technology underscores a definitive shift away from the pursuit of brute-force parameter scaling and toward the rigorous application of domain-specific data engineering, cognitive reasoning distillation, and structural compliance.</p>
 <p>The empirical evidence from the development of specialized architectures — ranging from the massive, mixed-dataset pre-training of BloombergGPT to the agile, RLHF-driven open-source pipelines of FinGPT and the highly localized, reasoning-optimized structures of CFGPT and Fin-R1 — demonstrates that contextual awareness and mathematical rigor dictate financial utility. The curation of hyper-specific datasets, such as the CFData corpus and entity-level sentiment tracking arrays, allows models to discern the granular nuances of market mechanics that generalized models overlook. Furthermore, the establishment of multi-dimensional evaluation frameworks like FinBen and FinEval ensures that as models transition into autonomous agentic workflows, their capabilities are rigorously decoupled, tested against hallucinations, and fortified against temporal leakage and systemic security vulnerabilities.</p>
@@ -1126,7 +1227,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2026-04-23 17:04:40
+                    :</strong> 2026-04-23 17:17:35
             </li>
         
         <li>
@@ -1201,7 +1302,7 @@
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
 		<div class="page-title">The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance"><span class="nav-text">The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Introduction-The-Structural-Paradigm-Shift-in-Quantitative-and-Fundamental-Finance"><span class="nav-text">1. Introduction: The Structural Paradigm Shift in Quantitative and Fundamental Finance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-A-Task-Centered-Taxonomy-for-Financial-Language-Models"><span class="nav-text">2. A Task-Centered Taxonomy for Financial Language Models</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Sentiment-Analysis-and-Opinion-as-Signal-Inputs"><span class="nav-text">2.1 Sentiment Analysis and Opinion as Signal Inputs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Information-Extraction-and-Knowledge-Graph-Construction"><span class="nav-text">2.2 Information Extraction and Knowledge Graph Construction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Numerical-Question-Answering-and-Economic-Reasoning"><span class="nav-text">2.3 Numerical Question Answering and Economic Reasoning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Summarization-and-Document-Understanding"><span class="nav-text">2.4 Summarization and Document Understanding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-Multimodal-Fusion-and-Audio-Visual-Cues"><span class="nav-text">2.5 Multimodal Fusion and Audio-Visual Cues</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-Agentic-Workflows-and-Automated-Trading-Systems"><span class="nav-text">2.6 Agentic Workflows and Automated Trading Systems</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-Governance-Compliance-and-Security-Risk-Management"><span class="nav-text">2.7 Governance, Compliance, and Security Risk Management</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Foundation-Architectures-and-Pre-training-Paradigms"><span class="nav-text">3. Foundation Architectures and Pre-training Paradigms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-The-Proprietary-Vanguard-BloombergGPT"><span class="nav-text">3.1 The Proprietary Vanguard: BloombergGPT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-The-Open-Source-Counter-Movement-FinGPT-and-LLM-Pro-Finance"><span class="nav-text">3.2 The Open-Source Counter-Movement: FinGPT and LLM Pro Finance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Bilingual-and-Regional-Architectures-CFGPT-PIXIU-and-XuanYuan"><span class="nav-text">3.3 Bilingual and Regional Architectures: CFGPT, PIXIU, and XuanYuan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-The-Transition-to-Pure-Reasoning-Fin-R1"><span class="nav-text">3.4 The Transition to Pure Reasoning: Fin-R1</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Data-Engineering-Corpora-Instruction-Tuning-and-the-SFT-Ecosystem"><span class="nav-text">4. Data Engineering: Corpora, Instruction Tuning, and the SFT Ecosystem</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-The-CFData-Corpus-Pre-training-and-Instruction-Tuning-at-Scale"><span class="nav-text">4.1 The CFData Corpus: Pre-training and Instruction Tuning at Scale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Open-Source-Instruction-Datasets-and-RLHF-Formats"><span class="nav-text">4.2 Open-Source Instruction Datasets and RLHF Formats</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-Data-Augmentation-and-Domain-Randomization"><span class="nav-text">4.3 Data Augmentation and Domain Randomization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-Key-Financial-LLM-Datasets-Summary-Reference"><span class="nav-text">4.4 Key Financial LLM Datasets: Summary Reference</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-Alignment-Data-Formats-From-SFT-to-Online-RL"><span class="nav-text">4.5 Alignment Data Formats: From SFT to Online RL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-Dataset-to-Trainer-Mapping-Practical-Reference"><span class="nav-text">4.6 Dataset-to-Trainer Mapping: Practical Reference</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Benchmarking-Frameworks-and-the-Decoupling-of-Cognitive-Capabilities"><span class="nav-text">5. Benchmarking Frameworks and the Decoupling of Cognitive Capabilities</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-English-Language-Benchmarks-FLUE-FLARE-and-FinBen"><span class="nav-text">5.1 English-Language Benchmarks: FLUE, FLARE, and FinBen</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-Chinese-Language-and-Bilingual-Benchmarks-FinEval-and-CFBenchmark"><span class="nav-text">5.2 Chinese-Language and Bilingual Benchmarks: FinEval and CFBenchmark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-Cognitive-Decoupling-and-Multimodal-Evaluation"><span class="nav-text">5.3 Cognitive Decoupling and Multimodal Evaluation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Operationalization-Hallucination-Mitigation-and-Governance"><span class="nav-text">6. Operationalization, Hallucination Mitigation, and Governance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-Temporal-Leakage-and-Time-Safe-Evaluation"><span class="nav-text">6.1 Temporal Leakage and Time-Safe Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-Hallucination-Mitigation-through-RAG-and-Tool-Verified-Numerics"><span class="nav-text">6.2 Hallucination Mitigation through RAG and Tool-Verified Numerics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-Agentic-Workflows-and-Structural-Compliance"><span class="nav-text">6.3 Agentic Workflows and Structural Compliance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-The-Complexities-of-Licensing-and-Open-Source-Compliance"><span class="nav-text">7. The Complexities of Licensing and Open-Source Compliance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-The-Phenomenon-of-Multi-Licensing-and-IP-Contamination"><span class="nav-text">7.1 The Phenomenon of Multi-Licensing and IP Contamination</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-Conclusion"><span class="nav-text">8. Conclusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Works-Cited"><span class="nav-text">Works Cited</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance"><span class="nav-text">The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Introduction-The-Structural-Paradigm-Shift-in-Quantitative-and-Fundamental-Finance"><span class="nav-text">1. Introduction: The Structural Paradigm Shift in Quantitative and Fundamental Finance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-A-Task-Centered-Taxonomy-for-Financial-Language-Models"><span class="nav-text">2. A Task-Centered Taxonomy for Financial Language Models</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Sentiment-Analysis-and-Opinion-as-Signal-Inputs"><span class="nav-text">2.1 Sentiment Analysis and Opinion as Signal Inputs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Information-Extraction-and-Knowledge-Graph-Construction"><span class="nav-text">2.2 Information Extraction and Knowledge Graph Construction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Numerical-Question-Answering-and-Economic-Reasoning"><span class="nav-text">2.3 Numerical Question Answering and Economic Reasoning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Summarization-and-Document-Understanding"><span class="nav-text">2.4 Summarization and Document Understanding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-Multimodal-Fusion-and-Audio-Visual-Cues"><span class="nav-text">2.5 Multimodal Fusion and Audio-Visual Cues</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-Agentic-Workflows-and-Automated-Trading-Systems"><span class="nav-text">2.6 Agentic Workflows and Automated Trading Systems</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-Governance-Compliance-and-Security-Risk-Management"><span class="nav-text">2.7 Governance, Compliance, and Security Risk Management</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Foundation-Architectures-and-Pre-training-Paradigms"><span class="nav-text">3. Foundation Architectures and Pre-training Paradigms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-The-Proprietary-Vanguard-BloombergGPT"><span class="nav-text">3.1 The Proprietary Vanguard: BloombergGPT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-The-Open-Source-Counter-Movement-FinGPT-and-LLM-Pro-Finance"><span class="nav-text">3.2 The Open-Source Counter-Movement: FinGPT and LLM Pro Finance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Bilingual-and-Regional-Architectures-CFGPT-PIXIU-and-XuanYuan"><span class="nav-text">3.3 Bilingual and Regional Architectures: CFGPT, PIXIU, and XuanYuan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-The-Transition-to-Pure-Reasoning-Fin-R1"><span class="nav-text">3.4 The Transition to Pure Reasoning: Fin-R1</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Data-Engineering-Corpora-Instruction-Tuning-and-the-SFT-Ecosystem"><span class="nav-text">4. Data Engineering: Corpora, Instruction Tuning, and the SFT Ecosystem</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-The-CFData-Corpus-Pre-training-and-Instruction-Tuning-at-Scale"><span class="nav-text">4.1 The CFData Corpus: Pre-training and Instruction Tuning at Scale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Open-Source-Instruction-Datasets-and-RLHF-Formats"><span class="nav-text">4.2 Open-Source Instruction Datasets and RLHF Formats</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-Data-Augmentation-and-Domain-Randomization"><span class="nav-text">4.3 Data Augmentation and Domain Randomization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-Key-Financial-LLM-Datasets-Summary-Reference"><span class="nav-text">4.4 Key Financial LLM Datasets: Summary Reference</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-Alignment-Data-Formats-From-SFT-to-Online-RL"><span class="nav-text">4.5 Alignment Data Formats: From SFT to Online RL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-Dataset-to-Trainer-Mapping-Practical-Reference"><span class="nav-text">4.6 Dataset-to-Trainer Mapping: Practical Reference</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Benchmarking-Frameworks-and-the-Decoupling-of-Cognitive-Capabilities"><span class="nav-text">5. Benchmarking Frameworks and the Decoupling of Cognitive Capabilities</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-English-Language-Benchmarks-FLUE-FLARE-and-FinBen"><span class="nav-text">5.1 English-Language Benchmarks: FLUE, FLARE, and FinBen</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-Chinese-Language-and-Bilingual-Benchmarks-FinEval-and-CFBenchmark"><span class="nav-text">5.2 Chinese-Language and Bilingual Benchmarks: FinEval and CFBenchmark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-Cognitive-Decoupling-and-Multimodal-Evaluation"><span class="nav-text">5.3 Cognitive Decoupling and Multimodal Evaluation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Operationalization-Hallucination-Mitigation-and-Governance"><span class="nav-text">6. Operationalization, Hallucination Mitigation, and Governance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-Temporal-Leakage-and-Time-Safe-Evaluation"><span class="nav-text">6.1 Temporal Leakage and Time-Safe Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-Hallucination-Mitigation-through-RAG-and-Tool-Verified-Numerics"><span class="nav-text">6.2 Hallucination Mitigation through RAG and Tool-Verified Numerics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-Agentic-Workflows-and-Structural-Compliance"><span class="nav-text">6.3 Agentic Workflows and Structural Compliance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-The-Complexities-of-Licensing-and-Open-Source-Compliance"><span class="nav-text">7. The Complexities of Licensing and Open-Source Compliance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-The-Phenomenon-of-Multi-Licensing-and-IP-Contamination"><span class="nav-text">7.1 The Phenomenon of Multi-Licensing and IP Contamination</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-License-Taxonomy-What-You-Can-and-Cannot-Do"><span class="nav-text">7.2 License Taxonomy: What You Can and Cannot Do</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-The-Raw-Facts-Exemption-in-Financial-Data"><span class="nav-text">7.3 The &quot;Raw Facts&quot; Exemption in Financial Data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-Practical-Recommendations-for-Dataset-Construction"><span class="nav-text">7.4 Practical Recommendations for Dataset Construction</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-Conclusion"><span class="nav-text">8. Conclusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Works-Cited"><span class="nav-text">Works Cited</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1233,7 +1334,7 @@
                     </span>
                     
                         <span>
-                            35.6k words in total
+                            36.5k words in total
                         </span>
                     
                 </p>
