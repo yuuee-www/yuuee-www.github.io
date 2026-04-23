@@ -78,7 +78,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://yue-ruby-w.site/2024/07/13/2024-07-13-access-to-internal-server-from-jump-server/"/>
+    <link rel="canonical" href="https://yue-ruby-w.site/tags/dataset-construction/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -86,14 +86,12 @@
     
         
         <meta name="description" content="Ruby&#39;s Blog">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Access to Internal Server From Jump Server">
-<meta property="og:url" content="https://yue-ruby-w.site/2024/07/13/2024-07-13-Access-to-Internal-Server-From-Jump-Server/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="hola">
+<meta property="og:url" content="https://yue-ruby-w.site/tags/Dataset-Construction/index.html">
 <meta property="og:site_name" content="hola">
 <meta property="og:description" content="Ruby&#39;s Blog">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-07-13T08:05:19.000Z">
-<meta property="article:modified_time" content="2024-07-19T01:18:21.000Z">
 <meta property="article:author" content="wy">
 <meta name="twitter:card" content="summary">
     
@@ -107,7 +105,7 @@
     
     <title>
         
-            Access to Internal Server From Jump Server | hola
+            Tag: Dataset Construction | hola
         
     </title>
 
@@ -520,341 +518,58 @@
 			
 
 			<div class="main-content">
-				<div class="post-page-container flex relative justify-between box-border w-full h-full">
-	<div class="article-content-container">
-
-		<div class="article-title relative w-full">
-			
-			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Access to Internal Server From Jump Server</h1>
-			</div>
-			
-		</div>
-
-		
-		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
-			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
-				<img src="/images/redefine-avatar.svg">
-			</div>
-			<div class="info flex flex-col justify-between">
-				<div class="author flex items-center">
-					<span class="name text-default-text-color text-lg font-semibold">wy</span>
-					
-					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
-					
-				</div>
-				<div class="meta-info">
-					<div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-07-13 16:05:19</span>
-        <span class="mobile">2024-07-13 16:05:19</span>
-        <span class="hover-info">Created</span>
-    </span>
-    
-        <span class="article-date article-meta-item">
-            <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-07-19 09:18:21</span>
-            <span class="mobile">2024-07-19 09:18:21</span>
-            <span class="hover-info">Updated</span>
-        </span>
-    
-
-    
-    
-
-    
-    
-        <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>491 Words</span>
-        </span>
-    
-    
-        <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>3 Mins</span>
-        </span>
-    
-    
-        <span class="article-pv article-meta-item">
-            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
-        </span>
-    
-</div>
-
-				</div>
-			</div>
-		</div>
-		
-
-		
-
-
-		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h1 id="Using-a-Jump-Server-for-Internal-Network-Access"><a href="#Using-a-Jump-Server-for-Internal-Network-Access" class="headerlink" title="Using a Jump Server for Internal Network Access"></a>Using a Jump Server for Internal Network Access</h1><p>In scenarios where direct access to internal network resources is restricted due to security policies, a jump server (also known as a bastion host) acts as an intermediary that provides a secure path to these resources from an external network. This method is commonly used to manage servers, databases, and other critical infrastructure securely.</p>
-<h2 id="Purpose"><a href="#Purpose" class="headerlink" title="Purpose"></a>Purpose</h2><p>Use a jump server for SSH tunneling, allowing secure connection to a remote server within a protected network.</p>
-<h2 id="Operating-Environment"><a href="#Operating-Environment" class="headerlink" title="Operating Environment"></a>Operating Environment</h2><p>macOS</p>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li><p>Jump Server Password: The password required to access the jump server.</p>
-</li>
-<li><p>Remote Server Password: The password needed to log into the remote server.</p>
-</li>
-</ul>
-<h2 id="Some-Terminal-Commands"><a href="#Some-Terminal-Commands" class="headerlink" title="Some Terminal Commands"></a>Some Terminal Commands</h2><p>- </p>
-<p><strong>ssh-keygen -t rsa</strong>: Generates a new RSA key pair, which is used for secure SSH connections. This command creates a private key and a public key, stored by default in <code>~/.ssh/id_rsa</code> and <code>~/.ssh/id_rsa.pub</code>, respectively.</p>
-<p>- </p>
-<p><strong>ssh Jumpmachine</strong>: Connects to the jump server using SSH. Replace <code>Jumpmachine</code> with the hostname or IP address of your jump server.</p>
-<p>- </p>
-<p><strong>ssh -v Jumpmachine</strong>: Connects to the jump server using SSH with verbose output. The <code>-v</code> option increases verbosity, which can help diagnose connection, authentication, and configuration problems. Replace <code>Jumpmachine</code> with the hostname or IP address of your jump server.</p>
-<p>These commands are fundamental for establishing a secure channel between your local machine and the jump server.</p>
-<h2 id="Configuring-SSH-in-VSCode"><a href="#Configuring-SSH-in-VSCode" class="headerlink" title="Configuring SSH in VSCode"></a>Configuring SSH in VSCode</h2><p>To connect to your remote server via a jump server using VSCode’s SSH capabilities, you need to configure the SSH settings properly. Below is a sample configuration for the <code>~/.ssh/config</code> file:</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># Configuration for the remote server</span><br><span class="line">Host RemoteServerAlias</span><br><span class="line">  HostName [Remote-Server-IP]</span><br><span class="line">  User [Remote-Server-User-ID]</span><br><span class="line">  ProxyCommand ssh -W %h:%p JumpServerAlias</span><br><span class="line"></span><br><span class="line"># Configuration for the jump server</span><br><span class="line">Host JumpServerAlias</span><br><span class="line">  HostName [Jump-Server-Domain]</span><br><span class="line">  Port 22</span><br><span class="line">  User [Jump-Server-User-ID]</span><br><span class="line">  HostkeyAlgorithms ssh-dss,ssh-rsa</span><br><span class="line">  KexAlgorithms +diffie-hellman-group1-sha1</span><br></pre></td></tr></table></figure></div>
-
-<h2 id="Final-Connection-Steps"><a href="#Final-Connection-Steps" class="headerlink" title="Final Connection Steps"></a>Final Connection Steps</h2><p>To connect to the server in VSCode, simply open the Remote Explorer, select <code>RemoteServerAlias</code>, and enter your server password when prompted.</p>
-<ul>
-<li><p><strong>Title:</strong> Access to Internal Server From Jump Server</p>
-</li>
-<li><p><strong>Author:</strong> wy</p>
-</li>
-<li><p><strong>Created at<br>          :</strong> 2024-07-14 00:05:19
-  
-      </p>
-</li>
-<li><pre><code>          **Updated at
-              :** 2024-07-19 17:18:21
-      
-  
-  
-</code></pre>
-</li>
-<li><pre><code>      **Link:** https://yuuee-www.github.io/blog/2024/07/14/Access-to-Internal-Server-From-Jump-Server/
-  
-  
-</code></pre>
-</li>
-<li><pre><code>      **
-          License:
-      **
-      
-
-      
-          This work is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0).
-      
-  
-
-
-      
-  
-
-  
-
-  
-
-  
-      
-          
-              
-                  [check GPU on an integrated server
-                          Prev posts](/2024/07/14/check-GPU-on-an-integrated-server/)
-              
-          
-          
-              
-                  [summer notes2
-                          Next posts](/2024/07/13/summer-notes2/)
-              
-          
-      
-  
-
-  
-      
-          
-
-
-  Comments
-
-
-
-  
-      
-
-
-
-  
-
-
-      
-  
-
-
-
-  
-      
-
-  On this page
-  Access to Internal Server From Jump Server
-</code></pre>
-</li>
-</ul>
-<ol>
-<li><p><a href="#Using-a-Jump-Server-for-Internal-Network-Access">Using a Jump Server for Internal Network Access</a></p>
-</li>
-<li><p><a href="#Purpose">Purpose</a></p>
-</li>
-<li><p><a href="#Operating-Environment">Operating Environment</a></p>
-</li>
-<li><p><a href="#Prerequisites">Prerequisites</a></p>
-</li>
-<li><p><a href="#Some-Terminal-Commands">Some Terminal Commands</a></p>
-</li>
-<li><p><a href="#Configuring-SSH-in-VSCode">Configuring SSH in VSCode</a></p>
-</li>
-<li><p><a href="#Final-Connection-Steps">Final Connection Steps</a></p>
-<pre><code>   ©
-   
-     2022
-     -
-   
-   2024    [wy](/)
-   
-       
-       
-
-           
-               24 posts in total
-           
-           
-       
-
-   
-
-
-   
-   
-       
-           
-               VISITOR COUNT
-               
-           
-       
-       
-           
-               TOTAL PAGE VIEWS
-               
-           
-       
-   
-
-
-   POWERED BY [Hexo](https://hexo.io)
-   THEME [Redefine v2.6.4](https://github.com/EvanNotFound/hexo-theme-redefine)
-
-
-
-   
-       Blog up for  days  hrs  Min  Sec
-</code></pre>
-</li>
-</ol>
-<p>- </p>
-<p>- </p>
-<p>- </p>
-<p>- </p>
-<p>- </p>
-<p>- </p>
-<p>- </p>
-<ul>
-<li></li>
-</ul>
-
-		</div>
-
-		
-		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
-			<div class="article-copyright-info-container">
-    <ul>
-        <li><strong>Title:</strong> Access to Internal Server From Jump Server</li>
-        <li><strong>Author:</strong> wy</li>
-        <li><strong>Created at
-                :</strong> 2024-07-13 16:05:19</li>
-        
-            <li>
-                <strong>Updated at
-                    :</strong> 2024-07-19 09:18:21
-            </li>
-        
-        <li>
-            <strong>Link:</strong> https://yue-ruby-w.site/2024/07/13/2024-07-13-Access-to-Internal-Server-From-Jump-Server/
-        </li>
-        <li>
-            <strong>
-                License:
-            </strong>
-            
-
-            
-                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
-            
-        </li>
-    </ul>
-</div>
-
-		</div>
-		
-
-		
-
-		
-
-		
-		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
-			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2024/07/13/2024-07-13-check-GPU-on-an-integrated-server/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">check GPU on an integrated server</span>
-						<span class="post-nav-item">Prev posts</span>
-					</span>
-				</a>
-			</div>
-			
-			
-			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2024/07/13/2024-07-13-summer-notes2/">
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">summer notes2</span>
-						<span class="post-nav-item">Next posts</span>
-					</span>
-					<span class="right arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-right"></i>
-					</span>
-				</a>
-			</div>
-			
-		</div>
-		
-
-
-		
-	</div>
+				<div class="page-template-container">
+	
 
 	
-	<div class="toc-content-container">
-		<div class="post-toc-wrap">
-	<div class="post-toc">
-		<div class="toc-title">On this page</div>
-		<div class="page-title">Access to Internal Server From Jump Server</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Using-a-Jump-Server-for-Internal-Network-Access"><span class="nav-text">Using a Jump Server for Internal Network Access</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Purpose"><span class="nav-text">Purpose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Operating-Environment"><span class="nav-text">Operating Environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prerequisites"><span class="nav-text">Prerequisites</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Some-Terminal-Commands"><span class="nav-text">Some Terminal Commands</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configuring-SSH-in-VSCode"><span class="nav-text">Configuring SSH in VSCode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Final-Connection-Steps"><span class="nav-text">Final Connection Steps</span></a></li></ol></li></ol>
-
-	</div>
+	<div class="tag-name">
+    <i class="fa-solid fa-tag"></i>&nbsp;Dataset Construction
 </div>
-	</div>
+<div class="tag-post-list">
+    
+<div class="archive-list-container">
+    
+        <section class="archive-item mb-spacing-unit last:mb-0">
+            <div class="archive-item-header flex flex-row items-center mb-2">
+                <span class="archive-year font-semibold text-3xl mr-2">2026</span>
+                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">1</span>
+            </div>
+            
+            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
+                
+                    
+                    
+                         <!-- Close the previous LI if not the first item -->
+                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='04-23'>
+                    
+                    <a href="/2026/04/23/Financial-LLM-Hallucination-Dataset-Construction/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">Constructing Financial Hallucination-Suppression Alignment Datasets: A Synthetic Pipeline for Vertical LLMs</span>
+                    </a>
+                    
+                
+                </li> <!-- Ensure the last item is properly closed -->
+            </ul>
+        </section>
+    
+</div>
+</div>
 	
+
+	<div class="page-template-content markdown-body">
+		
+
+		
+	</div>
+
+	<div class="page-template-comments">
+		
+	</div>
 </div>
 
+<div class="paginator">
+	<span class="page-number current">1</span>
+</div>
+  
 			</div>
 
 			
@@ -959,22 +674,6 @@
 		</div>
 	</div>
 
-	
-	<div class="post-tools">
-		<div class="post-tools-container">
-	<ul class="article-tools-list">
-		<!-- TOC aside toggle -->
-		
-		<li class="right-bottom-tools page-aside-toggle">
-			<i class="fa-regular fa-outdent"></i>
-		</li>
-		
-
-		<!-- go comment -->
-		
-	</ul>
-</div>
-	</div>
 	
 
 	<div class="right-side-tools-container">
@@ -1099,7 +798,6 @@
         }),
     );
 </script>
-
 
 
 
