@@ -93,7 +93,7 @@
 <meta property="og:description" content="Ruby&#39;s Blog">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-04-23T02:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-23T08:49:10.807Z">
+<meta property="article:modified_time" content="2026-04-23T08:58:24.388Z">
 <meta property="article:author" content="wy">
 <meta property="article:tag" content="Finance">
 <meta property="article:tag" content="LLM">
@@ -558,8 +558,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-23 16:49:10</span>
-            <span class="mobile">2026-04-23 16:49:10</span>
+            <span class="desktop">2026-04-23 16:58:24</span>
+            <span class="mobile">2026-04-23 16:58:24</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -609,12 +609,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>5.5k Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>5.7k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>34 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>35 Mins</span>
         </span>
     
     
@@ -772,6 +772,78 @@
 <p>Furthermore, the alignment of LLMs with professional enterprise standards requires data formatted specifically for RLHF. The <strong>argilla&#x2F;llama-2-banking-fine-tune</strong> dataset exemplifies this approach for the retail banking sector. Containing simulated interactions regarding failed transfers, unrecognised charges, card delivery timelines, and fraud disputes, the dataset provides a user request, two varying assistant outputs (response-1 and response-2), and a human preference ranking. This structure allows the model&#39;s reward function to optimize for the most helpful, polite, and professionally accurate response — a necessity for deploying autonomous customer-facing agents.</p>
 <p>Fine-grained sentiment analysis also relies on entity-tracking datasets. While generic models assess the overall tone of a paragraph, datasets like <strong>yixuantt&#x2F;FinEntity</strong> track sentiment at the specific entity level. By defining exact start and end character indices, the model learns to isolate sentiment directed at specific corporations (e.g., <code>&lt;JNJ.N&gt;</code> for Johnson &amp; Johnson, <code>&lt;TSLA.O&gt;</code> for Tesla), financial institutions (Goldman Sachs, Morgan Stanley), market sectors, and commodities (Brent Crude <code>&lt;LCOc1&gt;</code>) co-occurring within a single text.</p>
 <h3 id="4-3-Data-Augmentation-and-Domain-Randomization"><a href="#4-3-Data-Augmentation-and-Domain-Randomization" class="headerlink" title="4.3 Data Augmentation and Domain Randomization"></a>4.3 Data Augmentation and Domain Randomization</h3><p>The creation of robust financial data also benefits from sophisticated preprocessing frameworks. Tools such as <strong>Cornucopia-LLM</strong> (an independent PyTorch-based augmentation framework) provide a generic framework for data augmentation, preprocessing, and domain randomization. By randomizing the structural layout of JSON, YAML, or Markdown tables during training, models are prevented from overfitting to specific positional formatting heuristics, ensuring they learn true semantic meaning and transferability across disparate financial reporting standards.</p>
+<h3 id="4-4-Key-Financial-LLM-Datasets-Summary-Reference"><a href="#4-4-Key-Financial-LLM-Datasets-Summary-Reference" class="headerlink" title="4.4 Key Financial LLM Datasets: Summary Reference"></a>4.4 Key Financial LLM Datasets: Summary Reference</h3><p>The following table consolidates the primary datasets discussed above, categorized by scale, task focus, and licensing status — a practical reference for practitioners selecting training data under compliance constraints:</p>
+<table>
+<thead>
+<tr>
+<th>Dataset Name</th>
+<th>Size &#x2F; Scale</th>
+<th>Primary Task &#x2F; Domain</th>
+<th>License</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CFData (CFData-pt &amp; CFData-sft)</td>
+<td>193B tokens (pre-training); 1.5B tokens (SFT)</td>
+<td>Pre-training and SFT across multi-modal Chinese financial tasks</td>
+<td>Open Source</td>
+</tr>
+<tr>
+<td>BloombergGPT Financial Corpus</td>
+<td>363B financial tokens</td>
+<td>Large-scale mixed-dataset pre-training</td>
+<td>Proprietary</td>
+</tr>
+<tr>
+<td>FinEval</td>
+<td>&gt;26,000 questions (4,661 academic; 1,434 industry)</td>
+<td>Comprehensive Chinese evaluation benchmark (Knowledge, Reasoning, Security)</td>
+<td>CC BY-NC-SA 4.0</td>
+</tr>
+<tr>
+<td>FinGPT Datasets</td>
+<td>76.8K (Sentiment), 82.2K (Headline), 27.6K (Relation)</td>
+<td>Internet-scale instruction tuning and RLHF</td>
+<td>Open Source</td>
+</tr>
+<tr>
+<td>twitter-financial-news-sentiment</td>
+<td>11,932 documents</td>
+<td>Multi-class sentiment analysis (Bearish, Bullish, Neutral)</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>FinEntity</td>
+<td>979 rows</td>
+<td>Entity-level sentiment classification and NER</td>
+<td>Open Source</td>
+</tr>
+<tr>
+<td>Sujet-Finance-Instruct-177k</td>
+<td>~178,000 instruction pairs</td>
+<td>Financial instruction tuning</td>
+<td>Open Source</td>
+</tr>
+<tr>
+<td>BBT-FinCorpus</td>
+<td>~300GB raw text (105GB processed)</td>
+<td>Large-scale financial pre-training</td>
+<td>CC BY-NC-SA 4.0</td>
+</tr>
+<tr>
+<td>Investopedia Instruction Tuning</td>
+<td>Not explicitly specified</td>
+<td>Fine-tuning embedding models and self-verification</td>
+<td>CC BY-NC 4.0</td>
+</tr>
+<tr>
+<td>llama-2-banking-fine-tune</td>
+<td>100 rows</td>
+<td>RLHF fine-tuning for retail banking interactions</td>
+<td>Open Source</td>
+</tr>
+</tbody></table>
+<p>The licensing column is operationally significant: five of the ten datasets carry non-commercial or share-alike clauses (CC BY-NC-SA 4.0, CC BY-NC 4.0), which directly limits their use in production financial services deployments without additional legal review (see Section 7).</p>
 <hr>
 <h2 id="5-Benchmarking-Frameworks-and-the-Decoupling-of-Cognitive-Capabilities"><a href="#5-Benchmarking-Frameworks-and-the-Decoupling-of-Cognitive-Capabilities" class="headerlink" title="5. Benchmarking Frameworks and the Decoupling of Cognitive Capabilities"></a>5. Benchmarking Frameworks and the Decoupling of Cognitive Capabilities</h2><p>As financial language models scale in complexity, standard natural language benchmarks (such as GLUE, SuperGLUE, or MMLU) are insufficient for evaluating highly technical domain expertise. The industry requires specialized, multi-dimensional evaluation frameworks capable of measuring an LLM&#39;s ability to extract causal relationships, forecast market movements, execute precise numerical reasoning, and navigate compliance constraints.</p>
 <h3 id="5-1-English-Language-Benchmarks-FLUE-FLARE-and-FinBen"><a href="#5-1-English-Language-Benchmarks-FLUE-FLARE-and-FinBen" class="headerlink" title="5.1 English-Language Benchmarks: FLUE, FLARE, and FinBen"></a>5.1 English-Language Benchmarks: FLUE, FLARE, and FinBen</h3><p>The initial effort to standardize financial NLP evaluation culminated in <strong>FLUE (Financial Language Understanding Evaluation)</strong> in 2022. FLUE establishes a baseline across five core tasks: Sentiment Classification (utilizing the Financial Phrase Bank and FiQA), News Headline Classification, Named Entity Recognition (assessed on loan agreement data), Structure Boundary Detection (FinSBD3), and Question Answering. A key technical innovation introduced alongside FLUE was the implementation of domain-specific pre-training objectives, including financial phrase masking and a Supervised Contrastive Learning loss ( \( L_{SCL} \) ), designed to capture latent similarities between examples of the same financial class.</p>
@@ -875,7 +947,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2026-04-23 16:49:10
+                    :</strong> 2026-04-23 16:58:24
             </li>
         
         <li>
@@ -950,7 +1022,7 @@
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
 		<div class="page-title">The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance"><span class="nav-text">The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Introduction-The-Structural-Paradigm-Shift-in-Quantitative-and-Fundamental-Finance"><span class="nav-text">1. Introduction: The Structural Paradigm Shift in Quantitative and Fundamental Finance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-A-Task-Centered-Taxonomy-for-Financial-Language-Models"><span class="nav-text">2. A Task-Centered Taxonomy for Financial Language Models</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Sentiment-Analysis-and-Opinion-as-Signal-Inputs"><span class="nav-text">2.1 Sentiment Analysis and Opinion as Signal Inputs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Information-Extraction-and-Knowledge-Graph-Construction"><span class="nav-text">2.2 Information Extraction and Knowledge Graph Construction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Numerical-Question-Answering-and-Economic-Reasoning"><span class="nav-text">2.3 Numerical Question Answering and Economic Reasoning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Summarization-and-Document-Understanding"><span class="nav-text">2.4 Summarization and Document Understanding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-Multimodal-Fusion-and-Audio-Visual-Cues"><span class="nav-text">2.5 Multimodal Fusion and Audio-Visual Cues</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-Agentic-Workflows-and-Automated-Trading-Systems"><span class="nav-text">2.6 Agentic Workflows and Automated Trading Systems</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-Governance-Compliance-and-Security-Risk-Management"><span class="nav-text">2.7 Governance, Compliance, and Security Risk Management</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Foundation-Architectures-and-Pre-training-Paradigms"><span class="nav-text">3. Foundation Architectures and Pre-training Paradigms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-The-Proprietary-Vanguard-BloombergGPT"><span class="nav-text">3.1 The Proprietary Vanguard: BloombergGPT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-The-Open-Source-Counter-Movement-FinGPT-and-LLM-Pro-Finance"><span class="nav-text">3.2 The Open-Source Counter-Movement: FinGPT and LLM Pro Finance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Bilingual-and-Regional-Architectures-CFGPT-PIXIU-and-XuanYuan"><span class="nav-text">3.3 Bilingual and Regional Architectures: CFGPT, PIXIU, and XuanYuan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-The-Transition-to-Pure-Reasoning-Fin-R1"><span class="nav-text">3.4 The Transition to Pure Reasoning: Fin-R1</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Data-Engineering-Corpora-Instruction-Tuning-and-the-SFT-Ecosystem"><span class="nav-text">4. Data Engineering: Corpora, Instruction Tuning, and the SFT Ecosystem</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-The-CFData-Corpus-Pre-training-and-Instruction-Tuning-at-Scale"><span class="nav-text">4.1 The CFData Corpus: Pre-training and Instruction Tuning at Scale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Open-Source-Instruction-Datasets-and-RLHF-Formats"><span class="nav-text">4.2 Open-Source Instruction Datasets and RLHF Formats</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-Data-Augmentation-and-Domain-Randomization"><span class="nav-text">4.3 Data Augmentation and Domain Randomization</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Benchmarking-Frameworks-and-the-Decoupling-of-Cognitive-Capabilities"><span class="nav-text">5. Benchmarking Frameworks and the Decoupling of Cognitive Capabilities</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-English-Language-Benchmarks-FLUE-FLARE-and-FinBen"><span class="nav-text">5.1 English-Language Benchmarks: FLUE, FLARE, and FinBen</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-Chinese-Language-and-Bilingual-Benchmarks-FinEval-and-CFBenchmark"><span class="nav-text">5.2 Chinese-Language and Bilingual Benchmarks: FinEval and CFBenchmark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-Cognitive-Decoupling-and-Multimodal-Evaluation"><span class="nav-text">5.3 Cognitive Decoupling and Multimodal Evaluation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Operationalization-Hallucination-Mitigation-and-Governance"><span class="nav-text">6. Operationalization, Hallucination Mitigation, and Governance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-Temporal-Leakage-and-Time-Safe-Evaluation"><span class="nav-text">6.1 Temporal Leakage and Time-Safe Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-Hallucination-Mitigation-through-RAG-and-Tool-Verified-Numerics"><span class="nav-text">6.2 Hallucination Mitigation through RAG and Tool-Verified Numerics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-Agentic-Workflows-and-Structural-Compliance"><span class="nav-text">6.3 Agentic Workflows and Structural Compliance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-The-Complexities-of-Licensing-and-Open-Source-Compliance"><span class="nav-text">7. The Complexities of Licensing and Open-Source Compliance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-The-Phenomenon-of-Multi-Licensing-and-IP-Contamination"><span class="nav-text">7.1 The Phenomenon of Multi-Licensing and IP Contamination</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-Conclusion"><span class="nav-text">8. Conclusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Works-Cited"><span class="nav-text">Works Cited</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance"><span class="nav-text">The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Introduction-The-Structural-Paradigm-Shift-in-Quantitative-and-Fundamental-Finance"><span class="nav-text">1. Introduction: The Structural Paradigm Shift in Quantitative and Fundamental Finance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-A-Task-Centered-Taxonomy-for-Financial-Language-Models"><span class="nav-text">2. A Task-Centered Taxonomy for Financial Language Models</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Sentiment-Analysis-and-Opinion-as-Signal-Inputs"><span class="nav-text">2.1 Sentiment Analysis and Opinion as Signal Inputs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Information-Extraction-and-Knowledge-Graph-Construction"><span class="nav-text">2.2 Information Extraction and Knowledge Graph Construction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Numerical-Question-Answering-and-Economic-Reasoning"><span class="nav-text">2.3 Numerical Question Answering and Economic Reasoning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Summarization-and-Document-Understanding"><span class="nav-text">2.4 Summarization and Document Understanding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-Multimodal-Fusion-and-Audio-Visual-Cues"><span class="nav-text">2.5 Multimodal Fusion and Audio-Visual Cues</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-Agentic-Workflows-and-Automated-Trading-Systems"><span class="nav-text">2.6 Agentic Workflows and Automated Trading Systems</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-Governance-Compliance-and-Security-Risk-Management"><span class="nav-text">2.7 Governance, Compliance, and Security Risk Management</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Foundation-Architectures-and-Pre-training-Paradigms"><span class="nav-text">3. Foundation Architectures and Pre-training Paradigms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-The-Proprietary-Vanguard-BloombergGPT"><span class="nav-text">3.1 The Proprietary Vanguard: BloombergGPT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-The-Open-Source-Counter-Movement-FinGPT-and-LLM-Pro-Finance"><span class="nav-text">3.2 The Open-Source Counter-Movement: FinGPT and LLM Pro Finance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Bilingual-and-Regional-Architectures-CFGPT-PIXIU-and-XuanYuan"><span class="nav-text">3.3 Bilingual and Regional Architectures: CFGPT, PIXIU, and XuanYuan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-The-Transition-to-Pure-Reasoning-Fin-R1"><span class="nav-text">3.4 The Transition to Pure Reasoning: Fin-R1</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Data-Engineering-Corpora-Instruction-Tuning-and-the-SFT-Ecosystem"><span class="nav-text">4. Data Engineering: Corpora, Instruction Tuning, and the SFT Ecosystem</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-The-CFData-Corpus-Pre-training-and-Instruction-Tuning-at-Scale"><span class="nav-text">4.1 The CFData Corpus: Pre-training and Instruction Tuning at Scale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Open-Source-Instruction-Datasets-and-RLHF-Formats"><span class="nav-text">4.2 Open-Source Instruction Datasets and RLHF Formats</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-Data-Augmentation-and-Domain-Randomization"><span class="nav-text">4.3 Data Augmentation and Domain Randomization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-Key-Financial-LLM-Datasets-Summary-Reference"><span class="nav-text">4.4 Key Financial LLM Datasets: Summary Reference</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Benchmarking-Frameworks-and-the-Decoupling-of-Cognitive-Capabilities"><span class="nav-text">5. Benchmarking Frameworks and the Decoupling of Cognitive Capabilities</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-English-Language-Benchmarks-FLUE-FLARE-and-FinBen"><span class="nav-text">5.1 English-Language Benchmarks: FLUE, FLARE, and FinBen</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-Chinese-Language-and-Bilingual-Benchmarks-FinEval-and-CFBenchmark"><span class="nav-text">5.2 Chinese-Language and Bilingual Benchmarks: FinEval and CFBenchmark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-Cognitive-Decoupling-and-Multimodal-Evaluation"><span class="nav-text">5.3 Cognitive Decoupling and Multimodal Evaluation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Operationalization-Hallucination-Mitigation-and-Governance"><span class="nav-text">6. Operationalization, Hallucination Mitigation, and Governance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-Temporal-Leakage-and-Time-Safe-Evaluation"><span class="nav-text">6.1 Temporal Leakage and Time-Safe Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-Hallucination-Mitigation-through-RAG-and-Tool-Verified-Numerics"><span class="nav-text">6.2 Hallucination Mitigation through RAG and Tool-Verified Numerics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-Agentic-Workflows-and-Structural-Compliance"><span class="nav-text">6.3 Agentic Workflows and Structural Compliance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-The-Complexities-of-Licensing-and-Open-Source-Compliance"><span class="nav-text">7. The Complexities of Licensing and Open-Source Compliance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-The-Phenomenon-of-Multi-Licensing-and-IP-Contamination"><span class="nav-text">7.1 The Phenomenon of Multi-Licensing and IP Contamination</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-Conclusion"><span class="nav-text">8. Conclusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Works-Cited"><span class="nav-text">Works Cited</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -982,7 +1054,7 @@
                     </span>
                     
                         <span>
-                            33.8k words in total
+                            34.1k words in total
                         </span>
                     
                 </p>
