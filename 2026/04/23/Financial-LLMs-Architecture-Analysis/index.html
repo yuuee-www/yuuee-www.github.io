@@ -93,7 +93,7 @@
 <meta property="og:description" content="Ruby&#39;s Blog">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-04-23T02:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-23T10:01:56.033Z">
+<meta property="article:modified_time" content="2026-04-23T10:10:03.422Z">
 <meta property="article:author" content="wy">
 <meta property="article:tag" content="Finance">
 <meta property="article:tag" content="LLM">
@@ -558,8 +558,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-23 18:01:56</span>
-            <span class="mobile">2026-04-23 18:01:56</span>
+            <span class="desktop">2026-04-23 18:10:03</span>
+            <span class="mobile">2026-04-23 18:10:03</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -609,12 +609,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>11.2k Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>11.1k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>70 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>69 Mins</span>
         </span>
     
     
@@ -633,16 +633,7 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<meta name="notebook" content="true">
-
-<h1 id="The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance"><a href="#The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance" class="headerlink" title="The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance"></a>The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</h1><div class="nb-page-nav">
-  <a class="active" onclick="switchPage('page-1', this)">FinLLM Architecture</a>
-  <a onclick="switchPage('page-2', this)">Hallucination Dataset Pipeline</a>
-</div>
-
-<div id="page-1" class="nb-page active">
-
-<hr>
+			<h1 id="The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance"><a href="#The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance" class="headerlink" title="The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance"></a>The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</h1><hr>
 <h2 id="1-Introduction-The-Structural-Paradigm-Shift-in-Quantitative-and-Fundamental-Finance"><a href="#1-Introduction-The-Structural-Paradigm-Shift-in-Quantitative-and-Fundamental-Finance" class="headerlink" title="1. Introduction: The Structural Paradigm Shift in Quantitative and Fundamental Finance"></a>1. Introduction: The Structural Paradigm Shift in Quantitative and Fundamental Finance</h2><p>The integration of Large Language Models (LLMs) into the financial sector represents a structural paradigm shift, fundamentally transforming the mechanisms through which unstructured financial intelligence is processed, synthesized, and executed. Historically, quantitative finance and algorithmic trading have relied predominantly on structured data schemas, encompassing price-volume time series, tick data, macroeconomic indicators, and standardized accounting metrics. However, an estimated eighty percent of actionable market intelligence resides in highly unstructured text: regulatory filings, earnings call transcripts, analyst reports, geopolitical news streams, and real-time social media sentiment.</p>
 <p>General-domain foundation models, while exhibiting remarkable natural language understanding and generative capabilities, frequently falter when applied to the specialized, highly technical, and strictly regulated domain of finance. These generalized systems struggle with domain-specific jargon, complex numerical reasoning over tabular data, and strict adherence to regulatory taxonomies, such as the eXtensive Business Reporting Language (XBRL) mandated in United States Securities and Exchange Commission (SEC) filings, which can contain thousands of highly specific accounting labels.</p>
 <p>To bridge this operational deficit, the distinct discipline of Financial Large Language Models (FinLLMs) has emerged over the past several years. FinLLMs are specifically pre-trained, continuously adapted, or instruction-tuned on massive, highly curated corpora of financial literature, equipping them with the latent knowledge necessary to perform specialized tasks at an expert level. The development of these domain-specific models is not merely an exercise in scaling parameters or expanding context windows; it requires meticulous data curation pipelines, financial-specific instruction tuning paradigms, and the deployment of rigorous benchmarking frameworks designed to detect subtle hallucinations, prevent temporal leakage, and ensure logical consistency across multi-step reasoning tasks. The current landscape is categorized by a dichotomy between massive, proprietary models built by heavily capitalized institutions and lightweight, open-source models designed for democratized access, rapid iteration, and localized, secure deployment.</p>
@@ -1194,15 +1185,6 @@
 <p>The empirical evidence from the development of specialized architectures — ranging from the massive, mixed-dataset pre-training of BloombergGPT to the agile, RLHF-driven open-source pipelines of FinGPT and the highly localized, reasoning-optimized structures of CFGPT and Fin-R1 — demonstrates that contextual awareness and mathematical rigor dictate financial utility. The curation of hyper-specific datasets, such as the CFData corpus and entity-level sentiment tracking arrays, allows models to discern the granular nuances of market mechanics that generalized models overlook. Furthermore, the establishment of multi-dimensional evaluation frameworks like FinBen and FinEval ensures that as models transition into autonomous agentic workflows, their capabilities are rigorously decoupled, tested against hallucinations, and fortified against temporal leakage and systemic security vulnerabilities.</p>
 <p>Ultimately, the successful capitalization of FinLLMs within the global financial infrastructure will depend entirely on the industry&#39;s ability to reconcile the inherently probabilistic nature of neural networks with the deterministic, highly regulated demands of capital markets. Through the deployment of retrieval-first architectures, tool-verified numerics, and strict adherence to verifiable data provenance and licensing frameworks, financial language models will continue to evolve into indispensable, highly auditable engines of modern quantitative intelligence.</p>
 <hr>
-<div class="nb-page-footer">
-  <span></span>
-  <a onclick="switchPage('page-2', document.querySelector('.nb-page-nav a:nth-child(2)'))">Hallucination Dataset Pipeline →</a>
-</div>
-
-</div>
-
-<div id="page-2" class="nb-page">
-
 <hr>
 <h1 id="Part-II-—-Constructing-Financial-Hallucination-Suppression-Alignment-Datasets"><a href="#Part-II-—-Constructing-Financial-Hallucination-Suppression-Alignment-Datasets" class="headerlink" title="Part II — Constructing Financial Hallucination-Suppression Alignment Datasets"></a>Part II — Constructing Financial Hallucination-Suppression Alignment Datasets</h1><p><strong>Research Task:</strong> Propose a dataset construction method applicable to the vertical finance field, which generates high-quality, hallucination-suppression-specific alignment data based on existing large models (ChatGPT, GPT-4, DeepSeek).</p>
 <p>This section synthesizes the research landscape across five dimensions — instruction tuning methodologies, synthetic generation techniques, hallucination typology, contrastive alignment data design, and end-to-end pipeline architecture — to arrive at a concrete, implementable proposal.</p>
@@ -1532,25 +1514,6 @@
 <li><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/html/2506.21591v3" >FinEval-KR: A Financial Domain Evaluation Framework for LLMs&#39; Knowledge and Reasoning<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — arXiv 2506.21591</li>
 <li><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/html/2502.04484v2" >An Empirical Analysis of Machine Learning Model and Dataset Documentation, Supply Chain, and Licensing Challenges on Hugging Face<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — arXiv 2502.04484</li>
 </ol>
-<div class="nb-page-footer">
-  <a onclick="switchPage('page-1', document.querySelector('.nb-page-nav a:nth-child(1)'))">← FinLLM Architecture</a>
-  <span></span>
-</div>
-
-</div>
-
-<script>
-function switchPage(pageId, navLink) {
-  document.querySelectorAll('.nb-page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nb-page-nav a').forEach(a => a.classList.remove('active'));
-  document.getElementById(pageId).classList.add('active');
-  navLink.classList.add('active');
-  document.querySelector('.nb-page-nav').scrollIntoView({behavior: 'smooth', block: 'start'});
-  if (typeof renderMathInElement === 'function') {
-    renderMathInElement(document.getElementById(pageId), {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
-  }
-}
-</script>
 
 		</div>
 
@@ -1565,7 +1528,7 @@ function switchPage(pageId, navLink) {
         
             <li>
                 <strong>Updated at
-                    :</strong> 2026-04-23 18:01:56
+                    :</strong> 2026-04-23 18:10:03
             </li>
         
         <li>
