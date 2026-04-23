@@ -93,7 +93,7 @@
 <meta property="og:description" content="Ruby&#39;s Blog">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-04-23T02:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-23T12:25:36.980Z">
+<meta property="article:modified_time" content="2026-04-23T13:04:49.727Z">
 <meta property="article:author" content="wy">
 <meta property="article:tag" content="Finance">
 <meta property="article:tag" content="LLM">
@@ -558,8 +558,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-23 20:25:36</span>
-            <span class="mobile">2026-04-23 20:25:36</span>
+            <span class="desktop">2026-04-23 21:04:49</span>
+            <span class="mobile">2026-04-23 21:04:49</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -635,7 +635,8 @@
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
 			<h1 id="The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance"><a href="#The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance" class="headerlink" title="The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance"></a>The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</h1><div class="fin-page-toggle">
   <a id="fin-btn-main" class="fin-toggle-btn active" onclick="finShowPage('main')" title="Main article">📄 Article</a>
-  <a id="fin-btn-blank" class="fin-toggle-btn" onclick="finShowPage('blank')" title="Open new page">✨ New Page</a>
+  <a id="fin-btn-blank" class="fin-toggle-btn" onclick="finShowPage('blank')" title="Hallucination suppression alignment dataset construction">🛡️ Alignment</a>
+  <a id="fin-btn-curation" class="fin-toggle-btn" onclick="finShowPage('curation')" title="Data curation">📚 Curation</a>
 </div>
 
 <div id="fin-page-main">
@@ -1812,6 +1813,12 @@
 </ol>
 </div>
 
+<div id="fin-page-curation" style="display:none; min-height: 400px;">
+
+<!-- Curation page — content to be added later -->
+
+</div>
+
 <style>
 .fin-page-toggle {
   display: flex;
@@ -1865,21 +1872,13 @@
 
 <script>
 function finShowPage(which) {
-  var main = document.getElementById('fin-page-main');
-  var blank = document.getElementById('fin-page-blank');
-  var btnMain = document.getElementById('fin-btn-main');
-  var btnBlank = document.getElementById('fin-btn-blank');
-  if (which === 'blank') {
-    main.style.display = 'none';
-    blank.style.display = 'block';
-    btnMain.classList.remove('active');
-    btnBlank.classList.add('active');
-  } else {
-    main.style.display = 'block';
-    blank.style.display = 'none';
-    btnMain.classList.add('active');
-    btnBlank.classList.remove('active');
-  }
+  var pages = ['main', 'blank', 'curation'];
+  pages.forEach(function(p) {
+    var el = document.getElementById('fin-page-' + p);
+    var btn = document.getElementById('fin-btn-' + p);
+    if (el) el.style.display = (p === which) ? 'block' : 'none';
+    if (btn) btn.classList.toggle('active', p === which);
+  });
   document.querySelector('.fin-page-toggle').scrollIntoView({behavior:'smooth', block:'start'});
 }
 </script>
@@ -1897,7 +1896,7 @@ function finShowPage(which) {
         
             <li>
                 <strong>Updated at
-                    :</strong> 2026-04-23 20:25:36
+                    :</strong> 2026-04-23 21:04:49
             </li>
         
         <li>
@@ -2004,7 +2003,7 @@ function finShowPage(which) {
                     </span>
                     
                         <span>
-                            45.7k words in total
+                            45.6k words in total
                         </span>
                     
                 </p>
