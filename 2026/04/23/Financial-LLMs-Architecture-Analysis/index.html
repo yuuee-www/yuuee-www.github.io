@@ -93,7 +93,7 @@
 <meta property="og:description" content="Ruby&#39;s Blog">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-04-23T02:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-23T09:17:35.015Z">
+<meta property="article:modified_time" content="2026-04-23T09:53:10.232Z">
 <meta property="article:author" content="wy">
 <meta property="article:tag" content="Finance">
 <meta property="article:tag" content="LLM">
@@ -499,7 +499,7 @@
 
         <div class="statistics flex justify-around my-2.5">
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">16</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">13</div>
         <div class="label text-third-text-color text-sm">Tags</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
@@ -507,7 +507,7 @@
         <div class="label text-third-text-color text-sm">Categories</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">31</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">30</div>
         <div class="label text-third-text-color text-sm">Posts</div>
     </a>
 </div>
@@ -558,8 +558,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-23 17:17:35</span>
-            <span class="mobile">2026-04-23 17:17:35</span>
+            <span class="desktop">2026-04-23 17:53:10</span>
+            <span class="mobile">2026-04-23 17:53:10</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -609,12 +609,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>8.1k Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>11.1k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>50 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>69 Mins</span>
         </span>
     
     
@@ -1185,6 +1185,307 @@
 <p>The empirical evidence from the development of specialized architectures — ranging from the massive, mixed-dataset pre-training of BloombergGPT to the agile, RLHF-driven open-source pipelines of FinGPT and the highly localized, reasoning-optimized structures of CFGPT and Fin-R1 — demonstrates that contextual awareness and mathematical rigor dictate financial utility. The curation of hyper-specific datasets, such as the CFData corpus and entity-level sentiment tracking arrays, allows models to discern the granular nuances of market mechanics that generalized models overlook. Furthermore, the establishment of multi-dimensional evaluation frameworks like FinBen and FinEval ensures that as models transition into autonomous agentic workflows, their capabilities are rigorously decoupled, tested against hallucinations, and fortified against temporal leakage and systemic security vulnerabilities.</p>
 <p>Ultimately, the successful capitalization of FinLLMs within the global financial infrastructure will depend entirely on the industry&#39;s ability to reconcile the inherently probabilistic nature of neural networks with the deterministic, highly regulated demands of capital markets. Through the deployment of retrieval-first architectures, tool-verified numerics, and strict adherence to verifiable data provenance and licensing frameworks, financial language models will continue to evolve into indispensable, highly auditable engines of modern quantitative intelligence.</p>
 <hr>
+<hr>
+<h1 id="Part-II-—-Constructing-Financial-Hallucination-Suppression-Alignment-Datasets"><a href="#Part-II-—-Constructing-Financial-Hallucination-Suppression-Alignment-Datasets" class="headerlink" title="Part II — Constructing Financial Hallucination-Suppression Alignment Datasets"></a>Part II — Constructing Financial Hallucination-Suppression Alignment Datasets</h1><p><strong>Research Task:</strong> Propose a dataset construction method applicable to the vertical finance field, which generates high-quality, hallucination-suppression-specific alignment data based on existing large models (ChatGPT, GPT-4, DeepSeek).</p>
+<p>This section synthesizes the research landscape across five dimensions — instruction tuning methodologies, synthetic generation techniques, hallucination typology, contrastive alignment data design, and end-to-end pipeline architecture — to arrive at a concrete, implementable proposal.</p>
+<hr>
+<h2 id="9-Recent-Methodologies-Instruction-Tuning-and-Alignment-Datasets-for-Finance"><a href="#9-Recent-Methodologies-Instruction-Tuning-and-Alignment-Datasets-for-Finance" class="headerlink" title="9. Recent Methodologies: Instruction Tuning and Alignment Datasets for Finance"></a>9. Recent Methodologies: Instruction Tuning and Alignment Datasets for Finance</h2><h3 id="9-1-The-SFT-then-Align-Paradigm"><a href="#9-1-The-SFT-then-Align-Paradigm" class="headerlink" title="9.1 The SFT-then-Align Paradigm"></a>9.1 The SFT-then-Align Paradigm</h3><p>The dominant methodology for building vertical FinLLMs follows a two-stage pipeline:</p>
+<ol>
+<li><strong>Supervised Fine-Tuning (SFT):</strong> A general-purpose base model (LLaMA, Qwen, Mistral) is first fine-tuned on a large corpus of financial instruction-response pairs to acquire domain vocabulary and task format. Datasets like CFData-sft (1.6M pairs), Sujet-Finance-Instruct-177k, and FinGPT&#39;s task-specific corpora are the raw material here.</li>
+<li><strong>Alignment:</strong> The SFT model is then aligned via preference optimization (DPO, ORPO, KTO) or online RL (GRPO) to correct the residual failure modes introduced during SFT — most critically, hallucination.</li>
+</ol>
+<p>The critical insight from recent work is that <strong>SFT alone does not suppress hallucination</strong>. SFT teaches the model to produce fluent, domain-appropriate text, but it also faithfully replicates any hallucinations present in the training data. A model trained on 1.6M CFData-sft pairs will confidently generate plausible-sounding but incorrect earnings figures or fabricated regulatory citations, because the training signal never distinguished factually grounded completions from plausible confabulations.</p>
+<p>Alignment data specifically designed to teach the model <em>when</em> to refuse, <em>when</em> to hedge, and <em>how</em> to ground claims in retrieved sources is the gap that the current FinLLM literature has only partially filled.</p>
+<h3 id="9-2-Self-Instruct-and-Evol-Instruct-Adaptations-for-Finance"><a href="#9-2-Self-Instruct-and-Evol-Instruct-Adaptations-for-Finance" class="headerlink" title="9.2 Self-Instruct and Evol-Instruct Adaptations for Finance"></a>9.2 Self-Instruct and Evol-Instruct Adaptations for Finance</h3><p>Two general-purpose synthetic data techniques have been adapted for financial instruction generation:</p>
+<ul>
+<li><strong>Self-Instruct</strong> (Wang et al., 2022): A seed set of human-written instruction-response pairs is used to prompt an LLM to generate new instruction-response pairs, then filtered for diversity and quality. Applied to finance, the seed set consists of expert-written financial QA pairs (CFA exam questions, analyst report templates), and the generator is GPT-4 or DeepSeek-V3.</li>
+<li><strong>Evol-Instruct</strong> (Xu et al., 2023, WizardLM): A two-step process — first &quot;evolve&quot; existing instructions to be more complex (add constraints, require multi-step reasoning, introduce numerical tables), then generate responses. Evolving &quot;What is Apple&#39;s P&#x2F;E ratio?&quot; into &quot;Given the attached 10-K excerpt, calculate the trailing twelve-month P&#x2F;E ratio, compare it to the sector median, and assess whether the current valuation is justified given projected revenue growth&quot; produces much richer training signal.</li>
+</ul>
+<p>The Investopedia instruction tuning dataset applies a variant of this: scraped financial text is processed by an LLM to generate structured QA pairs, followed by a secondary self-verification pass that filters hallucinated answers.</p>
+<h3 id="9-3-Constitutional-AI-and-Process-Based-Supervision-for-Finance"><a href="#9-3-Constitutional-AI-and-Process-Based-Supervision-for-Finance" class="headerlink" title="9.3 Constitutional AI and Process-Based Supervision for Finance"></a>9.3 Constitutional AI and Process-Based Supervision for Finance</h3><p>Two alignment paradigms from the general-purpose literature are directly applicable to financial hallucination suppression:</p>
+<ul>
+<li><strong>Constitutional AI (CAI):</strong> A set of explicit principles (&quot;do not fabricate financial figures&quot;, &quot;always cite the source document&quot;, &quot;express uncertainty when data is unavailable&quot;) guides both generation and critique. The model evaluates its own outputs against these principles and revises them — producing a self-critique-and-revision loop without requiring human preference labels.</li>
+<li><strong>Process Reward Models (PRMs):</strong> Rather than rewarding only the final answer, PRMs assign correctness labels to each intermediate reasoning step. For financial QA, this means evaluating whether the revenue extraction step, the ratio calculation step, and the conclusion step are each independently correct. Fin-PRM operationalizes this for financial math.</li>
+</ul>
+<hr>
+<h2 id="10-Synthetic-Generation-with-ChatGPT-GPT-4-and-DeepSeek"><a href="#10-Synthetic-Generation-with-ChatGPT-GPT-4-and-DeepSeek" class="headerlink" title="10. Synthetic Generation with ChatGPT, GPT-4, and DeepSeek"></a>10. Synthetic Generation with ChatGPT, GPT-4, and DeepSeek</h2><h3 id="10-1-Why-Synthetic-Generation-is-Necessary"><a href="#10-1-Why-Synthetic-Generation-is-Necessary" class="headerlink" title="10.1 Why Synthetic Generation is Necessary"></a>10.1 Why Synthetic Generation is Necessary</h3><p>Human annotation of financial preference data is prohibitively expensive. A single high-quality preference pair (prompt + chosen + rejected, both requiring domain expert verification) costs approximately $15–50 USD per item when sourced from credentialed financial analysts. At DPO-scale requirements (50K–500K pairs), this is economically infeasible for most research groups and mid-size institutions.</p>
+<p>Synthetic generation using frontier models reduces this cost by 2–3 orders of magnitude while, under careful pipeline design, maintaining or exceeding the quality of purely human-labeled data.</p>
+<h3 id="10-2-Model-Selection-for-the-Generator-Role"><a href="#10-2-Model-Selection-for-the-Generator-Role" class="headerlink" title="10.2 Model Selection for the Generator Role"></a>10.2 Model Selection for the Generator Role</h3><table>
+<thead>
+<tr>
+<th>Generator Model</th>
+<th>Strengths</th>
+<th>Weaknesses for Finance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GPT-4o</td>
+<td>Strong structured output, reliable JSON, multilingual</td>
+<td>Proprietary; rate-limited</td>
+</tr>
+<tr>
+<td>GPT-4-Turbo</td>
+<td>Long context (128k), good at table-heavy 10-K analysis</td>
+<td>Same as above</td>
+</tr>
+<tr>
+<td>DeepSeek-V3</td>
+<td>Open weights, competitive financial reasoning, cost-effective</td>
+<td>Occasional hallucination on obscure tickers</td>
+</tr>
+<tr>
+<td>DeepSeek-R1</td>
+<td>Explicit CoT reasoning traces, strong on math</td>
+<td>Slower inference; verbose outputs need post-processing</td>
+</tr>
+<tr>
+<td>Claude 3.5 Sonnet</td>
+<td>Reliable citation format, strong at regulatory text</td>
+<td>Conservative refusals reduce negative sample diversity</td>
+</tr>
+<tr>
+<td>Qwen2.5-72B</td>
+<td>Strong on Chinese financial regulatory content</td>
+<td>Weaker on IFRS vs. US GAAP distinctions</td>
+</tr>
+</tbody></table>
+<p><strong>Recommended setup:</strong> Use <strong>DeepSeek-R1</strong> (or GPT-4o) as the primary generator for CoT reasoning traces and preference pairs, with an independent <strong>GPT-4o</strong> (or Claude) acting as the verifier&#x2F;judge — keeping generator and judge distinct to reduce confirmation bias.</p>
+<h3 id="10-3-Prompt-Engineering-for-Financial-Instruction-Generation"><a href="#10-3-Prompt-Engineering-for-Financial-Instruction-Generation" class="headerlink" title="10.3 Prompt Engineering for Financial Instruction Generation"></a>10.3 Prompt Engineering for Financial Instruction Generation</h3><p>The quality of synthetic data is entirely determined by the quality of the generation prompt. For financial hallucination suppression, prompts must:</p>
+<ol>
+<li><strong>Specify the source document</strong> — the generator should be forced to ground responses in a provided excerpt, not rely on parametric memory</li>
+<li><strong>Specify the output format</strong> — JSON with explicit fields for <code>answer</code>, <code>calculation_steps</code>, <code>source_citations</code>, <code>confidence</code></li>
+<li><strong>Specify uncertainty conditions</strong> — the generator should produce hedged answers when the source document is insufficient, rather than confabulating</li>
+</ol>
+<p>Example generation prompt for a grounded financial QA pair:</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">You are generating training data for a financial LLM.</span><br><span class="line"></span><br><span class="line">SOURCE DOCUMENT:</span><br><span class="line">&#123;10-K excerpt: revenue $24.3B, COGS $15.1B, operating expenses $6.2B,</span><br><span class="line"> interest expense $0.8B, tax rate 21%, shares outstanding 3.2B&#125;</span><br><span class="line"></span><br><span class="line">TASK: Generate a financial analysis question that requires multi-step calculation</span><br><span class="line">over the above figures, and the correct, fully worked answer.</span><br><span class="line"></span><br><span class="line">Requirements:</span><br><span class="line">- The question must require at least 3 arithmetic steps</span><br><span class="line">- The answer must cite specific line items from the source document</span><br><span class="line">- The answer must express the confidence level (high/medium/low) for each step</span><br><span class="line">- Do NOT introduce any figures not present in the source document</span><br><span class="line"></span><br><span class="line">Output format:</span><br><span class="line">&#123;&quot;question&quot;: &quot;...&quot;, &quot;answer&quot;: &quot;...&quot;, &quot;steps&quot;: [...], &quot;citations&quot;: [...], &quot;confidence&quot;: &quot;...&quot;&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="10-4-Generating-CoT-Trajectories-with-DeepSeek-R1"><a href="#10-4-Generating-CoT-Trajectories-with-DeepSeek-R1" class="headerlink" title="10.4 Generating CoT Trajectories with DeepSeek-R1"></a>10.4 Generating CoT Trajectories with DeepSeek-R1</h3><p>DeepSeek-R1&#39;s explicit reasoning traces make it particularly valuable for generating stepwise financial reasoning data. The model&#39;s <code>&lt;think&gt;</code> tokens expose the full intermediate reasoning chain, which can be:</p>
+<ol>
+<li>Extracted and formatted as PRMTrainer stepwise supervision data</li>
+<li>Used as positive CoT examples for GRPO-based online RL (Fin-R1 style)</li>
+<li>Compared against hallucinated reasoning chains to create DPO preference pairs</li>
+</ol>
+<p>The key pipeline step is <strong>trace verification</strong>: after DeepSeek-R1 generates a reasoning chain, each intermediate step is checked against the source document and&#x2F;or an external calculator before the trace is accepted into the training corpus.</p>
+<hr>
+<h2 id="11-Hallucination-Typology-in-Financial-LLMs"><a href="#11-Hallucination-Typology-in-Financial-LLMs" class="headerlink" title="11. Hallucination Typology in Financial LLMs"></a>11. Hallucination Typology in Financial LLMs</h2><p>Financial hallucinations are not homogeneous. Effective suppression requires understanding the distinct failure modes and targeting each with appropriate training signal.</p>
+<h3 id="11-1-Financial-Hallucination-Taxonomy"><a href="#11-1-Financial-Hallucination-Taxonomy" class="headerlink" title="11.1 Financial Hallucination Taxonomy"></a>11.1 Financial Hallucination Taxonomy</h3><table>
+<thead>
+<tr>
+<th>Hallucination Type</th>
+<th>Example</th>
+<th>Detection Method</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Numeric fabrication</strong></td>
+<td>&quot;Apple reported revenue of $98.7B in Q3 2024&quot; (actual: $85.8B)</td>
+<td>Cross-reference financial data API (Yahoo Finance, Alpha Vantage)</td>
+</tr>
+<tr>
+<td><strong>Ticker&#x2F;entity confusion</strong></td>
+<td>Using MSFT data when asked about MFST (typo)</td>
+<td>Ticker validation against exchange symbol database</td>
+</tr>
+<tr>
+<td><strong>Temporal leakage</strong></td>
+<td>Citing a 2024 earnings figure when answering a 2022 query</td>
+<td>Point-in-time filtering; date-aware retrieval index</td>
+</tr>
+<tr>
+<td><strong>Fabricated regulatory citation</strong></td>
+<td>&quot;According to SEC Rule 17a-5(b)(3)...&quot; (rule doesn&#39;t exist)</td>
+<td>EDGAR&#x2F;CFR lookup; legal citation validator</td>
+</tr>
+<tr>
+<td><strong>Ratio miscalculation</strong></td>
+<td>Calculating P&#x2F;E as Price × Earnings instead of Price ÷ Earnings</td>
+<td>Sandboxed Python execution with formula verification</td>
+</tr>
+<tr>
+<td><strong>XBRL tag hallucination</strong></td>
+<td>Using <code>us-gaap:Revenue</code> where <code>us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax</code> is required</td>
+<td>XBRL taxonomy validator</td>
+</tr>
+<tr>
+<td><strong>Trend inversion</strong></td>
+<td>&quot;Revenue grew 15% YoY&quot; when the filing shows a 15% decline</td>
+<td>Sign-check against source document</td>
+</tr>
+<tr>
+<td><strong>Spurious attribution</strong></td>
+<td>&quot;Goldman Sachs analysts rate the stock a Buy&quot; without a source</td>
+<td>Citation grounding requirement; uncited claims flagged</td>
+</tr>
+</tbody></table>
+<h3 id="11-2-Why-Standard-SFT-Fails-to-Suppress-These"><a href="#11-2-Why-Standard-SFT-Fails-to-Suppress-These" class="headerlink" title="11.2 Why Standard SFT Fails to Suppress These"></a>11.2 Why Standard SFT Fails to Suppress These</h3><p>SFT on prompt-completion pairs teaches the model what a good financial answer <em>looks like</em>, but does not teach it to prefer factually grounded answers over fluent confabulations. The cross-entropy training loss is indifferent to factual accuracy — a hallucinated earnings figure that matches the format of a correct one receives an identical training gradient.</p>
+<p>Alignment training (DPO, KTO, GRPO with factual reward) creates a <strong>preference gap</strong> between grounded and fabricated responses that the SFT loss cannot create. This is the core motivation for building dedicated hallucination-suppression alignment data rather than simply scaling up SFT corpora.</p>
+<hr>
+<h2 id="12-Contrastive-Alignment-Dataset-Design"><a href="#12-Contrastive-Alignment-Dataset-Design" class="headerlink" title="12. Contrastive Alignment Dataset Design"></a>12. Contrastive Alignment Dataset Design</h2><p>The central data engineering challenge is constructing preference pairs where:</p>
+<ul>
+<li>The <code>chosen</code> response is factually grounded, calculation-correct, and appropriately hedged</li>
+<li>The <code>rejected</code> response is fluent and domain-appropriate but contains a specific, verifiable hallucination</li>
+</ul>
+<p>The <code>rejected</code> sample must be <em>plausible enough</em> that the model cannot trivially distinguish it by stylistic cues alone — it must learn to distinguish on factual grounds.</p>
+<h3 id="12-1-Hallucination-Injection-Strategies"><a href="#12-1-Hallucination-Injection-Strategies" class="headerlink" title="12.1 Hallucination Injection Strategies"></a>12.1 Hallucination Injection Strategies</h3><p><strong>Strategy A — Numeric Perturbation:</strong><br>Take a verified correct numerical answer and apply a systematic perturbation: scale by a random factor (×1.15, ×0.87), swap two digits, change the sign, or shift the decimal.</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">correct = <span class="number">24.3</span>  <span class="comment"># billion</span></span><br><span class="line">perturbations = [</span><br><span class="line">    correct * random.uniform(<span class="number">0.85</span>, <span class="number">1.15</span>),   <span class="comment"># scale noise</span></span><br><span class="line">    correct * -<span class="number">1</span>,                            <span class="comment"># sign flip</span></span><br><span class="line">    <span class="built_in">float</span>(<span class="built_in">str</span>(correct)[::-<span class="number">1</span>]),              <span class="comment"># digit reversal (24.3 → 3.42)</span></span><br><span class="line">    correct + random.randint(<span class="number">1</span>, <span class="number">5</span>),         <span class="comment"># additive noise</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Strategy B — Temporal Displacement:</strong><br>Replace a figure from the query period with the same metric from an adjacent period. &quot;Q3 2024 revenue&quot; is answered with &quot;Q3 2023 revenue&quot; — same ticker, same metric, wrong time. This trains the model to be sensitive to temporal context.</p>
+<p><strong>Strategy C — Cross-Entity Contamination:</strong><br>Replace the correct company&#39;s figures with a competitor&#39;s figures from the same period. Apple&#39;s Q3 revenue replaced by Microsoft&#39;s Q3 revenue. This mirrors a realistic hallucination pattern (the model &quot;knows&quot; the figure, just associates it with the wrong entity).</p>
+<p><strong>Strategy D — Regulatory Citation Fabrication (via LLM):</strong><br>Prompt a generator model to produce a plausible-sounding but non-existent regulatory citation. The generator is explicitly instructed to invent a rule number. The result becomes the <code>rejected</code> sample for queries requiring regulatory grounding.</p>
+<h3 id="12-2-DPO-Preference-Pair-Schema"><a href="#12-2-DPO-Preference-Pair-Schema" class="headerlink" title="12.2 DPO Preference Pair Schema"></a>12.2 DPO Preference Pair Schema</h3><div class="code-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;prompt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Based on the attached 10-K excerpt, what was the company&#x27;s gross margin in FY2023, and how does it compare to the prior year?&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;source_doc&quot;</span><span class="punctuation">:</span> <span class="string">&quot;FY2023: Revenue $24.3B, COGS $15.1B. FY2022: Revenue $21.8B, COGS $13.6B.&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;chosen&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;response&quot;</span><span class="punctuation">:</span> <span class="string">&quot;FY2023 gross margin = (24.3 - 15.1) / 24.3 = 37.9%. FY2022 gross margin = (21.8 - 13.6) / 21.8 = 37.6%. Gross margin expanded by approximately 0.3 percentage points year-over-year.&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;hallucination_type&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;verified&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;rejected&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;response&quot;</span><span class="punctuation">:</span> <span class="string">&quot;FY2023 gross margin = (24.3 - 15.1) / 15.1 = 60.9%. This represents a significant improvement from FY2022&#x27;s margin of 37.6%.&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;hallucination_type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ratio_miscalculation&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;injected_error_description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;denominator changed from revenue to COGS&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="12-3-KTO-Unpaired-Format-Lower-Annotation-Cost"><a href="#12-3-KTO-Unpaired-Format-Lower-Annotation-Cost" class="headerlink" title="12.3 KTO Unpaired Format (Lower Annotation Cost)"></a>12.3 KTO Unpaired Format (Lower Annotation Cost)</h3><p>For institutions where pairwise annotation is still too expensive, KTO&#39;s unpaired format reduces the labeling burden to a single boolean per sample:</p>
+<div class="code-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;prompt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;What was Tesla&#x27;s FY2023 automotive revenue?&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;completion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$78.5B&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;label&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;prompt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;What was Tesla&#x27;s FY2023 automotive revenue?&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;completion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$91.2B&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;label&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>The <code>false</code>-labeled samples can be generated programmatically via the numeric perturbation strategies above, requiring no human annotation beyond the initial verification of the <code>true</code> samples.</p>
+<hr>
+<h2 id="13-End-to-End-Pipeline-Architecture"><a href="#13-End-to-End-Pipeline-Architecture" class="headerlink" title="13. End-to-End Pipeline Architecture"></a>13. End-to-End Pipeline Architecture</h2><h3 id="Stage-1-—-Verified-Source-Data-Ingestion"><a href="#Stage-1-—-Verified-Source-Data-Ingestion" class="headerlink" title="Stage 1 — Verified Source Data Ingestion"></a>Stage 1 — Verified Source Data Ingestion</h3><p>Build a clean, temporally indexed corpus of ground-truth financial facts.</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Data Type</th>
+<th>License</th>
+<th>Point-in-Time Safe</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SEC EDGAR full-text search</td>
+<td>10-K, 10-Q, 8-K filings</td>
+<td>Public domain</td>
+<td>Yes (filing date as timestamp)</td>
+</tr>
+<tr>
+<td>World Bank Open Data</td>
+<td>Macroeconomic indicators</td>
+<td>CC-BY 4.0</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Alpha Vantage API (free tier)</td>
+<td>Historical price&#x2F;volume, earnings</td>
+<td>Permissive</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Federal Register &#x2F; CFR</td>
+<td>US regulatory text</td>
+<td>Public domain</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>XBRL inline viewer (SEC)</td>
+<td>Structured GAAP line items</td>
+<td>Public domain</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<p>Each ingested document is stored with metadata: <code>{source_url, filing_date, ticker, fiscal_period, spdx_license, ingestion_timestamp}</code>.</p>
+<h3 id="Stage-2-—-Prompt-Design-and-Instruction-Seeding"><a href="#Stage-2-—-Prompt-Design-and-Instruction-Seeding" class="headerlink" title="Stage 2 — Prompt Design and Instruction Seeding"></a>Stage 2 — Prompt Design and Instruction Seeding</h3><p>Generate a diverse set of financial reasoning prompts spanning all 7 task classes from Section 2, starting from 500–1,000 human-written seed pairs (CFA exam questions, FINRA practice problems, auditor exam questions), then applying Evol-Instruct evolution passes to increase complexity.</p>
+<p><strong>Prompt diversity checklist:</strong></p>
+<ul>
+<li>Numeric multi-step reasoning (gross margin, EV&#x2F;EBITDA, YTM calculation)</li>
+<li>Entity and period disambiguation (correct ticker, correct fiscal quarter)</li>
+<li>Regulatory grounding (cite specific SEC&#x2F;IFRS rule)</li>
+<li>Summarization under constraint (compress without losing KPIs)</li>
+<li>Uncertainty expression (hedge when source document is insufficient)</li>
+</ul>
+<h3 id="Stage-3-—-Synthetic-Generation-with-Verification"><a href="#Stage-3-—-Synthetic-Generation-with-Verification" class="headerlink" title="Stage 3 — Synthetic Generation with Verification"></a>Stage 3 — Synthetic Generation with Verification</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for each prompt p with source_doc d:</span><br><span class="line">    1. Pass (p, d) to DeepSeek-R1 with grounding instruction</span><br><span class="line">    2. Extract answer A and reasoning trace T from &lt;think&gt; block</span><br><span class="line">    3. Verify each numeric claim in A against d via exact match or calculator</span><br><span class="line">    4. Verify each regulatory citation via EDGAR/CFR API lookup</span><br><span class="line">    5. If all verifications pass → accept (p, A, T) as positive sample</span><br><span class="line">    6. If any verification fails → log failure type, discard or route to human review</span><br></pre></td></tr></table></figure></div>
+
+<p>Target acceptance rate: 75–85% for numeric QA; ~60% for regulatory citation tasks.</p>
+<h3 id="Stage-4-—-Hallucination-Injection-for-Negative-Samples"><a href="#Stage-4-—-Hallucination-Injection-for-Negative-Samples" class="headerlink" title="Stage 4 — Hallucination Injection for Negative Samples"></a>Stage 4 — Hallucination Injection for Negative Samples</h3><table>
+<thead>
+<tr>
+<th>Prompt Type</th>
+<th>Primary Injection Strategy</th>
+<th>Fallback</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Numeric calculation</td>
+<td>Numeric Perturbation (Strategy A)</td>
+<td>Ratio Miscalculation</td>
+</tr>
+<tr>
+<td>Time-series comparison</td>
+<td>Temporal Displacement (Strategy B)</td>
+<td>Numeric Perturbation</td>
+</tr>
+<tr>
+<td>Multi-company comparison</td>
+<td>Cross-Entity Contamination (Strategy C)</td>
+<td>Temporal Displacement</td>
+</tr>
+<tr>
+<td>Regulatory citation</td>
+<td>Citation Fabrication via LLM (Strategy D)</td>
+<td>Entity Confusion</td>
+</tr>
+</tbody></table>
+<p>After injection, a <strong>plausibility filter</strong> (LLM judge, 1–5 scale) screens out rejected samples that are obviously wrong. Samples scoring below 3 are regenerated.</p>
+<h3 id="Stage-5-—-Automated-Quality-Verification-LLM-as-a-Judge-Tool-Verification"><a href="#Stage-5-—-Automated-Quality-Verification-LLM-as-a-Judge-Tool-Verification" class="headerlink" title="Stage 5 — Automated Quality Verification (LLM-as-a-Judge + Tool Verification)"></a>Stage 5 — Automated Quality Verification (LLM-as-a-Judge + Tool Verification)</h3><p><strong>Track A — Tool-Verified Numerics:</strong> All numerical answers in <code>chosen</code> samples are re-verified by executing the claimed calculation in a sandboxed Python environment. Any sample where the Python result diverges from the stated answer beyond a configurable epsilon is flagged for removal.</p>
+<p><strong>Track B — LLM-as-a-Judge:</strong></p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Judge prompt:</span><br><span class="line">&quot;You are evaluating a financial QA preference pair.</span><br><span class="line">PROMPT: &#123;p&#125;</span><br><span class="line">SOURCE DOC: &#123;d&#125;</span><br><span class="line">CHOSEN RESPONSE: &#123;A_chosen&#125;</span><br><span class="line">REJECTED RESPONSE: &#123;A_rejected&#125;</span><br><span class="line"></span><br><span class="line">Score on 1-5:</span><br><span class="line">1. Is CHOSEN factually correct and grounded in SOURCE DOC?</span><br><span class="line">2. Is REJECTED plausible but factually wrong?</span><br><span class="line">3. Is the factual distinction clear to a domain expert?</span><br><span class="line"></span><br><span class="line">Output: &#123;&quot;chosen_correctness&quot;: X, &quot;rejected_plausibility&quot;: X,</span><br><span class="line">         &quot;distinction_clarity&quot;: X, &quot;overall_accept&quot;: true/false&#125;&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Acceptance criteria:</strong> <code>chosen_correctness &gt;= 4</code>, <code>rejected_plausibility &gt;= 3</code>, <code>overall_accept = true</code>.</p>
+<p><strong>Estimated pipeline yield:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Items In</th>
+<th>Acceptance Rate</th>
+<th>Items Out</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Stage 1 (ingestion)</td>
+<td>—</td>
+<td>—</td>
+<td>~100K source documents</td>
+</tr>
+<tr>
+<td>Stage 2 (prompt seeding)</td>
+<td>1,000 seeds</td>
+<td>Evol ×10</td>
+<td>~10K prompts</td>
+</tr>
+<tr>
+<td>Stage 3 (generation + verify)</td>
+<td>10K prompts</td>
+<td>75%</td>
+<td>~7,500 positive samples</td>
+</tr>
+<tr>
+<td>Stage 4 (hallucination injection)</td>
+<td>7,500</td>
+<td>80% plausibility filter</td>
+<td>~6,000 preference pairs</td>
+</tr>
+<tr>
+<td>Stage 5 (LLM judge)</td>
+<td>6,000 pairs</td>
+<td>85%</td>
+<td><strong>~5,100 final pairs</strong></td>
+</tr>
+</tbody></table>
+<p>A single pipeline run produces ~5,000 high-quality DPO preference pairs — sufficient for meaningful hallucination-suppression alignment at 7B–13B scale. Multiple runs with different source document batches can scale to 50K+ pairs.</p>
+<hr>
+<h2 id="14-Proposed-Dataset-Schema"><a href="#14-Proposed-Dataset-Schema" class="headerlink" title="14. Proposed Dataset Schema"></a>14. Proposed Dataset Schema</h2><p>The final dataset is stored in a format compatible with DPOTrainer, KTOTrainer, and PRMTrainer:</p>
+<div class="code-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fin-halluc-00001&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;prompt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;...&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;source_doc&quot;</span><span class="punctuation">:</span> <span class="string">&quot;...&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;source_metadata&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://www.sec.gov/...&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;filing_date&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2024-02-02&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;ticker&quot;</span><span class="punctuation">:</span> <span class="string">&quot;AAPL&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;fiscal_period&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Q1FY2024&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;spdx_license&quot;</span><span class="punctuation">:</span> <span class="string">&quot;public-domain&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;chosen&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;response&quot;</span><span class="punctuation">:</span> <span class="string">&quot;...&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;reasoning_trace&quot;</span><span class="punctuation">:</span> <span class="string">&quot;...&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;verification_method&quot;</span><span class="punctuation">:</span> <span class="string">&quot;calculator&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;verified&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;rejected&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;response&quot;</span><span class="punctuation">:</span> <span class="string">&quot;...&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;hallucination_type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;numeric_perturbation&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;injected_error_description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;...&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;plausibility_score&quot;</span><span class="punctuation">:</span> <span class="number">4</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;judge_scores&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;chosen_correctness&quot;</span><span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;rejected_plausibility&quot;</span><span class="punctuation">:</span> <span class="number">4</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;distinction_clarity&quot;</span><span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;overall_accept&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="15-Open-Questions-and-Future-Directions"><a href="#15-Open-Questions-and-Future-Directions" class="headerlink" title="15. Open Questions and Future Directions"></a>15. Open Questions and Future Directions</h2><ol>
+<li><p><strong>Hallucination rate measurement:</strong> No standardized financial hallucination benchmark equivalent to HaluEval exists for the general domain. FinBen and FinEval measure task accuracy but not hallucination rate specifically. A dedicated hallucination evaluation suite covering all eight types in Section 11.1 is a prerequisite for measuring pipeline effectiveness.</p>
+</li>
+<li><p><strong>Reward model calibration:</strong> For GRPO-based online RL (Fin-R1 style), the reward function determines everything. A binary correct&#x2F;incorrect reward is insufficient for the nuanced spectrum of financial correctness (exactly right vs. close enough vs. directionally correct vs. completely wrong). Designing a continuous, calibrated financial reward function is an open problem.</p>
+</li>
+<li><p><strong>Distribution shift:</strong> A model aligned on SEC EDGAR filings will hallucinate differently when deployed on earnings call transcripts or analyst reports. Domain-specific alignment data needs to be constructed for each sub-domain of deployment.</p>
+</li>
+<li><p><strong>Adversarial robustness:</strong> The pipeline above assumes a cooperative generation setting. In real deployment, users may craft prompts specifically designed to elicit hallucinated financial figures (prompt injection, jailbreak-style queries). Building adversarial financial prompts into the training corpus is a necessary extension.</p>
+</li>
+</ol>
+<hr>
 <h2 id="Works-Cited"><a href="#Works-Cited" class="headerlink" title="Works Cited"></a>Works Cited</h2><ol>
 <li><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2510.05533" >The New Quant: A Survey of Large Language Models in Financial Prediction and Trading<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — arXiv 2510.05533</li>
 <li><a class="link"   target="_blank" rel="noopener" href="https://ideas.repec.org/p/arx/papers/2406.11903.html" >A Survey of Large Language Models for Financial Applications: Progress, Prospects and Challenges<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> — IDEAS&#x2F;RePEC arXiv 2406.11903</li>
@@ -1227,7 +1528,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2026-04-23 17:17:35
+                    :</strong> 2026-04-23 17:53:10
             </li>
         
         <li>
@@ -1276,18 +1577,6 @@
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2026/04/23/Financial-LLM-Hallucination-Dataset-Construction/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">Constructing Financial Hallucination-Suppression Alignment Datasets: A Synthetic Pipeline for Vertical LLMs</span>
-						<span class="post-nav-item">Prev posts</span>
-					</span>
-				</a>
-			</div>
-			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
 				<a class="next" rel="next" href="/2026/04/22/MCP-vs-CLI-The-Interface-Debate/">
@@ -1314,7 +1603,7 @@
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
 		<div class="page-title">The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance"><span class="nav-text">The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Introduction-The-Structural-Paradigm-Shift-in-Quantitative-and-Fundamental-Finance"><span class="nav-text">1. Introduction: The Structural Paradigm Shift in Quantitative and Fundamental Finance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-A-Task-Centered-Taxonomy-for-Financial-Language-Models"><span class="nav-text">2. A Task-Centered Taxonomy for Financial Language Models</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Sentiment-Analysis-and-Opinion-as-Signal-Inputs"><span class="nav-text">2.1 Sentiment Analysis and Opinion as Signal Inputs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Information-Extraction-and-Knowledge-Graph-Construction"><span class="nav-text">2.2 Information Extraction and Knowledge Graph Construction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Numerical-Question-Answering-and-Economic-Reasoning"><span class="nav-text">2.3 Numerical Question Answering and Economic Reasoning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Summarization-and-Document-Understanding"><span class="nav-text">2.4 Summarization and Document Understanding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-Multimodal-Fusion-and-Audio-Visual-Cues"><span class="nav-text">2.5 Multimodal Fusion and Audio-Visual Cues</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-Agentic-Workflows-and-Automated-Trading-Systems"><span class="nav-text">2.6 Agentic Workflows and Automated Trading Systems</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-Governance-Compliance-and-Security-Risk-Management"><span class="nav-text">2.7 Governance, Compliance, and Security Risk Management</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Foundation-Architectures-and-Pre-training-Paradigms"><span class="nav-text">3. Foundation Architectures and Pre-training Paradigms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-The-Proprietary-Vanguard-BloombergGPT"><span class="nav-text">3.1 The Proprietary Vanguard: BloombergGPT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-The-Open-Source-Counter-Movement-FinGPT-and-LLM-Pro-Finance"><span class="nav-text">3.2 The Open-Source Counter-Movement: FinGPT and LLM Pro Finance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Bilingual-and-Regional-Architectures-CFGPT-PIXIU-and-XuanYuan"><span class="nav-text">3.3 Bilingual and Regional Architectures: CFGPT, PIXIU, and XuanYuan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-The-Transition-to-Pure-Reasoning-Fin-R1"><span class="nav-text">3.4 The Transition to Pure Reasoning: Fin-R1</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Data-Engineering-Corpora-Instruction-Tuning-and-the-SFT-Ecosystem"><span class="nav-text">4. Data Engineering: Corpora, Instruction Tuning, and the SFT Ecosystem</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-The-CFData-Corpus-Pre-training-and-Instruction-Tuning-at-Scale"><span class="nav-text">4.1 The CFData Corpus: Pre-training and Instruction Tuning at Scale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Open-Source-Instruction-Datasets-and-RLHF-Formats"><span class="nav-text">4.2 Open-Source Instruction Datasets and RLHF Formats</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-Data-Augmentation-and-Domain-Randomization"><span class="nav-text">4.3 Data Augmentation and Domain Randomization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-Key-Financial-LLM-Datasets-Summary-Reference"><span class="nav-text">4.4 Key Financial LLM Datasets: Summary Reference</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-Alignment-Data-Formats-From-SFT-to-Online-RL"><span class="nav-text">4.5 Alignment Data Formats: From SFT to Online RL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-Dataset-to-Trainer-Mapping-Practical-Reference"><span class="nav-text">4.6 Dataset-to-Trainer Mapping: Practical Reference</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Benchmarking-Frameworks-and-the-Decoupling-of-Cognitive-Capabilities"><span class="nav-text">5. Benchmarking Frameworks and the Decoupling of Cognitive Capabilities</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-English-Language-Benchmarks-FLUE-FLARE-and-FinBen"><span class="nav-text">5.1 English-Language Benchmarks: FLUE, FLARE, and FinBen</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-Chinese-Language-and-Bilingual-Benchmarks-FinEval-and-CFBenchmark"><span class="nav-text">5.2 Chinese-Language and Bilingual Benchmarks: FinEval and CFBenchmark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-Cognitive-Decoupling-and-Multimodal-Evaluation"><span class="nav-text">5.3 Cognitive Decoupling and Multimodal Evaluation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Operationalization-Hallucination-Mitigation-and-Governance"><span class="nav-text">6. Operationalization, Hallucination Mitigation, and Governance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-Temporal-Leakage-and-Time-Safe-Evaluation"><span class="nav-text">6.1 Temporal Leakage and Time-Safe Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-Hallucination-Mitigation-through-RAG-and-Tool-Verified-Numerics"><span class="nav-text">6.2 Hallucination Mitigation through RAG and Tool-Verified Numerics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-Agentic-Workflows-and-Structural-Compliance"><span class="nav-text">6.3 Agentic Workflows and Structural Compliance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-The-Complexities-of-Licensing-and-Open-Source-Compliance"><span class="nav-text">7. The Complexities of Licensing and Open-Source Compliance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-The-Phenomenon-of-Multi-Licensing-and-IP-Contamination"><span class="nav-text">7.1 The Phenomenon of Multi-Licensing and IP Contamination</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-License-Taxonomy-What-You-Can-and-Cannot-Do"><span class="nav-text">7.2 License Taxonomy: What You Can and Cannot Do</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-The-Raw-Facts-Exemption-in-Financial-Data"><span class="nav-text">7.3 The &quot;Raw Facts&quot; Exemption in Financial Data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-Practical-Recommendations-for-Dataset-Construction"><span class="nav-text">7.4 Practical Recommendations for Dataset Construction</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-Conclusion"><span class="nav-text">8. Conclusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Works-Cited"><span class="nav-text">Works Cited</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Architecture-of-Financial-Intelligence-A-Comprehensive-Analysis-of-Large-Language-Models-in-Finance"><span class="nav-text">The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Introduction-The-Structural-Paradigm-Shift-in-Quantitative-and-Fundamental-Finance"><span class="nav-text">1. Introduction: The Structural Paradigm Shift in Quantitative and Fundamental Finance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-A-Task-Centered-Taxonomy-for-Financial-Language-Models"><span class="nav-text">2. A Task-Centered Taxonomy for Financial Language Models</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Sentiment-Analysis-and-Opinion-as-Signal-Inputs"><span class="nav-text">2.1 Sentiment Analysis and Opinion as Signal Inputs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Information-Extraction-and-Knowledge-Graph-Construction"><span class="nav-text">2.2 Information Extraction and Knowledge Graph Construction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Numerical-Question-Answering-and-Economic-Reasoning"><span class="nav-text">2.3 Numerical Question Answering and Economic Reasoning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Summarization-and-Document-Understanding"><span class="nav-text">2.4 Summarization and Document Understanding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-Multimodal-Fusion-and-Audio-Visual-Cues"><span class="nav-text">2.5 Multimodal Fusion and Audio-Visual Cues</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-Agentic-Workflows-and-Automated-Trading-Systems"><span class="nav-text">2.6 Agentic Workflows and Automated Trading Systems</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-Governance-Compliance-and-Security-Risk-Management"><span class="nav-text">2.7 Governance, Compliance, and Security Risk Management</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Foundation-Architectures-and-Pre-training-Paradigms"><span class="nav-text">3. Foundation Architectures and Pre-training Paradigms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-The-Proprietary-Vanguard-BloombergGPT"><span class="nav-text">3.1 The Proprietary Vanguard: BloombergGPT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-The-Open-Source-Counter-Movement-FinGPT-and-LLM-Pro-Finance"><span class="nav-text">3.2 The Open-Source Counter-Movement: FinGPT and LLM Pro Finance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Bilingual-and-Regional-Architectures-CFGPT-PIXIU-and-XuanYuan"><span class="nav-text">3.3 Bilingual and Regional Architectures: CFGPT, PIXIU, and XuanYuan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-The-Transition-to-Pure-Reasoning-Fin-R1"><span class="nav-text">3.4 The Transition to Pure Reasoning: Fin-R1</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Data-Engineering-Corpora-Instruction-Tuning-and-the-SFT-Ecosystem"><span class="nav-text">4. Data Engineering: Corpora, Instruction Tuning, and the SFT Ecosystem</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-The-CFData-Corpus-Pre-training-and-Instruction-Tuning-at-Scale"><span class="nav-text">4.1 The CFData Corpus: Pre-training and Instruction Tuning at Scale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Open-Source-Instruction-Datasets-and-RLHF-Formats"><span class="nav-text">4.2 Open-Source Instruction Datasets and RLHF Formats</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-Data-Augmentation-and-Domain-Randomization"><span class="nav-text">4.3 Data Augmentation and Domain Randomization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-Key-Financial-LLM-Datasets-Summary-Reference"><span class="nav-text">4.4 Key Financial LLM Datasets: Summary Reference</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-Alignment-Data-Formats-From-SFT-to-Online-RL"><span class="nav-text">4.5 Alignment Data Formats: From SFT to Online RL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-Dataset-to-Trainer-Mapping-Practical-Reference"><span class="nav-text">4.6 Dataset-to-Trainer Mapping: Practical Reference</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Benchmarking-Frameworks-and-the-Decoupling-of-Cognitive-Capabilities"><span class="nav-text">5. Benchmarking Frameworks and the Decoupling of Cognitive Capabilities</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-English-Language-Benchmarks-FLUE-FLARE-and-FinBen"><span class="nav-text">5.1 English-Language Benchmarks: FLUE, FLARE, and FinBen</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-Chinese-Language-and-Bilingual-Benchmarks-FinEval-and-CFBenchmark"><span class="nav-text">5.2 Chinese-Language and Bilingual Benchmarks: FinEval and CFBenchmark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-Cognitive-Decoupling-and-Multimodal-Evaluation"><span class="nav-text">5.3 Cognitive Decoupling and Multimodal Evaluation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Operationalization-Hallucination-Mitigation-and-Governance"><span class="nav-text">6. Operationalization, Hallucination Mitigation, and Governance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-Temporal-Leakage-and-Time-Safe-Evaluation"><span class="nav-text">6.1 Temporal Leakage and Time-Safe Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-Hallucination-Mitigation-through-RAG-and-Tool-Verified-Numerics"><span class="nav-text">6.2 Hallucination Mitigation through RAG and Tool-Verified Numerics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-Agentic-Workflows-and-Structural-Compliance"><span class="nav-text">6.3 Agentic Workflows and Structural Compliance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-The-Complexities-of-Licensing-and-Open-Source-Compliance"><span class="nav-text">7. The Complexities of Licensing and Open-Source Compliance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-The-Phenomenon-of-Multi-Licensing-and-IP-Contamination"><span class="nav-text">7.1 The Phenomenon of Multi-Licensing and IP Contamination</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-License-Taxonomy-What-You-Can-and-Cannot-Do"><span class="nav-text">7.2 License Taxonomy: What You Can and Cannot Do</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-The-Raw-Facts-Exemption-in-Financial-Data"><span class="nav-text">7.3 The &quot;Raw Facts&quot; Exemption in Financial Data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-Practical-Recommendations-for-Dataset-Construction"><span class="nav-text">7.4 Practical Recommendations for Dataset Construction</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-Conclusion"><span class="nav-text">8. Conclusion</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Part-II-%E2%80%94-Constructing-Financial-Hallucination-Suppression-Alignment-Datasets"><span class="nav-text">Part II — Constructing Financial Hallucination-Suppression Alignment Datasets</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#9-Recent-Methodologies-Instruction-Tuning-and-Alignment-Datasets-for-Finance"><span class="nav-text">9. Recent Methodologies: Instruction Tuning and Alignment Datasets for Finance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-The-SFT-then-Align-Paradigm"><span class="nav-text">9.1 The SFT-then-Align Paradigm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-Self-Instruct-and-Evol-Instruct-Adaptations-for-Finance"><span class="nav-text">9.2 Self-Instruct and Evol-Instruct Adaptations for Finance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-3-Constitutional-AI-and-Process-Based-Supervision-for-Finance"><span class="nav-text">9.3 Constitutional AI and Process-Based Supervision for Finance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-Synthetic-Generation-with-ChatGPT-GPT-4-and-DeepSeek"><span class="nav-text">10. Synthetic Generation with ChatGPT, GPT-4, and DeepSeek</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-1-Why-Synthetic-Generation-is-Necessary"><span class="nav-text">10.1 Why Synthetic Generation is Necessary</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-Model-Selection-for-the-Generator-Role"><span class="nav-text">10.2 Model Selection for the Generator Role</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-Prompt-Engineering-for-Financial-Instruction-Generation"><span class="nav-text">10.3 Prompt Engineering for Financial Instruction Generation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-4-Generating-CoT-Trajectories-with-DeepSeek-R1"><span class="nav-text">10.4 Generating CoT Trajectories with DeepSeek-R1</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-Hallucination-Typology-in-Financial-LLMs"><span class="nav-text">11. Hallucination Typology in Financial LLMs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#11-1-Financial-Hallucination-Taxonomy"><span class="nav-text">11.1 Financial Hallucination Taxonomy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-2-Why-Standard-SFT-Fails-to-Suppress-These"><span class="nav-text">11.2 Why Standard SFT Fails to Suppress These</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-Contrastive-Alignment-Dataset-Design"><span class="nav-text">12. Contrastive Alignment Dataset Design</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#12-1-Hallucination-Injection-Strategies"><span class="nav-text">12.1 Hallucination Injection Strategies</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-2-DPO-Preference-Pair-Schema"><span class="nav-text">12.2 DPO Preference Pair Schema</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-3-KTO-Unpaired-Format-Lower-Annotation-Cost"><span class="nav-text">12.3 KTO Unpaired Format (Lower Annotation Cost)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-End-to-End-Pipeline-Architecture"><span class="nav-text">13. End-to-End Pipeline Architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Stage-1-%E2%80%94-Verified-Source-Data-Ingestion"><span class="nav-text">Stage 1 — Verified Source Data Ingestion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stage-2-%E2%80%94-Prompt-Design-and-Instruction-Seeding"><span class="nav-text">Stage 2 — Prompt Design and Instruction Seeding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stage-3-%E2%80%94-Synthetic-Generation-with-Verification"><span class="nav-text">Stage 3 — Synthetic Generation with Verification</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stage-4-%E2%80%94-Hallucination-Injection-for-Negative-Samples"><span class="nav-text">Stage 4 — Hallucination Injection for Negative Samples</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stage-5-%E2%80%94-Automated-Quality-Verification-LLM-as-a-Judge-Tool-Verification"><span class="nav-text">Stage 5 — Automated Quality Verification (LLM-as-a-Judge + Tool Verification)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-Proposed-Dataset-Schema"><span class="nav-text">14. Proposed Dataset Schema</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-Open-Questions-and-Future-Directions"><span class="nav-text">15. Open Questions and Future Directions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Works-Cited"><span class="nav-text">Works Cited</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1342,11 +1631,11 @@
                 
                 <p class="post-count space-x-0.5">
                     <span>
-                        31 posts in total
+                        30 posts in total
                     </span>
                     
                         <span>
-                            39.8k words in total
+                            39.5k words in total
                         </span>
                     
                 </p>
