@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    
+    <meta name="author" content="wy">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://yue-ruby-w.site/2026/04/24/financial-hallucination-suppression-dataset-pipeline/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+        
+        <meta name="description" content="Ruby&#39;s Blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Building a Financial Hallucination-Suppression Dataset Pipeline">
+<meta property="og:url" content="https://yue-ruby-w.site/2026/04/24/Financial-Hallucination-Suppression-Dataset-Pipeline/index.html">
+<meta property="og:site_name" content="hola">
+<meta property="og:description" content="Ruby&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-24T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-24T02:26:30.504Z">
+<meta property="article:author" content="wy">
+<meta property="article:tag" content="Alignment">
+<meta property="article:tag" content="DPO">
+<meta property="article:tag" content="Dataset">
+<meta property="article:tag" content="Finance">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/favicon.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            Building a Financial Hallucination-Suppression Dataset Pipeline | hola
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+        
+            
+    
+            
+    
+            
+                
+                    <link rel="stylesheet" href="/css/notebook.css">
+                
+    
+            
+                
+                    <link rel="stylesheet" href="/css/highlighter.css">
+                
+    
+            
+                
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+                
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+        <link href="/fonts/Geist/geist.css" rel="stylesheet">
+    
+    
+        <link href="/fonts/Chillax/chillax.css" rel="stylesheet">
+    
+    
+        
+<script src="/js/build/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"yue-ruby-w.site","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"Recommended","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":true,"family":"Geist","url":"/fonts/Geist/geist.css"},"title":{"enable":true,"family":"Chillax","url":"/fonts/Chillax/chillax.css"}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":true,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":null,"description":"Ruby's Blog"},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-8oxg61.jpg","dark":"/images/wallhaven-8oxg61.jpg"},"title":"Ruby's Blog","subtitle":{"text":["Hi!","你好～"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":[{"icon":"fa-brands fa-github","url":"https://github.com/yuuee-www"},{"icon":"fa-solid fa-at","url":"mailto:wy@yue-ruby-w.site"},{"icon":"fa-solid fa-at","url":"you@example.com"},{"icon":"fa-brands fa-telegram","url":null},{"icon":"/images/custom-icon.svg","url":null}],"qrs":[{"icon":"fa-brands fa-weixin","qr":null},{"icon":"/images/custom-icon.svg","qr":null}]}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1","theme":{"light":"default","dark":"dark"}}},"version":"2.9.0","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur","masonry":{"batch_size":12,"initial_batch_size":24}},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footer":{"runtime":true,"icon":"<i class=\"fa-solid fa-heart fa-beat\" style=\"--fa-animation-duration: 0.5s; color: #f54545\"></i>","start":"2023/06/13 00:00:00","statistics":true,"customize":null,"icp":{"enable":false,"number":null,"url":null}},"footerStart":"2023/06/13 00:00:00","mermaid":{"style":{"light":"default","dark":"dark"}}};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.i18n = {"search":"Search...","toc":"On this page","prev":"Prev","next":"Next","prev_posts":"Prev posts","next_posts":"Next posts","page":"Page %d","recent_posts":"Recent Posts","share":"Share","powered_by":"POWERED BY %s","theme":"THEME","rss_feed":"RSS Feed","category":"Category","categories":"Categories","tag":"Tag","tags":"Tags","post":"Post","posts":"Posts","tagcloud":"Tag Cloud","comment":"Comment","comments":"Comments","home":"Home","archive":"Archive","archives":"Archives","top":"TOP","sticky":"Sticky","go-back-home":"Go Back Home","masonry_loading":"Loading photos...","image_viewer":"Image viewer","close":"Close","exif":{"title":"EXIF","cards":{"camera":"Camera","lens":"Lens","exposure":"Exposure","other":"Other"},"fields":{"make":"Brand","model":"Model","date_taken":"Date taken","lens_model":"Lens","focal_length":"Focal length","focus_mode":"Focus mode","shutter":"Shutter","aperture":"Aperture","iso":"ISO","exposure_program":"Exposure program","exposure_compensation":"Exposure compensation","metering_mode":"Metering mode","flash":"Flash","white_balance":"White balance","latitude":"Latitude","longitude":"Longitude","altitude":"Altitude"},"status":{"loading":"Loading...","no_exif":"No EXIF available","library_missing":"EXIF library not loaded","image_source_missing":"Image source unavailable","unavailable":"EXIF unavailable (blocked by CORS or missing metadata)","flag_unavailable":"EXIF unavailable"}},"about":"About","changelog":"Changelog","links":"Links","link":"Link","friends":"Friends","friend":"Friend","timeline":"Timeline","shuoshuo":"Shuoshuo","bookmarks":"Bookmarks","site_uv":"VISITOR COUNT","site_pv":"TOTAL PAGE VIEWS","read_more":"Read more","wordcount":"Words","min2read":"Mins","status":"Status","runtime":"Blog up for","days":"days","hours":"hrs","minutes":"Min","seconds":"Sec","optimized_by":"and Optimized by Evan","rights":"All Rights Reserved","site_posts":"%s posts in total","site_wordcount":"%s words in total","copyright":{"author":"Author","title":"Title","link":"Link","create_time":"Created at","update_time":"Updated at","license_title":"License","license_content":"This work is licensed under %s.","all_rights_reserved":"All Rights Reserved &#169; %s","public_domain":"This work is in the public domain."},"ago":{"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"},"create_time":"Created","update_time":"Updated","expired":"This post is written %s days ago, and the content may not be up to date."};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        hola
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({ loop: true })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [20, 0],
+                translateZ: 0,
+                opacity: [0, 1],
+                filter: ['blur(5px)', 'blur(0px)'],
+                easing: "easeOutExpo",
+                duration: 1200,
+                delay: (el, i) => 300 + 20 * i,
+            })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [0, -20],
+                opacity: [1, 0],
+                filter: ['blur(0px)', 'blur(5px)'],
+                easing: "easeInExpo",
+                duration: 1000,
+                delay: (el, i) => 15 * i,
+                complete: function() {
+                    hidePreloader();
+                }
+            }, '-=700');
+
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                hola
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/categories"
+                        >
+                            <span>Categories</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">16</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">31</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Building a Financial Hallucination-Suppression Dataset Pipeline</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/images/redefine-avatar.svg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">wy</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-04-24 10:00</span>
+        <span class="mobile">2026-04-24 10:00</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-04-24 10:26:30</span>
+            <span class="mobile">2026-04-24 10:26:30</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/Research/">Research</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/LLM/">LLM</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Finance/">Finance</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/DPO/">DPO</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Dataset/">Dataset</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Alignment/">Alignment</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>5.3k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>32 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h1 id="Building-a-Financial-Hallucination-Suppression-Dataset-Pipeline"><a href="#Building-a-Financial-Hallucination-Suppression-Dataset-Pipeline" class="headerlink" title="Building a Financial Hallucination-Suppression Dataset Pipeline"></a>Building a Financial Hallucination-Suppression Dataset Pipeline</h1><p>A companion to <a href="/2026/04/23/Financial-LLMs-Architecture-Analysis/">The Architecture of Financial Intelligence</a> — this post turns the architecture into an executable pipeline that generates a DPO (Direct Preference Optimization) dataset for suppressing hallucinations in financial LLMs.</p>
+<p>Because we&#39;re teaching the model a <strong>constraint</strong> (do not fabricate) rather than a <strong>capability</strong>, we have to deliberately engineer traps. For every tricky prompt we generate a <em>chosen</em> response (factually grounded or a principled refusal) and a <em>rejected</em> response (a plausible-sounding but entirely fabricated financial answer).</p>
+<p>The whole pipeline uses the OpenAI-compatible <code>openai</code> Python client, so the same scripts work for <strong>DeepSeek</strong> and <strong>OpenAI</strong> by swapping the base URL and API key.</p>
+<hr>
+<h2 id="Pipeline-Architecture"><a href="#Pipeline-Architecture" class="headerlink" title="Pipeline Architecture"></a>Pipeline Architecture</h2><table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Script</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td><code>00_check_setup.py</code></td>
+<td>Pre-flight: env vars, EDGAR reachability, LLM smoke calls, JSON mode</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>01_ingest_edgar.py</code></td>
+<td>Pull SEC filings with temporal-safe metadata</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>02_seed_and_evolve.py</code></td>
+<td>500 CFA&#x2F;FINRA seeds → Evol-Instruct expand to ~5k prompts</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>03_generate_chosen.py</code></td>
+<td>Grounded generation + numeric&#x2F;citation verification</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>04_inject_hallucinations.py</code></td>
+<td>Four injection strategies → rejected samples</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>05_judge_and_filter.py</code></td>
+<td>Sandboxed arithmetic check + LLM-as-Judge scoring</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>06_format_trl.py</code></td>
+<td>Export DPO JSONL (TRL-ready) + full-schema + KTO</td>
+</tr>
+</tbody></table>
+<p>Expected yield, mirroring the numbers from the architecture post:</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Stage 1 → ~100 filings × 10 chunks   = 1,000 source chunks</span><br><span class="line">Stage 2 → 1,000 × 7 seeds × 2 evol   = 14,000 prompts</span><br><span class="line">Stage 3 → 75% grounded numerics      = ~10,500 chosen</span><br><span class="line">Stage 4 → 4-way injection, dedup     = ~10,000 pairs</span><br><span class="line">Stage 5 → judge ≥4 / ≥3              = ~7,500 final DPO pairs</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="Project-Layout"><a href="#Project-Layout" class="headerlink" title="Project Layout"></a>Project Layout</h2><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">financial-hallucination-pipeline/</span><br><span class="line">├── .env.example</span><br><span class="line">├── .gitignore</span><br><span class="line">├── Makefile</span><br><span class="line">├── run.sh</span><br><span class="line">├── requirements.txt</span><br><span class="line">├── pipeline/</span><br><span class="line">│   ├── shared.py</span><br><span class="line">│   ├── 00_check_setup.py</span><br><span class="line">│   ├── 01_ingest_edgar.py</span><br><span class="line">│   ├── 02_seed_and_evolve.py</span><br><span class="line">│   ├── 03_generate_chosen.py</span><br><span class="line">│   ├── 04_inject_hallucinations.py</span><br><span class="line">│   ├── 05_judge_and_filter.py</span><br><span class="line">│   └── 06_format_trl.py</span><br><span class="line">└── corpus/            # intermediate artifacts</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="Shared-Client-pipeline-shared-py"><a href="#Shared-Client-pipeline-shared-py" class="headerlink" title="Shared Client (pipeline/shared.py)"></a>Shared Client (<code>pipeline/shared.py</code>)</h2><p>Single source of truth for the LLM client and model names. Every script imports from here.</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;Shared OpenAI-compatible client + model names.</span></span><br><span class="line"><span class="string">Works for both DeepSeek and OpenAI by swapping LLM_BASE_URL + LLM_API_KEY.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line">    load_dotenv()</span><br><span class="line"><span class="keyword">except</span> ImportError:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> openai</span><br><span class="line"></span><br><span class="line">LLM_API_KEY  = os.environ.get(<span class="string">&quot;LLM_API_KEY&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">LLM_BASE_URL = os.environ.get(<span class="string">&quot;LLM_BASE_URL&quot;</span>, <span class="string">&quot;https://api.deepseek.com/v1&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> LLM_API_KEY:</span><br><span class="line">    <span class="keyword">raise</span> RuntimeError(</span><br><span class="line">        <span class="string">&quot;LLM_API_KEY not set. Copy .env.example to .env and fill it in.&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">client = openai.OpenAI(api_key=LLM_API_KEY, base_url=LLM_BASE_URL)</span><br><span class="line"></span><br><span class="line">MODEL_GEN    = os.environ.get(<span class="string">&quot;MODEL_GEN&quot;</span>,    <span class="string">&quot;deepseek-chat&quot;</span>)</span><br><span class="line">MODEL_REASON = os.environ.get(<span class="string">&quot;MODEL_REASON&quot;</span>, <span class="string">&quot;deepseek-reasoner&quot;</span>)</span><br><span class="line">MODEL_JUDGE  = os.environ.get(<span class="string">&quot;MODEL_JUDGE&quot;</span>,  <span class="string">&quot;deepseek-chat&quot;</span>)</span><br><span class="line"></span><br><span class="line">EDGAR_UA = os.environ.get(</span><br><span class="line">    <span class="string">&quot;EDGAR_USER_AGENT&quot;</span>,</span><br><span class="line">    <span class="string">&quot;yuuee-research research@example.com&quot;</span>,</span><br><span class="line">)</span><br><span class="line">CORPUS_DIR = os.environ.get(<span class="string">&quot;CORPUS_DIR&quot;</span>, <span class="string">&quot;corpus&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="Phase-0-—-Pre-flight-00-check-setup-py"><a href="#Phase-0-—-Pre-flight-00-check-setup-py" class="headerlink" title="Phase 0 — Pre-flight (00_check_setup.py)"></a>Phase 0 — Pre-flight (<code>00_check_setup.py</code>)</h2><p>Before burning API credits, validate that the environment is ready: deps, env vars, EDGAR reachability, LLM connectivity, and JSON-mode support.</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;Phase 0 — Pre-flight check.&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> json, os, sys, time</span><br><span class="line"></span><br><span class="line">PASS = <span class="string">&quot;\033[32m✓\033[0m&quot;</span></span><br><span class="line">FAIL = <span class="string">&quot;\033[31m✗\033[0m&quot;</span></span><br><span class="line">WARN = <span class="string">&quot;\033[33m!\033[0m&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_p</span>(<span class="params">tag, msg</span>): <span class="built_in">print</span>(<span class="string">f&quot;  <span class="subst">&#123;tag&#125;</span> <span class="subst">&#123;msg&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">check_imports</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[1/5] Python dependencies&quot;</span>)</span><br><span class="line">    ok = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">for</span> mod <span class="keyword">in</span> (<span class="string">&quot;openai&quot;</span>, <span class="string">&quot;requests&quot;</span>, <span class="string">&quot;dotenv&quot;</span>):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="built_in">__import__</span>(mod); _p(PASS, <span class="string">f&quot;import <span class="subst">&#123;mod&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">except</span> ImportError <span class="keyword">as</span> e:</span><br><span class="line">            _p(FAIL, <span class="string">f&quot;import <span class="subst">&#123;mod&#125;</span>: <span class="subst">&#123;e&#125;</span>&quot;</span>); ok = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> ok</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">check_env</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[2/5] Environment variables (.env)&quot;</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv; load_dotenv()</span><br><span class="line">    <span class="keyword">except</span> ImportError: <span class="keyword">pass</span></span><br><span class="line">    ok = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> [<span class="string">&quot;LLM_API_KEY&quot;</span>, <span class="string">&quot;EDGAR_USER_AGENT&quot;</span>]:</span><br><span class="line">        v = os.environ.get(k, <span class="string">&quot;&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> v <span class="keyword">or</span> <span class="string">&quot;REPLACE&quot;</span> <span class="keyword">in</span> v <span class="keyword">or</span> <span class="string">&quot;example.com&quot;</span> <span class="keyword">in</span> v:</span><br><span class="line">            _p(FAIL, <span class="string">f&quot;<span class="subst">&#123;k&#125;</span> unset or placeholder&quot;</span>); ok = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            _p(PASS, <span class="string">f&quot;<span class="subst">&#123;k&#125;</span> set&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> ok</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">check_edgar</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[3/5] SEC EDGAR reachability&quot;</span>)</span><br><span class="line">    <span class="keyword">import</span> requests</span><br><span class="line">    ua = os.environ.get(<span class="string">&quot;EDGAR_USER_AGENT&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">    r = requests.get(<span class="string">&quot;https://data.sec.gov/submissions/CIK0000320193.json&quot;</span>,</span><br><span class="line">                     headers=&#123;<span class="string">&quot;User-Agent&quot;</span>: ua&#125;, timeout=<span class="number">15</span>)</span><br><span class="line">    <span class="keyword">if</span> r.status_code == <span class="number">200</span> <span class="keyword">and</span> <span class="string">&quot;filings&quot;</span> <span class="keyword">in</span> r.json():</span><br><span class="line">        _p(PASS, <span class="string">f&quot;EDGAR 200 (<span class="subst">&#123;<span class="built_in">len</span>(r.content)//<span class="number">1024</span>&#125;</span> KB)&quot;</span>); <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    _p(FAIL, <span class="string">f&quot;EDGAR HTTP <span class="subst">&#123;r.status_code&#125;</span> — check EDGAR_USER_AGENT&quot;</span>); <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">check_llm</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[4/5] LLM endpoint smoke calls&quot;</span>)</span><br><span class="line">    <span class="keyword">import</span> openai</span><br><span class="line">    client = openai.OpenAI(</span><br><span class="line">        api_key=os.environ.get(<span class="string">&quot;LLM_API_KEY&quot;</span>, <span class="string">&quot;&quot;</span>),</span><br><span class="line">        base_url=os.environ.get(<span class="string">&quot;LLM_BASE_URL&quot;</span>, <span class="string">&quot;https://api.deepseek.com/v1&quot;</span>),</span><br><span class="line">    )</span><br><span class="line">    models = &#123;</span><br><span class="line">        <span class="string">&quot;MODEL_GEN&quot;</span>:    os.environ.get(<span class="string">&quot;MODEL_GEN&quot;</span>,    <span class="string">&quot;deepseek-chat&quot;</span>),</span><br><span class="line">        <span class="string">&quot;MODEL_REASON&quot;</span>: os.environ.get(<span class="string">&quot;MODEL_REASON&quot;</span>, <span class="string">&quot;deepseek-reasoner&quot;</span>),</span><br><span class="line">        <span class="string">&quot;MODEL_JUDGE&quot;</span>:  os.environ.get(<span class="string">&quot;MODEL_JUDGE&quot;</span>,  <span class="string">&quot;deepseek-chat&quot;</span>),</span><br><span class="line">    &#125;</span><br><span class="line">    seen = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> role, name <span class="keyword">in</span> models.items(): seen.setdefault(name, role)</span><br><span class="line">    ok = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">for</span> name, role <span class="keyword">in</span> seen.items():</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            t0 = time.time()</span><br><span class="line">            r = client.chat.completions.create(</span><br><span class="line">                model=name,</span><br><span class="line">                messages=[&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;Reply with: pong&quot;</span>&#125;],</span><br><span class="line">                max_tokens=<span class="number">5</span>, temperature=<span class="number">0.0</span>,</span><br><span class="line">            )</span><br><span class="line">            dt = time.time() - t0</span><br><span class="line">            _p(PASS, <span class="string">f&quot;<span class="subst">&#123;role&#125;</span>=<span class="subst">&#123;name&#125;</span> (<span class="subst">&#123;dt:<span class="number">.1</span>f&#125;</span>s)&quot;</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            _p(FAIL, <span class="string">f&quot;<span class="subst">&#123;role&#125;</span>=<span class="subst">&#123;name&#125;</span>: <span class="subst">&#123;e&#125;</span>&quot;</span>); ok = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> ok</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">check_json_mode</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[5/5] response_format=json_object support&quot;</span>)</span><br><span class="line">    <span class="keyword">import</span> openai</span><br><span class="line">    client = openai.OpenAI(</span><br><span class="line">        api_key=os.environ.get(<span class="string">&quot;LLM_API_KEY&quot;</span>, <span class="string">&quot;&quot;</span>),</span><br><span class="line">        base_url=os.environ.get(<span class="string">&quot;LLM_BASE_URL&quot;</span>, <span class="string">&quot;https://api.deepseek.com/v1&quot;</span>),</span><br><span class="line">    )</span><br><span class="line">    model = os.environ.get(<span class="string">&quot;MODEL_GEN&quot;</span>, <span class="string">&quot;deepseek-chat&quot;</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        r = client.chat.completions.create(</span><br><span class="line">            model=model,</span><br><span class="line">            messages=[</span><br><span class="line">                &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;Return strict JSON only.&quot;</span>&#125;,</span><br><span class="line">                &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,   <span class="string">&quot;content&quot;</span>: <span class="string">&#x27;Return JSON: &#123;&quot;ok&quot;: true&#125;&#x27;</span>&#125;,</span><br><span class="line">            ],</span><br><span class="line">            response_format=&#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;json_object&quot;</span>&#125;,</span><br><span class="line">            max_tokens=<span class="number">20</span>, temperature=<span class="number">0.0</span>,</span><br><span class="line">        )</span><br><span class="line">        parsed = json.loads(r.choices[<span class="number">0</span>].message.content)</span><br><span class="line">        _p(PASS, <span class="string">f&quot;<span class="subst">&#123;model&#125;</span> JSON mode works&quot;</span>); <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        _p(FAIL, <span class="string">f&quot;<span class="subst">&#123;model&#125;</span> JSON mode failed: <span class="subst">&#123;e&#125;</span>&quot;</span>); <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    results = [</span><br><span class="line">        (<span class="string">&quot;deps&quot;</span>, check_imports()), (<span class="string">&quot;env&quot;</span>, check_env()),</span><br><span class="line">        (<span class="string">&quot;edgar&quot;</span>, check_edgar()), (<span class="string">&quot;llm&quot;</span>, check_llm()),</span><br><span class="line">        (<span class="string">&quot;json_mode&quot;</span>, check_json_mode()),</span><br><span class="line">    ]</span><br><span class="line">    passed = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> _, ok <span class="keyword">in</span> results <span class="keyword">if</span> ok)</span><br><span class="line">    <span class="keyword">for</span> name, ok <span class="keyword">in</span> results:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;  <span class="subst">&#123;PASS <span class="keyword">if</span> ok <span class="keyword">else</span> FAIL&#125;</span>  <span class="subst">&#123;name&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;\n<span class="subst">&#123;passed&#125;</span>/<span class="subst">&#123;<span class="built_in">len</span>(results)&#125;</span> checks passed.&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span> <span class="keyword">if</span> passed == <span class="built_in">len</span>(results) <span class="keyword">else</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    sys.exit(main())</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="Phase-1-—-SEC-EDGAR-Ingestion-01-ingest-edgar-py"><a href="#Phase-1-—-SEC-EDGAR-Ingestion-01-ingest-edgar-py" class="headerlink" title="Phase 1 — SEC EDGAR Ingestion (01_ingest_edgar.py)"></a>Phase 1 — SEC EDGAR Ingestion (<code>01_ingest_edgar.py</code>)</h2><p>Pulls 10-K &#x2F; 10-Q filings for a set of tickers and chunks them into ~2k-char excerpts with <strong>full source metadata</strong> — critical for temporal safety (avoid future-leakage during backtesting) and license provenance (SEC filings are public domain).</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;Phase 1 — Ground Truth Ingestion from SEC EDGAR.&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> argparse, hashlib, json, re, time</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> shared <span class="keyword">import</span> EDGAR_UA, CORPUS_DIR</span><br><span class="line"></span><br><span class="line">HEADERS = &#123;<span class="string">&quot;User-Agent&quot;</span>: EDGAR_UA&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">fetch_submissions</span>(<span class="params">cik</span>):</span><br><span class="line">    url = <span class="string">f&quot;https://data.sec.gov/submissions/CIK<span class="subst">&#123;<span class="built_in">str</span>(cik).zfill(<span class="number">10</span>)&#125;</span>.json&quot;</span></span><br><span class="line">    r = requests.get(url, headers=HEADERS, timeout=<span class="number">30</span>)</span><br><span class="line">    r.raise_for_status()</span><br><span class="line">    <span class="keyword">return</span> r.json()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">fetch_filing_text</span>(<span class="params">cik, accession, primary_doc</span>):</span><br><span class="line">    acc = accession.replace(<span class="string">&quot;-&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">    url = <span class="string">f&quot;https://www.sec.gov/Archives/edgar/data/<span class="subst">&#123;<span class="built_in">int</span>(cik)&#125;</span>/<span class="subst">&#123;acc&#125;</span>/<span class="subst">&#123;primary_doc&#125;</span>&quot;</span></span><br><span class="line">    r = requests.get(url, headers=HEADERS, timeout=<span class="number">60</span>)</span><br><span class="line">    r.raise_for_status()</span><br><span class="line">    text = re.sub(<span class="string">r&quot;&lt;[^&gt;]+&gt;&quot;</span>, <span class="string">&quot; &quot;</span>, r.text)</span><br><span class="line">    text = re.sub(<span class="string">r&quot;&amp;[a-z]+;&quot;</span>, <span class="string">&quot; &quot;</span>, text)</span><br><span class="line">    <span class="keyword">return</span> re.sub(<span class="string">r&quot;\s+&quot;</span>, <span class="string">&quot; &quot;</span>, text).strip()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">ingest</span>(<span class="params">ticker, cik, forms=(<span class="params"><span class="string">&quot;10-K&quot;</span>, <span class="string">&quot;10-Q&quot;</span></span>),</span></span><br><span class="line"><span class="params">           max_filings=<span class="number">2</span>, chunks_per_filing=<span class="number">10</span>, chunk_size=<span class="number">2000</span></span>):</span><br><span class="line">    sub = fetch_submissions(cik)</span><br><span class="line">    recent = sub[<span class="string">&quot;filings&quot;</span>][<span class="string">&quot;recent&quot;</span>]</span><br><span class="line">    out, done = [], <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i, form <span class="keyword">in</span> <span class="built_in">enumerate</span>(recent[<span class="string">&quot;form&quot;</span>]):</span><br><span class="line">        <span class="keyword">if</span> form <span class="keyword">not</span> <span class="keyword">in</span> forms <span class="keyword">or</span> done &gt;= max_filings: <span class="keyword">continue</span></span><br><span class="line">        acc = recent[<span class="string">&quot;accessionNumber&quot;</span>][i]</span><br><span class="line">        primary = recent[<span class="string">&quot;primaryDocument&quot;</span>][i]</span><br><span class="line">        filed = recent[<span class="string">&quot;filingDate&quot;</span>][i]</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            text = fetch_filing_text(cik, acc, primary)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;  ! skip <span class="subst">&#123;ticker&#125;</span> <span class="subst">&#123;acc&#125;</span>: <span class="subst">&#123;e&#125;</span>&quot;</span>); <span class="keyword">continue</span></span><br><span class="line">        start = <span class="built_in">min</span>(<span class="built_in">len</span>(text) // <span class="number">4</span>, <span class="number">5000</span>)</span><br><span class="line">        end = <span class="built_in">min</span>(<span class="built_in">len</span>(text), start + chunk_size * chunks_per_filing)</span><br><span class="line">        <span class="keyword">for</span> j, k <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="built_in">range</span>(start, end, chunk_size)):</span><br><span class="line">            chunk = text[k:k + chunk_size]</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(chunk) &lt; <span class="number">500</span>: <span class="keyword">continue</span></span><br><span class="line">            doc_id = hashlib.md5(<span class="string">f&quot;<span class="subst">&#123;ticker&#125;</span><span class="subst">&#123;acc&#125;</span><span class="subst">&#123;j&#125;</span>&quot;</span>.encode()).hexdigest()[:<span class="number">12</span>]</span><br><span class="line">            out.append(&#123;</span><br><span class="line">                <span class="string">&quot;doc_id&quot;</span>: doc_id, <span class="string">&quot;text&quot;</span>: chunk,</span><br><span class="line">                <span class="string">&quot;source_url&quot;</span>: <span class="string">f&quot;https://www.sec.gov/Archives/edgar/data/<span class="subst">&#123;<span class="built_in">int</span>(cik)&#125;</span>/<span class="subst">&#123;acc.replace(<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;&#x27;</span>)&#125;</span>/<span class="subst">&#123;primary&#125;</span>&quot;</span>,</span><br><span class="line">                <span class="string">&quot;ticker&quot;</span>: ticker, <span class="string">&quot;form&quot;</span>: form, <span class="string">&quot;filing_date&quot;</span>: filed,</span><br><span class="line">                <span class="string">&quot;accession&quot;</span>: acc, <span class="string">&quot;spdx_license&quot;</span>: <span class="string">&quot;public-domain&quot;</span>,</span><br><span class="line">                <span class="string">&quot;ingestion_ts&quot;</span>: <span class="built_in">int</span>(time.time()),</span><br><span class="line">            &#125;)</span><br><span class="line">        done += <span class="number">1</span></span><br><span class="line">        time.sleep(<span class="number">0.25</span>)   <span class="comment"># EDGAR rate-limit courtesy</span></span><br><span class="line">    <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line">DEFAULT_TICKERS = [</span><br><span class="line">    (<span class="string">&quot;AAPL&quot;</span>, <span class="number">320193</span>), (<span class="string">&quot;MSFT&quot;</span>, <span class="number">789019</span>), (<span class="string">&quot;JPM&quot;</span>, <span class="number">19617</span>),</span><br><span class="line">    (<span class="string">&quot;XOM&quot;</span>, <span class="number">34088</span>),   (<span class="string">&quot;NVDA&quot;</span>, <span class="number">1045810</span>), (<span class="string">&quot;BRK-B&quot;</span>, <span class="number">1067983</span>),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    ap = argparse.ArgumentParser()</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--tickers-file&quot;</span>)</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--max-filings&quot;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">2</span>)</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--chunks-per-filing&quot;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">10</span>)</span><br><span class="line">    args = ap.parse_args()</span><br><span class="line">    tickers = DEFAULT_TICKERS</span><br><span class="line">    <span class="keyword">if</span> args.tickers_file:</span><br><span class="line">        tickers = [<span class="built_in">tuple</span>(x) <span class="keyword">for</span> x <span class="keyword">in</span> json.loads(Path(args.tickers_file).read_text())]</span><br><span class="line">    Path(CORPUS_DIR).mkdir(parents=<span class="literal">True</span>, exist_ok=<span class="literal">True</span>)</span><br><span class="line">    all_recs = []</span><br><span class="line">    <span class="keyword">for</span> t, cik <span class="keyword">in</span> tickers:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Ingesting <span class="subst">&#123;t&#125;</span> (CIK <span class="subst">&#123;cik&#125;</span>)&quot;</span>)</span><br><span class="line">        recs = ingest(t, cik, args.max_filings, args.chunks_per_filing)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;  + <span class="subst">&#123;<span class="built_in">len</span>(recs)&#125;</span> chunks&quot;</span>)</span><br><span class="line">        all_recs.extend(recs)</span><br><span class="line">    out = Path(CORPUS_DIR) / <span class="string">&quot;edgar_chunks.jsonl&quot;</span></span><br><span class="line">    out.write_text(<span class="string">&quot;\n&quot;</span>.join(json.dumps(r) <span class="keyword">for</span> r <span class="keyword">in</span> all_recs))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;\n<span class="subst">&#123;<span class="built_in">len</span>(all_recs)&#125;</span> chunks → <span class="subst">&#123;out&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="Phase-2-—-Seed-Evol-Instruct-02-seed-and-evolve-py"><a href="#Phase-2-—-Seed-Evol-Instruct-02-seed-and-evolve-py" class="headerlink" title="Phase 2 — Seed &amp; Evol-Instruct (02_seed_and_evolve.py)"></a>Phase 2 — Seed &amp; Evol-Instruct (<code>02_seed_and_evolve.py</code>)</h2><p>Seven seed templates cover the main hallucination surfaces: numeric QA, ratio calcs, YoY changes, regulatory citations, false premises, out-of-bounds asks, and future prediction. Each seed is then <em>evolved</em> by the LLM to add constraints or peer comparisons.</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;Phase 2 — Prompt Seeding + Evol-Instruct expansion.&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> argparse, json</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">from</span> shared <span class="keyword">import</span> client, MODEL_GEN, CORPUS_DIR</span><br><span class="line"></span><br><span class="line">SEEDS = [</span><br><span class="line">    &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;numeric_qa&quot;</span>,     <span class="string">&quot;q&quot;</span>: <span class="string">&quot;What was &#123;ticker&#125;&#x27;s revenue in &#123;period&#125;?&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;ratio_calc&quot;</span>,     <span class="string">&quot;q&quot;</span>: <span class="string">&quot;Compute &#123;ticker&#125;&#x27;s operating margin for &#123;period&#125;.&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;yoy_change&quot;</span>,     <span class="string">&quot;q&quot;</span>: <span class="string">&quot;What was &#123;ticker&#125;&#x27;s YoY revenue growth in &#123;period&#125;?&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;regulatory&quot;</span>,     <span class="string">&quot;q&quot;</span>: <span class="string">&quot;Cite the SEC rule governing &#123;ticker&#125;&#x27;s segment reporting disclosure.&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;false_premise&quot;</span>,  <span class="string">&quot;q&quot;</span>: <span class="string">&quot;Given &#123;ticker&#125;&#x27;s Q2 2025 merger with Acme Corp, what was the combined revenue?&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;out_of_bounds&quot;</span>,  <span class="string">&quot;q&quot;</span>: <span class="string">&quot;What is &#123;ticker&#125;&#x27;s projected free cash flow for FY2030?&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;future_predict&quot;</span>, <span class="string">&quot;q&quot;</span>: <span class="string">&quot;Guarantee &#123;ticker&#125;&#x27;s stock price six months after &#123;period&#125;.&quot;</span>&#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">EVOLVE_SYSTEM = <span class="string">&quot;&quot;&quot;You rewrite financial questions to increase difficulty WITHOUT changing</span></span><br><span class="line"><span class="string">the factual target. Apply ONE transformation:</span></span><br><span class="line"><span class="string">  - add a sub-calculation</span></span><br><span class="line"><span class="string">  - add a constraint (e.g., &#x27;exclude one-time items&#x27;)</span></span><br><span class="line"><span class="string">  - introduce a comparison to a named industry peer</span></span><br><span class="line"><span class="string">  - require citing the exact line item / section of the filing</span></span><br><span class="line"><span class="string">Return strict JSON: &#123;&quot;question&quot;: &quot;...&quot;, &quot;complexity&quot;: &quot;L1|L2|L3&quot;&#125;</span></span><br><span class="line"><span class="string">Keep the question under 60 words.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">evolve</span>(<span class="params">question</span>):</span><br><span class="line">    r = client.chat.completions.create(</span><br><span class="line">        model=MODEL_GEN,</span><br><span class="line">        messages=[</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: EVOLVE_SYSTEM&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,   <span class="string">&quot;content&quot;</span>: <span class="string">f&quot;Original: <span class="subst">&#123;question&#125;</span>&quot;</span>&#125;,</span><br><span class="line">        ],</span><br><span class="line">        response_format=&#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;json_object&quot;</span>&#125;, temperature=<span class="number">0.8</span>,</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> json.loads(r.choices[<span class="number">0</span>].message.content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    ap = argparse.ArgumentParser()</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--evolutions&quot;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">2</span>)</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--limit-chunks&quot;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="literal">None</span>)</span><br><span class="line">    args = ap.parse_args()</span><br><span class="line">    chunks = [json.loads(l) <span class="keyword">for</span> l <span class="keyword">in</span></span><br><span class="line">              (Path(CORPUS_DIR) / <span class="string">&quot;edgar_chunks.jsonl&quot;</span>).read_text().splitlines()]</span><br><span class="line">    <span class="keyword">if</span> args.limit_chunks: chunks = chunks[:args.limit_chunks]</span><br><span class="line">    out = []</span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> chunks:</span><br><span class="line">        period = <span class="string">f&quot;<span class="subst">&#123;c[<span class="string">&#x27;form&#x27;</span>]&#125;</span> filed <span class="subst">&#123;c[<span class="string">&#x27;filing_date&#x27;</span>]&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">for</span> seed <span class="keyword">in</span> SEEDS:</span><br><span class="line">            base = seed[<span class="string">&quot;q&quot;</span>].<span class="built_in">format</span>(ticker=c[<span class="string">&quot;ticker&quot;</span>], period=period)</span><br><span class="line">            <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(args.evolutions):</span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    ev = evolve(base)</span><br><span class="line">                <span class="keyword">except</span> Exception: <span class="keyword">continue</span></span><br><span class="line">                out.append(&#123;</span><br><span class="line">                    <span class="string">&quot;doc_id&quot;</span>: c[<span class="string">&quot;doc_id&quot;</span>], <span class="string">&quot;ticker&quot;</span>: c[<span class="string">&quot;ticker&quot;</span>],</span><br><span class="line">                    <span class="string">&quot;filing_date&quot;</span>: c[<span class="string">&quot;filing_date&quot;</span>],</span><br><span class="line">                    <span class="string">&quot;seed_type&quot;</span>: seed[<span class="string">&quot;type&quot;</span>], <span class="string">&quot;question&quot;</span>: ev[<span class="string">&quot;question&quot;</span>],</span><br><span class="line">                    <span class="string">&quot;complexity&quot;</span>: ev.get(<span class="string">&quot;complexity&quot;</span>, <span class="string">&quot;L1&quot;</span>),</span><br><span class="line">                &#125;)</span><br><span class="line">    p = Path(CORPUS_DIR) / <span class="string">&quot;prompts.jsonl&quot;</span></span><br><span class="line">    p.write_text(<span class="string">&quot;\n&quot;</span>.join(json.dumps(x) <span class="keyword">for</span> x <span class="keyword">in</span> out))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;<span class="built_in">len</span>(out)&#125;</span> prompts → <span class="subst">&#123;p&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="Phase-3-—-Grounded-Generation-03-generate-chosen-py"><a href="#Phase-3-—-Grounded-Generation-03-generate-chosen-py" class="headerlink" title="Phase 3 — Grounded Generation (03_generate_chosen.py)"></a>Phase 3 — Grounded Generation (<code>03_generate_chosen.py</code>)</h2><p>The LLM plays a <strong>strict compliance officer</strong>: answer only from the source, or explicitly refuse. Every numeric claim is then verified back against the source text via normalized substring match, and at least one citation must trace to the source.</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;Phase 3 — Generate the &#x27;chosen&#x27; (strictly grounded) response.&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> argparse, json, re</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">from</span> shared <span class="keyword">import</span> client, MODEL_REASON, CORPUS_DIR</span><br><span class="line"></span><br><span class="line">CHOSEN_SYSTEM = <span class="string">&quot;&quot;&quot;You are a strict, legally compliant financial AI.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">RULES (non-negotiable):</span></span><br><span class="line"><span class="string">  1. Answer ONLY using facts explicitly present in the provided SOURCE.</span></span><br><span class="line"><span class="string">  2. If SOURCE lacks the information, respond exactly:</span></span><br><span class="line"><span class="string">     &quot;The provided source does not contain information to answer this question.&quot;</span></span><br><span class="line"><span class="string">  3. If the QUESTION contains a false premise, correct the premise and refuse to speculate.</span></span><br><span class="line"><span class="string">  4. Never predict or guarantee future prices, returns, or events.</span></span><br><span class="line"><span class="string">  5. When citing a number, quote the EXACT figure as it appears in SOURCE.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Return strict JSON:</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">  &quot;reasoning&quot;: &quot;&lt;step-by-step, each step anchored to a SOURCE quote&gt;&quot;,</span></span><br><span class="line"><span class="string">  &quot;answer&quot;: &quot;&lt;final response to user&gt;&quot;,</span></span><br><span class="line"><span class="string">  &quot;numeric_claims&quot;: [&#123;&quot;value&quot;: &lt;float&gt;, &quot;unit&quot;: &quot;USD|pct|...&quot;, &quot;source_span&quot;: &quot;&lt;quote&gt;&quot;&#125;],</span></span><br><span class="line"><span class="string">  &quot;citations&quot;: [&quot;&lt;verbatim quote from SOURCE&gt;&quot;, ...]</span></span><br><span class="line"><span class="string">&#125;&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_chosen</span>(<span class="params">source, question</span>):</span><br><span class="line">    r = client.chat.completions.create(</span><br><span class="line">        model=MODEL_REASON,</span><br><span class="line">        messages=[</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: CHOSEN_SYSTEM&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,   <span class="string">&quot;content&quot;</span>: <span class="string">f&quot;SOURCE:\n<span class="subst">&#123;source&#125;</span>\n\nQUESTION: <span class="subst">&#123;question&#125;</span>&quot;</span>&#125;,</span><br><span class="line">        ],</span><br><span class="line">        response_format=&#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;json_object&quot;</span>&#125;, temperature=<span class="number">0.0</span>,</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> json.loads(r.choices[<span class="number">0</span>].message.content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_normalize</span>(<span class="params">s</span>): <span class="keyword">return</span> re.sub(<span class="string">r&quot;[,\s$%]&quot;</span>, <span class="string">&quot;&quot;</span>, s)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">verify_numerics</span>(<span class="params">chosen, source</span>):</span><br><span class="line">    norm_src = _normalize(source)</span><br><span class="line">    <span class="keyword">for</span> nc <span class="keyword">in</span> chosen.get(<span class="string">&quot;numeric_claims&quot;</span>, []) <span class="keyword">or</span> []:</span><br><span class="line">        v = _normalize(<span class="built_in">str</span>(nc.get(<span class="string">&quot;value&quot;</span>, <span class="string">&quot;&quot;</span>)))</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> v: <span class="keyword">continue</span></span><br><span class="line">        candidates = &#123;v, v.rstrip(<span class="string">&quot;0&quot;</span>).rstrip(<span class="string">&quot;.&quot;</span>), v + <span class="string">&quot;0&quot;</span>, v + <span class="string">&quot;00&quot;</span>&#125;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">any</span>(c <span class="keyword">and</span> c <span class="keyword">in</span> norm_src <span class="keyword">for</span> c <span class="keyword">in</span> candidates):</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">verify_citations</span>(<span class="params">chosen, source</span>):</span><br><span class="line">    cites = chosen.get(<span class="string">&quot;citations&quot;</span>) <span class="keyword">or</span> []</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> cites: <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    norm_src = re.sub(<span class="string">r&quot;\s+&quot;</span>, <span class="string">&quot; &quot;</span>, source).lower()</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">any</span>(re.sub(<span class="string">r&quot;\s+&quot;</span>, <span class="string">&quot; &quot;</span>, c).lower()[:<span class="number">80</span>] <span class="keyword">in</span> norm_src <span class="keyword">for</span> c <span class="keyword">in</span> cites)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    ap = argparse.ArgumentParser()</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--limit&quot;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="literal">None</span>)</span><br><span class="line">    args = ap.parse_args()</span><br><span class="line">    chunks = &#123;json.loads(l)[<span class="string">&quot;doc_id&quot;</span>]: json.loads(l)</span><br><span class="line">              <span class="keyword">for</span> l <span class="keyword">in</span> (Path(CORPUS_DIR) / <span class="string">&quot;edgar_chunks.jsonl&quot;</span>).read_text().splitlines()&#125;</span><br><span class="line">    prompts = [json.loads(l) <span class="keyword">for</span> l <span class="keyword">in</span></span><br><span class="line">               (Path(CORPUS_DIR) / <span class="string">&quot;prompts.jsonl&quot;</span>).read_text().splitlines()]</span><br><span class="line">    <span class="keyword">if</span> args.limit: prompts = prompts[:args.limit]</span><br><span class="line">    out, kept, dropped = [], <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> prompts:</span><br><span class="line">        src = chunks[p[<span class="string">&quot;doc_id&quot;</span>]][<span class="string">&quot;text&quot;</span>]</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            chosen = generate_chosen(src, p[<span class="string">&quot;question&quot;</span>])</span><br><span class="line">        <span class="keyword">except</span> Exception: dropped += <span class="number">1</span>; <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> verify_numerics(chosen, src): dropped += <span class="number">1</span>; <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> verify_citations(chosen, src): dropped += <span class="number">1</span>; <span class="keyword">continue</span></span><br><span class="line">        out.append(&#123;**p, <span class="string">&quot;source_text&quot;</span>: src, <span class="string">&quot;chosen&quot;</span>: chosen&#125;)</span><br><span class="line">        kept += <span class="number">1</span></span><br><span class="line">    path = Path(CORPUS_DIR) / <span class="string">&quot;chosen.jsonl&quot;</span></span><br><span class="line">    path.write_text(<span class="string">&quot;\n&quot;</span>.join(json.dumps(x) <span class="keyword">for</span> x <span class="keyword">in</span> out))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Kept <span class="subst">&#123;kept&#125;</span>, dropped <span class="subst">&#123;dropped&#125;</span> → <span class="subst">&#123;path&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="Phase-4-—-Hallucination-Injection-04-inject-hallucinations-py"><a href="#Phase-4-—-Hallucination-Injection-04-inject-hallucinations-py" class="headerlink" title="Phase 4 — Hallucination Injection (04_inject_hallucinations.py)"></a>Phase 4 — Hallucination Injection (<code>04_inject_hallucinations.py</code>)</h2><p>Four strategies, <strong>cycled deterministically</strong> so DPO doesn&#39;t overfit a single failure mode:</p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>numeric_perturbation</code></td>
+<td>Scale figures by 10–35% while keeping prose natural</td>
+</tr>
+<tr>
+<td><code>temporal_displacement</code></td>
+<td>Answer with figures from a different fiscal period</td>
+</tr>
+<tr>
+<td><code>cross_entity</code></td>
+<td>Swap in a competitor&#39;s figures from the same period</td>
+</tr>
+<tr>
+<td><code>citation_fabrication</code></td>
+<td>Invent a non-existent SEC rule &#x2F; FASB codification</td>
+</tr>
+</tbody></table>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;Phase 4 — Inject hallucinations to create the &#x27;rejected&#x27; response.&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> argparse, itertools, json, random, re</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">from</span> shared <span class="keyword">import</span> client, MODEL_GEN, CORPUS_DIR</span><br><span class="line"></span><br><span class="line">REJECTED_SYSTEM = <span class="string">&quot;&quot;&quot;You are an overconfident, highly fluent financial analyst.</span></span><br><span class="line"><span class="string">Given a QUESTION and a REFERENCE ANSWER, produce a NEW answer that sounds equally</span></span><br><span class="line"><span class="string">professional and confident but contains the specified HALLUCINATION TYPE.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">RULES:</span></span><br><span class="line"><span class="string">  - Never admit uncertainty or refuse.</span></span><br><span class="line"><span class="string">  - Match length, register, and structure of the reference answer.</span></span><br><span class="line"><span class="string">  - Do NOT reuse the reference answer&#x27;s exact wording verbatim.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Return strict JSON: &#123;&quot;response&quot;: &quot;...&quot;, &quot;injected_error&quot;: &quot;&lt;one-sentence description&gt;&quot;&#125;&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">STRATEGIES = &#123;</span><br><span class="line">    <span class="string">&quot;numeric_perturbation&quot;</span>:  <span class="string">&quot;Scale every monetary or percent figure by a random factor between 10% and 35%.&quot;</span>,</span><br><span class="line">    <span class="string">&quot;temporal_displacement&quot;</span>: <span class="string">&quot;Answer using figures from a DIFFERENT fiscal period while claiming they are the asked period&#x27;s.&quot;</span>,</span><br><span class="line">    <span class="string">&quot;cross_entity&quot;</span>:          <span class="string">&quot;Swap the company&#x27;s figures with a plausible competitor&#x27;s figures from the same period.&quot;</span>,</span><br><span class="line">    <span class="string">&quot;citation_fabrication&quot;</span>:  <span class="string">&quot;Invent a non-existent SEC rule, FASB codification, or PCAOB standard.&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_perturb_numbers</span>(<span class="params">text</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">swap</span>(<span class="params">m</span>):</span><br><span class="line">        raw = m.group()</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            v = <span class="built_in">float</span>(raw.replace(<span class="string">&quot;,&quot;</span>, <span class="string">&quot;&quot;</span>).replace(<span class="string">&quot;$&quot;</span>, <span class="string">&quot;&quot;</span>).rstrip(<span class="string">&quot;%&quot;</span>))</span><br><span class="line">        <span class="keyword">except</span> ValueError:</span><br><span class="line">            <span class="keyword">return</span> raw</span><br><span class="line">        factor = random.choice([<span class="number">1.13</span>, <span class="number">1.27</span>, <span class="number">0.84</span>, <span class="number">0.71</span>, <span class="number">1.18</span>, <span class="number">0.89</span>])</span><br><span class="line">        new = v * factor</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;%&quot;</span> <span class="keyword">in</span> raw:    <span class="keyword">return</span> <span class="string">f&quot;<span class="subst">&#123;new:<span class="number">.1</span>f&#125;</span>%&quot;</span></span><br><span class="line">        <span class="keyword">if</span> raw.startswith(<span class="string">&quot;$&quot;</span>): <span class="keyword">return</span> <span class="string">f&quot;$<span class="subst">&#123;new:,<span class="number">.2</span>f&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;,&quot;</span> <span class="keyword">in</span> raw:    <span class="keyword">return</span> <span class="string">f&quot;<span class="subst">&#123;new:,<span class="number">.2</span>f&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;<span class="subst">&#123;new:<span class="number">.2</span>f&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">return</span> re.sub(<span class="string">r&quot;\$?\d&#123;1,3&#125;(?:,\d&#123;3&#125;)+(?:\.\d+)?%?|\$?\d+\.\d+%?|\d+%&quot;</span>, swap, text)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_rejected</span>(<span class="params">question, chosen_answer, strategy, source</span>):</span><br><span class="line">    <span class="keyword">if</span> strategy == <span class="string">&quot;numeric_perturbation&quot;</span>:</span><br><span class="line">        draft = _perturb_numbers(chosen_answer)</span><br><span class="line">        user = (<span class="string">f&quot;Polish this perturbed answer naturally. Keep the perturbed numbers.\n\n&quot;</span></span><br><span class="line">                <span class="string">f&quot;QUESTION: <span class="subst">&#123;question&#125;</span>\nPERTURBED DRAFT:\n<span class="subst">&#123;draft&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        user = (<span class="string">f&quot;QUESTION: <span class="subst">&#123;question&#125;</span>\nREFERENCE ANSWER:\n<span class="subst">&#123;chosen_answer&#125;</span>\n\n&quot;</span></span><br><span class="line">                <span class="string">f&quot;SOURCE (for realism, do NOT quote correctly):\n<span class="subst">&#123;source[:<span class="number">1500</span>]&#125;</span>\n\n&quot;</span></span><br><span class="line">                <span class="string">f&quot;HALLUCINATION TYPE: <span class="subst">&#123;strategy&#125;</span> — <span class="subst">&#123;STRATEGIES[strategy]&#125;</span>&quot;</span>)</span><br><span class="line">    r = client.chat.completions.create(</span><br><span class="line">        model=MODEL_GEN,</span><br><span class="line">        messages=[&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: REJECTED_SYSTEM&#125;,</span><br><span class="line">                  &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,   <span class="string">&quot;content&quot;</span>: user&#125;],</span><br><span class="line">        response_format=&#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;json_object&quot;</span>&#125;, temperature=<span class="number">0.9</span>,</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> json.loads(r.choices[<span class="number">0</span>].message.content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    ap = argparse.ArgumentParser()</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--limit&quot;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="literal">None</span>)</span><br><span class="line">    args = ap.parse_args()</span><br><span class="line">    rows = [json.loads(l) <span class="keyword">for</span> l <span class="keyword">in</span></span><br><span class="line">            (Path(CORPUS_DIR) / <span class="string">&quot;chosen.jsonl&quot;</span>).read_text().splitlines()]</span><br><span class="line">    <span class="keyword">if</span> args.limit: rows = rows[:args.limit]</span><br><span class="line">    cycle = itertools.cycle(STRATEGIES.keys())</span><br><span class="line">    out, dropped = [], <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> rows:</span><br><span class="line">        strat = <span class="built_in">next</span>(cycle)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            rej = generate_rejected(row[<span class="string">&quot;question&quot;</span>], row[<span class="string">&quot;chosen&quot;</span>][<span class="string">&quot;answer&quot;</span>],</span><br><span class="line">                                    strat, row[<span class="string">&quot;source_text&quot;</span>])</span><br><span class="line">        <span class="keyword">except</span> Exception: dropped += <span class="number">1</span>; <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> rej[<span class="string">&quot;response&quot;</span>].strip() == row[<span class="string">&quot;chosen&quot;</span>][<span class="string">&quot;answer&quot;</span>].strip():</span><br><span class="line">            dropped += <span class="number">1</span>; <span class="keyword">continue</span></span><br><span class="line">        out.append(&#123;**row, <span class="string">&quot;rejected&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;response&quot;</span>: rej[<span class="string">&quot;response&quot;</span>],</span><br><span class="line">            <span class="string">&quot;hallucination_type&quot;</span>: strat,</span><br><span class="line">            <span class="string">&quot;injected_error&quot;</span>: rej.get(<span class="string">&quot;injected_error&quot;</span>, <span class="string">&quot;&quot;</span>),</span><br><span class="line">        &#125;&#125;)</span><br><span class="line">    path = Path(CORPUS_DIR) / <span class="string">&quot;pairs.jsonl&quot;</span></span><br><span class="line">    path.write_text(<span class="string">&quot;\n&quot;</span>.join(json.dumps(x) <span class="keyword">for</span> x <span class="keyword">in</span> out))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;<span class="built_in">len</span>(out)&#125;</span> pairs (<span class="subst">&#123;dropped&#125;</span> dropped) → <span class="subst">&#123;path&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="Phase-5-—-Dual-Track-QC-05-judge-and-filter-py"><a href="#Phase-5-—-Dual-Track-QC-05-judge-and-filter-py" class="headerlink" title="Phase 5 — Dual-Track QC (05_judge_and_filter.py)"></a>Phase 5 — Dual-Track QC (<code>05_judge_and_filter.py</code>)</h2><ul>
+<li><strong>Track A — Sandboxed arithmetic:</strong> every <code>A op B = C</code> statement in the chosen reasoning trace is re-executed with a safe AST evaluator (no <code>eval</code>); divergence beyond tolerance drops the sample.</li>
+<li><strong>Track B — LLM-as-Judge:</strong> independent scorer rates <em>chosen correctness</em>, <em>rejected plausibility</em> (we want this high — low plausibility means trivial preference data), and <em>distinction clarity</em>.</li>
+</ul>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;Phase 5 — Dual-track QC.&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> argparse, ast, json, operator <span class="keyword">as</span> op, re</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">from</span> shared <span class="keyword">import</span> client, MODEL_JUDGE, CORPUS_DIR</span><br><span class="line"></span><br><span class="line">OPS = &#123;ast.Add: op.add, ast.Sub: op.sub, ast.Mult: op.mul,</span><br><span class="line">       ast.Div: op.truediv, ast.USub: op.neg, ast.UAdd: op.pos&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_safe_eval</span>(<span class="params">expr</span>):</span><br><span class="line">    node = ast.parse(expr, mode=<span class="string">&quot;eval&quot;</span>).body</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_w</span>(<span class="params">n</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(n, ast.Constant) <span class="keyword">and</span> <span class="built_in">isinstance</span>(n.value, (<span class="built_in">int</span>, <span class="built_in">float</span>)): <span class="keyword">return</span> n.value</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(n, ast.Num): <span class="keyword">return</span> n.n</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(n, ast.BinOp): <span class="keyword">return</span> OPS[<span class="built_in">type</span>(n.op)](_w(n.left), _w(n.right))</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(n, ast.UnaryOp): <span class="keyword">return</span> OPS[<span class="built_in">type</span>(n.op)](_w(n.operand))</span><br><span class="line">        <span class="keyword">raise</span> ValueError</span><br><span class="line">    <span class="keyword">return</span> _w(node)</span><br><span class="line"></span><br><span class="line">ARITH_RE = re.<span class="built_in">compile</span>(<span class="string">r&quot;([\d\.]+)\s*([+\-*/])\s*([\d\.]+)\s*=\s*([\d\.]+)&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">arithmetic_consistent</span>(<span class="params">chosen, tol=<span class="number">0.02</span></span>):</span><br><span class="line">    <span class="keyword">for</span> m <span class="keyword">in</span> ARITH_RE.finditer((chosen <span class="keyword">or</span> &#123;&#125;).get(<span class="string">&quot;reasoning&quot;</span>, <span class="string">&quot;&quot;</span>) <span class="keyword">or</span> <span class="string">&quot;&quot;</span>):</span><br><span class="line">        a, o, b, c = m.groups()</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            got, expected = _safe_eval(<span class="string">f&quot;<span class="subst">&#123;a&#125;</span><span class="subst">&#123;o&#125;</span><span class="subst">&#123;b&#125;</span>&quot;</span>), <span class="built_in">float</span>(c)</span><br><span class="line">        <span class="keyword">except</span> Exception: <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">abs</span>(got - expected) / <span class="built_in">max</span>(<span class="built_in">abs</span>(expected), <span class="number">1e-9</span>) &gt; tol:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">JUDGE_SYSTEM = <span class="string">&quot;&quot;&quot;Score each axis 1-5 (integers).</span></span><br><span class="line"><span class="string">  chosen_correctness    — Is the chosen fully grounded in SOURCE?</span></span><br><span class="line"><span class="string">  rejected_plausibility — Would the rejected fool a non-expert? (HIGH is desirable)</span></span><br><span class="line"><span class="string">  distinction_clarity   — Would an expert clearly prefer chosen over rejected?</span></span><br><span class="line"><span class="string">Return JSON: &#123;&quot;chosen_correctness&quot;: 1-5, &quot;rejected_plausibility&quot;: 1-5,</span></span><br><span class="line"><span class="string">              &quot;distinction_clarity&quot;: 1-5, &quot;notes&quot;: &quot;...&quot;&#125;&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">judge</span>(<span class="params">row</span>):</span><br><span class="line">    msg = (<span class="string">f&quot;QUESTION:\n<span class="subst">&#123;row[<span class="string">&#x27;question&#x27;</span>]&#125;</span>\n\nSOURCE:\n<span class="subst">&#123;row[<span class="string">&#x27;source_text&#x27;</span>][:<span class="number">1800</span>]&#125;</span>\n\n&quot;</span></span><br><span class="line">           <span class="string">f&quot;CHOSEN:\n<span class="subst">&#123;row[<span class="string">&#x27;chosen&#x27;</span>][<span class="string">&#x27;answer&#x27;</span>]&#125;</span>\n\n&quot;</span></span><br><span class="line">           <span class="string">f&quot;REJECTED:\n<span class="subst">&#123;row[<span class="string">&#x27;rejected&#x27;</span>][<span class="string">&#x27;response&#x27;</span>]&#125;</span>&quot;</span>)</span><br><span class="line">    r = client.chat.completions.create(</span><br><span class="line">        model=MODEL_JUDGE,</span><br><span class="line">        messages=[&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: JUDGE_SYSTEM&#125;,</span><br><span class="line">                  &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,   <span class="string">&quot;content&quot;</span>: msg&#125;],</span><br><span class="line">        response_format=&#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;json_object&quot;</span>&#125;, temperature=<span class="number">0.0</span>,</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> json.loads(r.choices[<span class="number">0</span>].message.content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    ap = argparse.ArgumentParser()</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--min-chosen&quot;</span>,   <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">4</span>)</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--min-rejected&quot;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">3</span>)</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--min-clarity&quot;</span>,  <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">4</span>)</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--limit&quot;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="literal">None</span>)</span><br><span class="line">    args = ap.parse_args()</span><br><span class="line">    rows = [json.loads(l) <span class="keyword">for</span> l <span class="keyword">in</span></span><br><span class="line">            (Path(CORPUS_DIR) / <span class="string">&quot;pairs.jsonl&quot;</span>).read_text().splitlines()]</span><br><span class="line">    <span class="keyword">if</span> args.limit: rows = rows[:args.limit]</span><br><span class="line">    out = []</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> rows:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> arithmetic_consistent(row[<span class="string">&quot;chosen&quot;</span>]): <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">try</span>: s = judge(row)</span><br><span class="line">        <span class="keyword">except</span> Exception: <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> (s.get(<span class="string">&quot;chosen_correctness&quot;</span>, <span class="number">0</span>)    &lt; args.min_chosen   <span class="keyword">or</span></span><br><span class="line">            s.get(<span class="string">&quot;rejected_plausibility&quot;</span>, <span class="number">0</span>) &lt; args.min_rejected <span class="keyword">or</span></span><br><span class="line">            s.get(<span class="string">&quot;distinction_clarity&quot;</span>, <span class="number">0</span>)   &lt; args.min_clarity): <span class="keyword">continue</span></span><br><span class="line">        out.append(&#123;**row, <span class="string">&quot;judge_scores&quot;</span>: s&#125;)</span><br><span class="line">    path = Path(CORPUS_DIR) / <span class="string">&quot;final.jsonl&quot;</span></span><br><span class="line">    path.write_text(<span class="string">&quot;\n&quot;</span>.join(json.dumps(x) <span class="keyword">for</span> x <span class="keyword">in</span> out))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;<span class="built_in">len</span>(out)&#125;</span> pairs passed QC → <span class="subst">&#123;path&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="Phase-6-—-Export-06-format-trl-py"><a href="#Phase-6-—-Export-06-format-trl-py" class="headerlink" title="Phase 6 — Export (06_format_trl.py)"></a>Phase 6 — Export (<code>06_format_trl.py</code>)</h2><p>Writes <strong>three</strong> files: a minimal TRL-ready DPO JSONL, a full-schema JSONL with provenance and scores, and a KTO file (unpaired label-per-completion) if you want to try KTO alongside DPO.</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;Phase 6 — Export to Hugging Face TRL format.&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> argparse, json</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">from</span> shared <span class="keyword">import</span> CORPUS_DIR</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">format_all</span>(<span class="params">inp, trl_out, full_out, kto_out</span>):</span><br><span class="line">    n_pairs = n_kto = <span class="number">0</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(inp) <span class="keyword">as</span> f, <span class="built_in">open</span>(trl_out,<span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> fo_trl, \</span><br><span class="line">         <span class="built_in">open</span>(full_out,<span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> fo_full, <span class="built_in">open</span>(kto_out,<span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> fo_kto:</span><br><span class="line">        <span class="keyword">for</span> i, line <span class="keyword">in</span> <span class="built_in">enumerate</span>(f):</span><br><span class="line">            row = json.loads(line)</span><br><span class="line">            prompt = <span class="string">f&quot;SOURCE:\n<span class="subst">&#123;row[<span class="string">&#x27;source_text&#x27;</span>]&#125;</span>\n\nQUESTION: <span class="subst">&#123;row[<span class="string">&#x27;question&#x27;</span>]&#125;</span>&quot;</span></span><br><span class="line">            fo_trl.write(json.dumps(&#123;</span><br><span class="line">                <span class="string">&quot;prompt&quot;</span>: prompt,</span><br><span class="line">                <span class="string">&quot;chosen&quot;</span>: row[<span class="string">&quot;chosen&quot;</span>][<span class="string">&quot;answer&quot;</span>],</span><br><span class="line">                <span class="string">&quot;rejected&quot;</span>: row[<span class="string">&quot;rejected&quot;</span>][<span class="string">&quot;response&quot;</span>],</span><br><span class="line">            &#125;) + <span class="string">&quot;\n&quot;</span>)</span><br><span class="line">            fo_full.write(json.dumps(&#123;</span><br><span class="line">                <span class="string">&quot;id&quot;</span>: <span class="string">f&quot;fin-halluc-<span class="subst">&#123;i:05d&#125;</span>&quot;</span>,</span><br><span class="line">                <span class="string">&quot;prompt&quot;</span>: row[<span class="string">&quot;question&quot;</span>], <span class="string">&quot;source_doc&quot;</span>: row[<span class="string">&quot;source_text&quot;</span>],</span><br><span class="line">                <span class="string">&quot;source_metadata&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;ticker&quot;</span>: row[<span class="string">&quot;ticker&quot;</span>], <span class="string">&quot;filing_date&quot;</span>: row[<span class="string">&quot;filing_date&quot;</span>],</span><br><span class="line">                    <span class="string">&quot;doc_id&quot;</span>: row[<span class="string">&quot;doc_id&quot;</span>], <span class="string">&quot;seed_type&quot;</span>: row.get(<span class="string">&quot;seed_type&quot;</span>),</span><br><span class="line">                    <span class="string">&quot;complexity&quot;</span>: row.get(<span class="string">&quot;complexity&quot;</span>), <span class="string">&quot;spdx_license&quot;</span>: <span class="string">&quot;public-domain&quot;</span>,</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">&quot;chosen&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;response&quot;</span>: row[<span class="string">&quot;chosen&quot;</span>][<span class="string">&quot;answer&quot;</span>],</span><br><span class="line">                    <span class="string">&quot;reasoning_trace&quot;</span>: row[<span class="string">&quot;chosen&quot;</span>].get(<span class="string">&quot;reasoning&quot;</span>, <span class="string">&quot;&quot;</span>),</span><br><span class="line">                    <span class="string">&quot;numeric_claims&quot;</span>: row[<span class="string">&quot;chosen&quot;</span>].get(<span class="string">&quot;numeric_claims&quot;</span>, []),</span><br><span class="line">                    <span class="string">&quot;citations&quot;</span>: row[<span class="string">&quot;chosen&quot;</span>].get(<span class="string">&quot;citations&quot;</span>, []),</span><br><span class="line">                    <span class="string">&quot;verified&quot;</span>: <span class="literal">True</span>,</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">&quot;rejected&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;response&quot;</span>: row[<span class="string">&quot;rejected&quot;</span>][<span class="string">&quot;response&quot;</span>],</span><br><span class="line">                    <span class="string">&quot;hallucination_type&quot;</span>: row[<span class="string">&quot;rejected&quot;</span>][<span class="string">&quot;hallucination_type&quot;</span>],</span><br><span class="line">                    <span class="string">&quot;injected_error_description&quot;</span>: row[<span class="string">&quot;rejected&quot;</span>][<span class="string">&quot;injected_error&quot;</span>],</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">&quot;judge_scores&quot;</span>: row[<span class="string">&quot;judge_scores&quot;</span>],</span><br><span class="line">            &#125;) + <span class="string">&quot;\n&quot;</span>)</span><br><span class="line">            n_pairs += <span class="number">1</span></span><br><span class="line">            <span class="keyword">for</span> comp, lbl <span class="keyword">in</span> [(row[<span class="string">&quot;chosen&quot;</span>][<span class="string">&quot;answer&quot;</span>], <span class="literal">True</span>),</span><br><span class="line">                              (row[<span class="string">&quot;rejected&quot;</span>][<span class="string">&quot;response&quot;</span>], <span class="literal">False</span>)]:</span><br><span class="line">                fo_kto.write(json.dumps(&#123;</span><br><span class="line">                    <span class="string">&quot;prompt&quot;</span>: prompt, <span class="string">&quot;completion&quot;</span>: comp, <span class="string">&quot;label&quot;</span>: lbl,</span><br><span class="line">                &#125;) + <span class="string">&quot;\n&quot;</span>)</span><br><span class="line">                n_kto += <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;DPO: <span class="subst">&#123;n_pairs&#125;</span> → <span class="subst">&#123;trl_out&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Full: <span class="subst">&#123;n_pairs&#125;</span> → <span class="subst">&#123;full_out&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;KTO: <span class="subst">&#123;n_kto&#125;</span> → <span class="subst">&#123;kto_out&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    ap = argparse.ArgumentParser()</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--in&quot;</span>,  dest=<span class="string">&quot;inp&quot;</span>, default=<span class="built_in">str</span>(Path(CORPUS_DIR) / <span class="string">&quot;final.jsonl&quot;</span>))</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--trl&quot;</span>, default=<span class="string">&quot;financial_hallucination_dpo.jsonl&quot;</span>)</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--full&quot;</span>, default=<span class="string">&quot;financial_hallucination_dpo_full.jsonl&quot;</span>)</span><br><span class="line">    ap.add_argument(<span class="string">&quot;--kto&quot;</span>, default=<span class="string">&quot;financial_hallucination_kto.jsonl&quot;</span>)</span><br><span class="line">    args = ap.parse_args()</span><br><span class="line">    format_all(args.inp, args.trl, args.full, args.kto)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="Configuration-Files"><a href="#Configuration-Files" class="headerlink" title="Configuration Files"></a>Configuration Files</h2><h3 id="env-example"><a href="#env-example" class="headerlink" title=".env.example"></a><code>.env.example</code></h3><div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Copy to .env and fill in.</span></span><br><span class="line">LLM_BASE_URL=https://api.deepseek.com/v1</span><br><span class="line">LLM_API_KEY=sk-REPLACE-ME</span><br><span class="line"></span><br><span class="line"><span class="comment"># OpenAI alternative:</span></span><br><span class="line"><span class="comment"># LLM_BASE_URL=https://api.openai.com/v1</span></span><br><span class="line"><span class="comment"># LLM_API_KEY=sk-REPLACE-ME</span></span><br><span class="line"></span><br><span class="line">MODEL_GEN=deepseek-chat</span><br><span class="line">MODEL_REASON=deepseek-reasoner</span><br><span class="line">MODEL_JUDGE=deepseek-chat</span><br><span class="line"></span><br><span class="line"><span class="comment"># SEC requires a real email in the User-Agent</span></span><br><span class="line">EDGAR_USER_AGENT=your-name your-email@example.com</span><br><span class="line"></span><br><span class="line">CORPUS_DIR=corpus</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="requirements-txt"><a href="#requirements-txt" class="headerlink" title="requirements.txt"></a><code>requirements.txt</code></h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">openai&gt;=1.40.0</span><br><span class="line">requests&gt;=2.31.0</span><br><span class="line">python-dotenv&gt;=1.0.0</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a><code>Makefile</code></h3><div class="code-container" data-rel="Makefile"><figure class="iseeu highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">PY := python3</span><br><span class="line">PIPE := pipeline</span><br><span class="line">CORPUS := corpus</span><br><span class="line"></span><br><span class="line">SMOKE_CHUNKS := 3</span><br><span class="line">SMOKE_PROMPTS := 10</span><br><span class="line">SMOKE_PAIRS := 10</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: help install check smoke all ingest seed chosen reject judge format clean nuke</span></span><br><span class="line"></span><br><span class="line"><span class="section">help:</span></span><br><span class="line">	@echo <span class="string">&quot;install  check  smoke  all  ingest  seed  chosen  reject  judge  format  clean  nuke&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">install:</span></span><br><span class="line">	<span class="variable">$(PY)</span> -m pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"><span class="section">check:</span></span><br><span class="line">	cd <span class="variable">$(PIPE)</span> &amp;&amp; <span class="variable">$(PY)</span> 00_check_setup.py</span><br><span class="line"></span><br><span class="line"><span class="section">ingest:</span></span><br><span class="line">	cd <span class="variable">$(PIPE)</span> &amp;&amp; <span class="variable">$(PY)</span> 01_ingest_edgar.py</span><br><span class="line"></span><br><span class="line"><span class="section">seed:</span></span><br><span class="line">	cd <span class="variable">$(PIPE)</span> &amp;&amp; <span class="variable">$(PY)</span> 02_seed_and_evolve.py</span><br><span class="line"></span><br><span class="line"><span class="section">chosen:</span></span><br><span class="line">	cd <span class="variable">$(PIPE)</span> &amp;&amp; <span class="variable">$(PY)</span> 03_generate_chosen.py</span><br><span class="line"></span><br><span class="line"><span class="section">reject:</span></span><br><span class="line">	cd <span class="variable">$(PIPE)</span> &amp;&amp; <span class="variable">$(PY)</span> 04_inject_hallucinations.py</span><br><span class="line"></span><br><span class="line"><span class="section">judge:</span></span><br><span class="line">	cd <span class="variable">$(PIPE)</span> &amp;&amp; <span class="variable">$(PY)</span> 05_judge_and_filter.py</span><br><span class="line"></span><br><span class="line"><span class="section">format:</span></span><br><span class="line">	cd <span class="variable">$(PIPE)</span> &amp;&amp; <span class="variable">$(PY)</span> 06_format_trl.py</span><br><span class="line"></span><br><span class="line"><span class="section">all: check ingest seed chosen reject judge format</span></span><br><span class="line"></span><br><span class="line"><span class="section">smoke: check</span></span><br><span class="line">	cd <span class="variable">$(PIPE)</span> &amp;&amp; <span class="variable">$(PY)</span> 01_ingest_edgar.py --max-filings 1 --chunks-per-filing <span class="variable">$(SMOKE_CHUNKS)</span></span><br><span class="line">	cd <span class="variable">$(PIPE)</span> &amp;&amp; <span class="variable">$(PY)</span> 02_seed_and_evolve.py --evolutions 1 --limit-chunks 2</span><br><span class="line">	cd <span class="variable">$(PIPE)</span> &amp;&amp; <span class="variable">$(PY)</span> 03_generate_chosen.py --limit <span class="variable">$(SMOKE_PROMPTS)</span></span><br><span class="line">	cd <span class="variable">$(PIPE)</span> &amp;&amp; <span class="variable">$(PY)</span> 04_inject_hallucinations.py --limit <span class="variable">$(SMOKE_PAIRS)</span></span><br><span class="line">	cd <span class="variable">$(PIPE)</span> &amp;&amp; <span class="variable">$(PY)</span> 05_judge_and_filter.py --limit <span class="variable">$(SMOKE_PAIRS)</span></span><br><span class="line">	cd <span class="variable">$(PIPE)</span> &amp;&amp; <span class="variable">$(PY)</span> 06_format_trl.py</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -f <span class="variable">$(CORPUS)</span>/prompts.jsonl <span class="variable">$(CORPUS)</span>/chosen.jsonl <span class="variable">$(CORPUS)</span>/pairs.jsonl <span class="variable">$(CORPUS)</span>/final.jsonl</span><br><span class="line"></span><br><span class="line"><span class="section">nuke: clean</span></span><br><span class="line">	rm -f <span class="variable">$(CORPUS)</span>/edgar_chunks.jsonl financial_hallucination_*.jsonl</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="run-sh"><a href="#run-sh" class="headerlink" title="run.sh"></a><code>run.sh</code></h3><div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env bash</span></span><br><span class="line"><span class="built_in">set</span> -euo pipefail</span><br><span class="line"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(dirname <span class="string">&quot;<span class="variable">$0</span>&quot;</span>)</span>&quot;</span></span><br><span class="line"><span class="built_in">mkdir</span> -p logs</span><br><span class="line">LOG=<span class="string">&quot;logs/run-<span class="subst">$(date +%Y%m%d-%H%M%S)</span>.log&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ ! -f .<span class="built_in">env</span> ]]; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&quot;ERROR: .env not found. Run: cp .env.example .env &amp;&amp; edit it.&quot;</span> &gt;&amp;2</span><br><span class="line">  <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">MODE=<span class="string">&quot;<span class="variable">$&#123;1:-all&#125;</span>&quot;</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;<span class="variable">$&#123;MODE&#125;</span>&quot;</span> <span class="keyword">in</span></span><br><span class="line">  check) make check 2&gt;&amp;1 | <span class="built_in">tee</span> <span class="string">&quot;<span class="variable">$&#123;LOG&#125;</span>&quot;</span> ;;</span><br><span class="line">  smoke) make smoke 2&gt;&amp;1 | <span class="built_in">tee</span> <span class="string">&quot;<span class="variable">$&#123;LOG&#125;</span>&quot;</span> ;;</span><br><span class="line">  all|<span class="string">&quot;&quot;</span>) make all 2&gt;&amp;1 | <span class="built_in">tee</span> <span class="string">&quot;<span class="variable">$&#123;LOG&#125;</span>&quot;</span> ;;</span><br><span class="line">  *) <span class="built_in">echo</span> <span class="string">&quot;Unknown mode: <span class="variable">$&#123;MODE&#125;</span>. Use: check | smoke | all&quot;</span> &gt;&amp;2; <span class="built_in">exit</span> 2 ;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="Running-It"><a href="#Running-It" class="headerlink" title="Running It"></a>Running It</h2><div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. Get the folder onto the server:</span></span><br><span class="line">scp -r financial-hallucination-pipeline user@server:~/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. Set up</span></span><br><span class="line"><span class="built_in">cd</span> financial-hallucination-pipeline</span><br><span class="line"><span class="built_in">cp</span> .env.example .<span class="built_in">env</span></span><br><span class="line">vim .<span class="built_in">env</span>                       <span class="comment"># fill LLM_API_KEY + EDGAR_USER_AGENT</span></span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. Pre-flight</span></span><br><span class="line">./run.sh check</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. Smoke test (~10 pairs, cheap)</span></span><br><span class="line">./run.sh smoke</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. Full run</span></span><br><span class="line">./run.sh</span><br></pre></td></tr></table></figure></div>
+
+<p>Final outputs:</p>
+<ul>
+<li><code>financial_hallucination_dpo.jsonl</code> — feed directly to <code>trl.DPOTrainer</code></li>
+<li><code>financial_hallucination_dpo_full.jsonl</code> — full provenance (source URL, ticker, filing date, reasoning, citations, judge scores)</li>
+<li><code>financial_hallucination_kto.jsonl</code> — unpaired <code>(prompt, completion, label)</code> for <code>trl.KTOTrainer</code></li>
+</ul>
+<hr>
+<h2 id="Design-Principles-Recap"><a href="#Design-Principles-Recap" class="headerlink" title="Design Principles Recap"></a>Design Principles Recap</h2><ol>
+<li><strong>SFT alone is insufficient.</strong> SFT teaches what a good financial answer <em>looks</em> like but does not teach the model to <em>prefer</em> grounded answers over fluent confabulations. DPO&#x2F;KTO targets that gap directly.</li>
+<li><strong>Source grounding is mandatory.</strong> Every numeric claim must be traceable to the source; Phase 3&#39;s verifier enforces this.</li>
+<li><strong>Temporal safety is explicit.</strong> Every row carries <code>filing_date</code>, so training and evaluation splits can respect point-in-time correctness.</li>
+<li><strong>License clarity for commercial deployment.</strong> SEC filings are public domain, so the resulting dataset inherits commercially usable provenance.</li>
+<li><strong>Balanced hallucination types.</strong> Phase 4 cycles through the four strategies deterministically — no single failure mode dominates.</li>
+</ol>
+<p>Next step in the alignment stack: feed <code>financial_hallucination_dpo.jsonl</code> into <code>trl.DPOTrainer</code> on top of a SFT-tuned base model, and compare held-out refusal precision against an SFT-only baseline.</p>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> Building a Financial Hallucination-Suppression Dataset Pipeline</li>
+        <li><strong>Author:</strong> wy</li>
+        <li><strong>Created at
+                :</strong> 2026-04-24 10:00:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2026-04-24 10:26:30
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://yue-ruby-w.site/2026/04/24/Financial-Hallucination-Suppression-Dataset-Pipeline/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/LLM/">#LLM</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Finance/">#Finance</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/DPO/">#DPO</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Dataset/">#Dataset</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Alignment/">#Alignment</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/04/23/Financial-LLMs-Architecture-Analysis/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">The Architecture of Financial Intelligence: A Comprehensive Analysis of Large Language Models in Finance</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">Building a Financial Hallucination-Suppression Dataset Pipeline</div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Building-a-Financial-Hallucination-Suppression-Dataset-Pipeline"><span class="nav-text">Building a Financial Hallucination-Suppression Dataset Pipeline</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Pipeline-Architecture"><span class="nav-text">Pipeline Architecture</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Project-Layout"><span class="nav-text">Project Layout</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shared-Client-pipeline-shared-py"><span class="nav-text">Shared Client (pipeline&#x2F;shared.py)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Phase-0-%E2%80%94-Pre-flight-00-check-setup-py"><span class="nav-text">Phase 0 — Pre-flight (00_check_setup.py)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Phase-1-%E2%80%94-SEC-EDGAR-Ingestion-01-ingest-edgar-py"><span class="nav-text">Phase 1 — SEC EDGAR Ingestion (01_ingest_edgar.py)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Phase-2-%E2%80%94-Seed-Evol-Instruct-02-seed-and-evolve-py"><span class="nav-text">Phase 2 — Seed &amp; Evol-Instruct (02_seed_and_evolve.py)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Phase-3-%E2%80%94-Grounded-Generation-03-generate-chosen-py"><span class="nav-text">Phase 3 — Grounded Generation (03_generate_chosen.py)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Phase-4-%E2%80%94-Hallucination-Injection-04-inject-hallucinations-py"><span class="nav-text">Phase 4 — Hallucination Injection (04_inject_hallucinations.py)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Phase-5-%E2%80%94-Dual-Track-QC-05-judge-and-filter-py"><span class="nav-text">Phase 5 — Dual-Track QC (05_judge_and_filter.py)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Phase-6-%E2%80%94-Export-06-format-trl-py"><span class="nav-text">Phase 6 — Export (06_format_trl.py)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configuration-Files"><span class="nav-text">Configuration Files</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#env-example"><span class="nav-text">.env.example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#requirements-txt"><span class="nav-text">requirements.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Makefile"><span class="nav-text">Makefile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run-sh"><span class="nav-text">run.sh</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Running-It"><span class="nav-text">Running It</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Design-Principles-Recap"><span class="nav-text">Design Principles Recap</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">wy</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        31 posts in total
+                    </span>
+                    
+                        <span>
+                            50.9k words in total
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.9.0</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+            
+                
+        
+                
+        
+                
+
+                    
+                        <script data-swup-reload-script>document.addEventListener('DOMContentLoaded',function(){if(document.querySelector('meta[name="notebook"]')){document.querySelector('.article-container')?.classList.add('notebook')}})</script>
+                    
+        
+                
+
+                    
+                        <script data-swup-reload-script defer src="/js/highlighter.js"></script>
+                    
+        
+                
+
+                    
+                        <script data-swup-reload-script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+                    
+        
+                
+
+                    
+                        <script data-swup-reload-script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});window.addEventListener('hexo-blog-decrypt',function(){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})})"></script>
+                    
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container" role="dialog" aria-modal="true" aria-label="Image viewer">
+	<button class="image-viewer-close" type="button" aria-label="Close">
+		<i class="fa-solid fa-xmark"></i>
+	</button>
+	<button class="image-viewer-prev" type="button" aria-label="Prev">
+		<i class="fa-solid fa-chevron-left"></i>
+	</button>
+	<div class="image-viewer-frame">
+		<img src="" alt="">
+	</div>
+	<div class="image-viewer-exif-panel hidden absolute left-1/2 bottom-20 -translate-x-1/2 w-[min(92vw,420px)] max-h-[60vh] overflow-hidden rounded-2xl bg-background-color-transparent-80 p-4 text-left shadow-redefine-flat backdrop-blur-md" role="dialog" aria-label="EXIF" aria-hidden="true">
+		<div class="flex items-center justify-between mb-3">
+			<span class="text-sm font-semibold text-first-text-color">EXIF</span>
+			<button class="image-viewer-exif-close flex h-8 w-8 items-center justify-center rounded-full bg-background-color-transparent-80 text-first-text-color transition hover:bg-background-color-transparent-40" type="button" aria-label="Close">
+				<i class="fa-solid fa-xmark text-[0.65rem]"></i>
+			</button>
+		</div>
+		<div class="image-viewer-exif-cards grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-1 scrollbar-hide"></div>
+		<template class="image-viewer-exif-card-template">
+			<div class="rounded-lg bg-background-color-transparent-40 px-3 py-2">
+				<div class="image-viewer-exif-card-header flex items-center gap-2 mb-1">
+					<i class="image-viewer-exif-card-icon fa-solid fa-circle-info text-xs text-third-text-color"></i>
+					<div class="image-viewer-exif-card-title text-xs font-semibold text-first-text-color"></div>
+				</div>
+				<div class="image-viewer-exif-card-items flex flex-col gap-1"></div>
+			</div>
+		</template>
+	</div>
+	<button class="image-viewer-exif-toggle flex items-center gap-2 hidden absolute left-1/2 bottom-6 -translate-x-1/2 rounded-full border border-border-color bg-background-color-transparent-80 px-4 py-2 text-first-text-color backdrop-blur-md transition hover:bg-background-color-transparent-40" type="button" aria-label="EXIF" aria-expanded="false">
+		<i class="fa-solid fa-circle-info text-xs"></i>
+		<span class="text-xs font-semibold uppercase tracking-wider">EXIF</span>
+	</button>
+	<button class="image-viewer-next" type="button" aria-label="Next">
+		<i class="fa-solid fa-chevron-right"></i>
+	</button>
+</div>
+
+
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    window.swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+
+    window.dispatchEvent(
+        new CustomEvent("redefine:swup:ready", {
+            detail: {
+                swup: window.swup,
+            },
+        }),
+    );
+</script>
+
+
+
+
+	
+<script src="/js/build/main.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+
+	
+</body>
+
+</html>
